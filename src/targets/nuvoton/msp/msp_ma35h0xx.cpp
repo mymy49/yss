@@ -149,8 +149,6 @@ void __WEAK initializeSystem(void)
     __asm__ volatile("msr sctlr_el1, %0\n isb" : : "r"(sctlr));
 }
 
-volatile uint32_t systick_cnt, default_cnt;
-
 extern "C"
 {
 	void SystemCoreClockUpdate(void)
@@ -160,15 +158,13 @@ extern "C"
 
 	void TMR1_IRQHandler();
 
-	void irqExceptionHandler()
+	void irqExceptionHandler(IRQn_Type irqNum)
 	{
-	    IRQn_Type irq_num = (IRQn_Type)(GICInterface->IAR & 0x3FF);
-
-		switch(irq_num)
+		switch(irqNum)
 		{
 		case SecPhysicalTimer_IRQn :
 			raw_write_cntps_tval_el1(raw_read_cntfrq_el0() / THREAD_GIVEN_CLOCK);
-			systick_cnt++;
+			GIC_SendSGI((IRQn_Type)0, 0, 2);
 			break;
 			
 		case TMR1_IRQn :
@@ -178,8 +174,6 @@ extern "C"
 		default :
 			break;
 		}
-		
-		GICInterface->EOIR = irq_num;
 	}
 
 	void synchronousExceptionHandler()

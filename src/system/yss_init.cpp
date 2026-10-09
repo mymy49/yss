@@ -91,7 +91,7 @@ void initializeYss(void)
 		clk = 12000000;
 		raw_write_cntfrq_el0(clk);
 	}
-
+ 
 	raw_write_cntps_tval_el1(clk / THREAD_GIVEN_CLOCK);
 	__ISB();
 	
@@ -100,6 +100,10 @@ void initializeYss(void)
 
 	__setInterruptPriority(SecPhysicalTimer_IRQn, 0x10); 
 	__enableInterrupt(SecPhysicalTimer_IRQn);
+	
+    GIC_SetPriority(SGI0_IRQn, 0x10);
+    GIC_EnableIRQ(SGI0_IRQn);
+	GIC_SetGroup(SGI0_IRQn, 0);
 #endif
 
 #endif

@@ -13,7 +13,7 @@
 #include <drv/mcu.h>
 #include <stdint.h>
 
-#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE) && !defined(YSS__MULTI_CORE) && !defined(YSS__CORE_CA35_H_GENERIC)
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE) && !defined(YSS__MULTI_CORE)
 
 #include <config.h>
 #include <util/runtime.h>
@@ -38,9 +38,9 @@
 // Scheduler task descriptor.
 typedef struct
 {
-	int32_t *malloc;          // Allocated stack memory
-	uint32_t *sp;             // Current stack pointer for context switching
-	uint32_t  size;           // Stack size in bytes
+	uintptr_t *malloc;          // Allocated stack memory
+	uintptr_t *sp;             // Current stack pointer for context switching
+	size_t  size;           // Stack size in bytes
 	void (*entry)(void *);    // Entry function for the thread
 	void *var;                // Parameter passed to the entry function
 	threadId_t indexNumber;
@@ -101,14 +101,22 @@ inline void removeFromActivatedThreadList(threadId_t id)
 	}
 }
 
-inline void disableSystickInterrupt(void)
+inline void disableSchedulerTimer(void)
 {
+#if defined(YSS__CORE_CA35_H_GENERIC)
+
+#elif defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC)
 	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
+#endif
 }
 
-inline void enableSystickInterrupt(void)
+inline void enableSchedulerTimer(void)
 {
+#if defined(YSS__CORE_CA35_H_GENERIC)
+
+#elif defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC)
 	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
+#endif
 }
 
 static inline bool isValidThreadId(threadId_t id)
@@ -136,7 +144,12 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
         return -1;
 
     // 1. Align stack size to an 8-byte boundary and enforce the minimum size requirement[cite: 5].
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
     stackSize = (stackSize + 7) & ~0x7;
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+    stackSize = (stackSize + 15) & ~0xF;
+#endif
+
     if (stackSize < MIN_STACK_SIZE)
         return -1;
 
@@ -145,7 +158,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
         return -1;
 
     // 2. Pre-allocate stack buffer outside the critical section to avoid blocking interrupts during heap operations[cite: 5].
-    int32_t *stackMem = new int32_t[stackSize / sizeof(int32_t)];
+    uintptr_t *stackMem = new uintptr_t[stackSize / sizeof(uintptr_t)];
     if (!stackMem)
     {
 #if defined(THREAD_MONITOR)
@@ -183,25 +196,42 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
     }
 
     // 5. Construct the initial ARM Cortex-M exception frame on the allocated stack[cite: 5, 9].
-    uint32_t wordCount = stackSize >> 2;
-    uint32_t *sp = (uint32_t *)stackMem + wordCount;
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
+    uintptr_t wordCount = stackSize >> 2;
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+    uintptr_t wordCount = stackSize >> 3;
+#endif
+    uintptr_t *sp = (uintptr_t *)stackMem + wordCount;
 
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
     // Ensure 8-byte stack alignment at exception entry point[cite: 5].
-    if (((uint32_t)sp & 0x7) == 0)
+    if (((uintptr_t)sp & 0x7) == 0)
         sp--;
 
     *sp-- = 0x61000000;                                     // xPSR (Thumb state)[cite: 5]
-    *sp-- = (uint32_t)func;                                 // PC (Thread entry function)[cite: 5]
-    *sp-- = (uint32_t)(void (*)(void))terminateThread;      // LR (Return stub upon thread completion)[cite: 5]
-    *sp-- = (uint32_t)r12;                                  // R12[cite: 5]
+    *sp-- = (uintptr_t)func;                                 // PC (Thread entry function)[cite: 5]
+    *sp-- = (uintptr_t)(void (*)(void))terminateThread;      // LR (Return stub upon thread completion)[cite: 5]
+    *sp-- = (uintptr_t)r12;                                  // R12[cite: 5]
     sp -= 3;                                                // Skip R3, R2, R1[cite: 5]
-    *sp-- = (uint32_t)var;                                  // R0 (Parameter)[cite: 5]
-    *sp-- = (uint32_t)r11;                                  // R11[cite: 5]
-    *sp-- = (uint32_t)r10;                                  // R10[cite: 5]
-    *sp-- = (uint32_t)r9;                                   // R9[cite: 5]
-    *sp-- = (uint32_t)r8;                                   // R8[cite: 5]
+    *sp-- = (uintptr_t)var;                                  // R0 (Parameter)[cite: 5]
+    *sp-- = (uintptr_t)r11;                                  // R11[cite: 5]
+    *sp-- = (uintptr_t)r10;                                  // R10[cite: 5]
+    *sp-- = (uintptr_t)r9;                                   // R9[cite: 5]
+    *sp-- = (uintptr_t)r8;                                   // R8[cite: 5]
     sp -= 4;                                                // Skip R7-R4[cite: 5]
     *sp = 0xfffffffd;                                       // EXC_RETURN (Thread mode using PSP)[cite: 5, 9]
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+    if ((uintptr_t)sp & 0xF)
+        sp--;
+	
+	sp += 100;
+    sp[69] = 0; // Padding (어셈블리의 str x30, [x0, #-16]! 로 인해 남는 8바이트 빈 공간)
+    sp[68] = (uintptr_t)(void (*)(void))terminateThread; // X30 (LR - Link Register)
+    sp[67] = (uint64_t)func; // ELR_EL1 (실행할 스레드 함수의 진입점 PC)
+    sp[66] = 0x04;                   // SPSR_EL1 (PSTATE: EL1t 모드, IRQ/FIQ 모두 마스크 해제 상태!)
+    sp[1] = 0; // FPCR (부동소수점 제어 레지스터)
+    sp[0] = 0; // FPSR (부동소수점 상태 레지스터)
+#endif
 
     // 6. Initialize Task descriptor metadata[cite: 5].
     thread->malloc = stackMem;
@@ -539,7 +569,7 @@ static void waitForSignal(void)
 
 	if(gActivatedThreadCount == 0)
 	{
-		disableSystickInterrupt();
+		disableSchedulerTimer();
 		__WFI();
 	}
 
@@ -657,7 +687,7 @@ void signal(threadId_t id)
 		thread->waitingForSignal = false;
 
 		if(gActivatedThreadCount > 0)
-			enableSystickInterrupt();
+			enableSchedulerTimer();
 
 	    // 5. Check if the thread is already in the pending dispatch queue; if so, move it to the tail[cite: 5, 9].
 	    for (uint32_t i = 0; i < gPendingSignalThreadCount; i++)
@@ -681,7 +711,11 @@ void signal(threadId_t id)
 
 finish:
     // 8. Request a PendSV context switch to immediately schedule the signaled thread[cite: 5, 9].
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
     SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+	GIC_SendSGI((IRQn_Type)0, 0, 2);
+#endif
 
     // 9. Restore the previous interrupt state.
     __setCoreInterruptStatus(primask);
@@ -694,6 +728,8 @@ void yield(void)
 	__enable_irq();
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
 	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+	GIC_SendSGI((IRQn_Type)0, 0, 2);
 #endif
 
 	__setCoreInterruptStatus(primask);
@@ -712,7 +748,11 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
         return -1;
 
     // 1. Align stack size to an 8-byte boundary and enforce minimum size[cite: 5].
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
     stackSize = (stackSize + 7) & ~0x7;
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+    stackSize = (stackSize + 15) & ~0xF;
+#endif
     if (stackSize < MIN_STACK_SIZE)
         return -1;
 
@@ -721,7 +761,7 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
         return -1;
 
     // 2. Pre-allocate stack buffer outside the critical section[cite: 5].
-    int32_t *stackMem = new int32_t[stackSize / sizeof(int32_t)];
+    uintptr_t *stackMem = new uintptr_t[stackSize / sizeof(uintptr_t)];
     if (!stackMem)
         return -1;
 
@@ -869,21 +909,38 @@ static void prepareStack(triggerId_t id)
 	volatile task_t *thread = &gYssThreadList[id];
 
     // 5. Reconstruct the initial exception frame on the trigger's pre-allocated stack buffer[cite: 5, 9].
-    uint32_t stackSize = thread->size >> 2;
-    uint32_t *sp = (uint32_t *)thread->malloc;
-    sp += stackSize;
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
+    uintptr_t stackSize = thread->size >> 2;
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+    uintptr_t stackSize = thread->size >> 3;
+#endif
+    uintptr_t *sp = (uintptr_t *)thread->malloc + stackSize;
 
-    // Adjust stack boundary for 8-byte alignment compliance[cite: 5].
-    if (((uint32_t)sp & 0x7) == 0)
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
+    // Ensure 8-byte stack alignment at exception entry point[cite: 5].
+    if (((uintptr_t)sp & 0x7) == 0)
         sp--;
 
     *sp-- = 0x61000000;                              // xPSR (Thumb state)[cite: 5]
-    *sp-- = (uint32_t)thread->entry;      // PC (Trigger entry function)[cite: 5]
-    *sp-- = (uint32_t)(void (*)(void))disable;       // LR (Return stub that puts trigger into dormant state)[cite: 4, 5]
+    *sp-- = (uintptr_t)thread->entry;      // PC (Trigger entry function)[cite: 5]
+    *sp-- = (uintptr_t)(void (*)(void))disable;       // LR (Return stub that puts trigger into dormant state)[cite: 4, 5]
     sp -= 4;                                         // Skip hardware-saved R12, R3, R2, R1[cite: 5]
-    *sp-- = (uint32_t)thread->var;        // R0 (Parameter passed to trigger)[cite: 5]
+    *sp-- = (uintptr_t)thread->var;        // R0 (Parameter passed to trigger)[cite: 5]
     sp -= 8;                                         // Skip callee-saved R11-R4[cite: 5]
     *sp = 0xfffffffd;                                // EXC_RETURN (Return to Thread mode using PSP)[cite: 5, 9]
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+    if ((uintptr_t)sp & 0xF)
+        sp--;
+	
+	sp += 100;
+    sp[69] = 0; // Padding (어셈블리의 str x30, [x0, #-16]! 로 인해 남는 8바이트 빈 공간)
+    sp[68] = (uintptr_t)(void (*)(void))disable; // X30 (LR - Link Register)
+    sp[67] = (uintptr_t)thread->entry; // ELR_EL1 (실행할 스레드 함수의 진입점 PC)
+    sp[66] = 0x04;                   // SPSR_EL1 (PSTATE: EL1t 모드, IRQ/FIQ 모두 마스크 해제 상태!)
+    sp[1] = 0; // FPCR (부동소수점 제어 레지스터)
+    sp[0] = 0; // FPSR (부동소수점 상태 레지스터)
+#endif
+
     thread->sp = sp;
 }
 
@@ -921,7 +978,11 @@ void run(triggerId_t id)
     gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
 
     // Request a PendSV context switch to dispatch the trigger[cite: 5].
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
     SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+	GIC_SendSGI((IRQn_Type)0, 0, 2);
+#endif
 
     // Restore the previous interrupt state.
     __setCoreInterruptStatus(primask);
@@ -1034,13 +1095,16 @@ extern "C"
 #endif
 	}
 
-uint32_t yss_switchContext(uint32_t currentSp) __attribute__((optimize("-O2")));
-uint32_t yss_switchContext(uint32_t currentSp)
+uintptr_t yss_switchContext(uintptr_t currentSp) __attribute__((optimize("-O2")));
+uintptr_t yss_switchContext(uintptr_t currentSp)
 {
     // 1. Save the updated PSP of the interrupted thread into its task descriptor.
-    gYssThreadList[gCurrentThreadNum].sp = (uint32_t *)currentSp;
+    gYssThreadList[gCurrentThreadNum].sp = (uintptr_t *)currentSp;
 
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
 	__disable_irq();
+#endif
+
     // 2. Select the next runnable thread based on priority.
     if (gPendingSignalThreadCount > 0)
     {
@@ -1061,13 +1125,20 @@ uint32_t yss_switchContext(uint32_t currentSp)
 
         gCurrentThreadNum = gActivatedThreadList[gRoundRobinThreadNum];
     }
+
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
 	__enable_irq();
+#endif
 
     // 3. Reset SysTick Current Value Register to 0 so the new thread gets a full time-slice[cite: 5].
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
     SysTick->VAL = 0;
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+	raw_write_cntps_tval_el1(raw_read_cntfrq_el0() / THREAD_GIVEN_CLOCK);
+#endif
 
     // 4. Return the next thread's saved top-of-stack pointer (passed back in R0)[cite: 5].
-    return (uint32_t)gYssThreadList[gCurrentThreadNum].sp;
+    return (uintptr_t)gYssThreadList[gCurrentThreadNum].sp;
 }
 
 void PendSV_Handler(void) __attribute__((naked));
