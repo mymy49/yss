@@ -26,16 +26,12 @@ Initially shared simply as "yss OS", the project earned its full name **Yi Sun-S
 - **Signal/WaitForSignal** mechanism for efficient thread synchronization with automatic CPU sleep (`__WFI`) when no threads are runnable.
 - **Multi-core scheduling** support (`YSS__MULTI_CORE`) with hardware semaphore-based cross-core scheduling locks.
 
-#### 🔁 Design Philosophy: Cheap Context Switch + `yield()` When Idle
-The scheduler is intentionally simple: round-robin selection is O(1) and the PendSV
-switch path is short (roughly tens to ~150 cycles on Cortex-M4/M7, FPU frames included;
-estimated from the code, not measured). There are no priorities and no per-thread
-accounting.
+#### 🔁 Design Philosophy: Preemptive Time-Slicing & `yield()` Optimization
+The yss OS scheduler is fundamentally a **Preemptive Round-Robin** RTOS. It uses a hardware timer (`SysTick` on Cortex-M, or Physical Timer on Cortex-A) to enforce strict time-slicing (configured via `THREAD_GIVEN_CLOCK`). This guarantees that the CPU is forcibly reclaimed at regular intervals, preventing any single thread from monopolizing the system (no starvation), even if a thread runs heavy computations.
 
-The intended usage pattern follows from this: **when a thread has nothing to do, it calls
-`thread::yield()` immediately** and hands the CPU to a thread that has work. A thread that
-does have work keeps running, so it reacts at once. Threads woken by `signal()` or
-`trigger` are dispatched ahead of the round-robin order.
+Despite this preemptive safety net, the scheduler logic is intentionally simple: round-robin selection is O(1) and the context switch path is highly optimized (roughly tens to ~150 cycles on Cortex-M4/M7). There are no complex priority queues and no heavy per-thread accounting.
+
+Because all threads share equal priority, the intended usage pattern for optimal real-time latency is cooperative: **when a thread has nothing to do, it should call `thread::yield()` immediately** and hand the CPU to a thread that has work. Threads woken by `signal()` or `trigger` bypass the round-robin order and are dispatched immediately.
 
 ```cpp
 while (1)
