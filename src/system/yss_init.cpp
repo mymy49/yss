@@ -61,10 +61,6 @@ void initializeCheap(void)
 
 void initializeYss(void)
 {
-#if defined(YSS__CORE_CA35_H_GENERIC)
-	enable_simple_mmu_cache();
-#endif
-
 #if !defined(YSS_DRV_TIMER_UNSUPPORTED) || defined(YSS__RUNTIME_SUPPORT)
 	// Enable system time clock
 	initializeSystemTime();
@@ -86,13 +82,24 @@ void initializeYss(void)
     __setInterruptPriority(PendSV_IRQn, 15);
 	SysTick_Config(THREAD_GIVEN_CLOCK);
 #elif defined(YSS__CORE_CA35_H_GENERIC)
+	__disableInterrupt(NonSecPhysicalTimer_IRQn);
+	__disableInterrupt(SecPhysicalTimer_IRQn);
+
 	uint32_t clk = raw_read_cntfrq_el0();
+	if (clk == 0)
+	{
+		clk = 12000000;
+		raw_write_cntfrq_el0(clk);
+	}
+
 	raw_write_cntps_tval_el1(clk / THREAD_GIVEN_CLOCK);
 	__ISB();
+	
 	raw_write_cntps_ctl_el1(1);
-    __ISB();
+	__ISB();
+
 	__setInterruptPriority(SecPhysicalTimer_IRQn, 0x10); 
-    __enableInterrupt(SecPhysicalTimer_IRQn);
+	__enableInterrupt(SecPhysicalTimer_IRQn);
 #endif
 
 #endif
