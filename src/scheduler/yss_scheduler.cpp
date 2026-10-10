@@ -569,13 +569,13 @@ void delayUs(uint32_t delayTime)
 		}
 
 		gYssDelayList[index].endtime = endTime;
-		gYssDelayList[index].id = gCurrentThreadNum;
+		gYssDelayList[index].id = gCurrentThreadNum[cid];
 
 		gDelayCount++;
 
 		if(index == 0)
 		{
-			setDelayTimer(gCurrentThreadNum, endTime - curTime - 500);
+			setDelayTimer(gCurrentThreadNum[cid], endTime - curTime - 500);
 		}
 
 		sleep();
@@ -584,7 +584,7 @@ void delayUs(uint32_t delayTime)
 
 		for(index = 0; index < gDelayCount; index++)
 		{
-			if(gCurrentThreadNum == gYssDelayList[index].id)
+			if(gCurrentThreadNum[cid] == gYssDelayList[index].id)
 				break;
 		}
 

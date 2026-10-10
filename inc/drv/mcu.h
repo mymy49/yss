@@ -164,6 +164,7 @@
 #define YSS__CORE_CM23_H_GENERIC
 #define YSS__RUNTIME_SUPPORT
 #define YSS__DMA_ALLOCATION
+#define YSS__CORE_COUNT		1
 
 #if defined(__M251KG6AE__) || defined(__M251LG6AE__)
 #define YSS__NUM_OF_DMA_CH		8
