@@ -13,7 +13,7 @@
 #include <drv/mcu.h>
 #include <stdint.h>
 
-#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE) && !defined(YSS__MULTI_CORE)
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE)
 
 #include <config.h>
 #include <util/runtime.h>
@@ -25,12 +25,15 @@
 
 #pragma GCC optimize("O1")
 
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
 #if defined(__FPU_PRESENT) && __FPU_USED == 1
 #define MIN_STACK_SIZE		512
 #else
 #define MIN_STACK_SIZE		256
 #endif
-
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+#define MIN_STACK_SIZE		2048
+#endif
 
 // Pre-allocation depth used for scheduler stack bookkeeping.
 #define PREOCCUPY_DEPTH		(MAX_THREAD * 2)
@@ -61,19 +64,54 @@ typedef struct
 // Global task list and scheduler metadata.
 volatile task_t gYssThreadList[MAX_THREAD] = 
 {
-	{0, 0, 0, 0, 0, 0, 0, true, true, false, false, false}
+	{0, 0, 0, 0, 0, 0, 0, true, true, false, false, false},
+#if YSS__CORE_COUNT >= 2
+	{0, 0, 0, 0, 0, 0, 0, true, true, false, false, false},
+#endif
+#if YSS__CORE_COUNT >= 3
+	{0, 0, 0, 0, 0, 0, 0, true, true, false, false, false},
+#endif
+#if YSS__CORE_COUNT >= 4
+	{0, 0, 0, 0, 0, 0, 0, true, true, false, false, false},
+#endif
 };
 
 volatile delay_t gYssDelayList[MAX_THREAD];
 
-static volatile int32_t gNumOfThread = 1;                // Number of active thread slots
-static volatile threadId_t gCurrentThreadNum;            // Currently executing thread
+static volatile int32_t gNumOfThread = YSS__CORE_COUNT;                // Number of active thread slots
 static volatile threadId_t gRoundRobinThreadNum;         // Round robin scheduler index
 static volatile threadId_t gPendingSignalThreadList[MAX_THREAD];
 static volatile uint32_t gPendingSignalThreadCount;       // Pending signal/trigger queue count
-static volatile uint32_t gActivatedThreadCount = 1;
-static volatile threadId_t gActivatedThreadList[MAX_THREAD] = {0};
+static volatile uint32_t gActivatedThreadCount = YSS__CORE_COUNT;
 static volatile int32_t gDelayCount;
+
+static volatile threadId_t gActivatedThreadList[MAX_THREAD] = 
+{
+	0,
+#if YSS__CORE_COUNT >= 2
+	1,
+#endif
+#if YSS__CORE_COUNT >= 3
+	2,
+#endif
+#if YSS__CORE_COUNT >= 4
+	3,
+#endif
+};
+
+static volatile threadId_t gCurrentThreadNum[YSS__CORE_COUNT] = 
+{
+	0,
+#if YSS__CORE_COUNT >= 2
+	1,
+#endif
+#if YSS__CORE_COUNT >= 3
+	2,
+#endif
+#if YSS__CORE_COUNT >= 4
+	3,
+#endif
+};
 
 void setDelayTimer(threadId_t id, uint64_t sleepTime);
 
@@ -104,7 +142,7 @@ inline void removeFromActivatedThreadList(threadId_t id)
 inline void disableSchedulerTimer(void)
 {
 #if defined(YSS__CORE_CA35_H_GENERIC)
-
+	raw_write_cntps_ctl_el1(0);
 #elif defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC)
 	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
 #endif
@@ -113,7 +151,7 @@ inline void disableSchedulerTimer(void)
 inline void enableSchedulerTimer(void)
 {
 #if defined(YSS__CORE_CA35_H_GENERIC)
-
+	raw_write_cntps_ctl_el1(1);
 #elif defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC)
 	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
 #endif
@@ -131,14 +169,59 @@ static inline bool isAllocatedThreadId(threadId_t id)
            gYssThreadList[id].allocated;
 }
 
+/// @brief Put the current thread to sleep until it is signaled.
+/// @warning Must be called with interrupts DISABLED (PRIMASK set).
+///          Callers are responsible for masking interrupts beforehand.
+/// @details When no runnable thread remains, WFI is executed while PRIMASK is
+///          still set. A pending interrupt wakes the core from WFI even though
+///          its handler cannot run yet, so a signal() raised between the check
+///          and WFI is never lost. The handler runs once __enable_irq() is
+///          called afterward. SysTick is stopped here and restarted by signal().
+static inline void sleep(void)
+{
+	uint32_t cid = semaphore::getId();
+
+    removeFromActivatedThreadList(gCurrentThreadNum[cid]);
+	gYssThreadList[gCurrentThreadNum[cid]].waitingForSignal = true;
+
+	if(gActivatedThreadCount == 0)
+	{
+		disableSchedulerTimer();
+		semaphore::unlockSchedule();
+		__WFI();
+	}
+
+	thread::yield();
+}
+
+#if YSS__CORE_COUNT == 1
+namespace semaphore
+{
+uint32_t getId()
+{
+	return 0;
+}
+
+uint32_t lockSchedule()
+{
+	return 0;
+}
+
+void unlockSchedule()
+{
+
+}
+}
+#endif
+
 namespace thread
 {
 void terminateThread(void);
-static void waitForSignal(void);
 
 threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
 	volatile task_t *thread;
+    int32_t id = -1;
 
     if (!func)
         return -1;
@@ -153,18 +236,27 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
     if (stackSize < MIN_STACK_SIZE)
         return -1;
 
-    // 4. Validate slot capacity and locate an available scheduler slot[cite: 5].
-    if (gNumOfThread >= MAX_THREAD)
-        return -1;
+    // Enter critical section by capturing the PRIMASK state.
+	uint32_t cid = semaphore::lockSchedule();
+    uint32_t primask = __getCoreInterruptStatus();
+	uintptr_t *stackMem;
+	uintptr_t wordCount;
+	uintptr_t *sp;
 
-    // 2. Pre-allocate stack buffer outside the critical section to avoid blocking interrupts during heap operations[cite: 5].
-    uintptr_t *stackMem = new uintptr_t[stackSize / sizeof(uintptr_t)];
+    __disable_irq();
+
+    // Validate slot capacity and locate an available scheduler slot[cite: 5].
+    if (gNumOfThread >= MAX_THREAD)
+		 goto error_handler;
+
+    // Pre-allocate stack buffer outside the critical section to avoid blocking interrupts during heap operations[cite: 5].
+	stackMem = new uintptr_t[stackSize / sizeof(uintptr_t)];
     if (!stackMem)
     {
 #if defined(THREAD_MONITOR)
         debug_printf("Thread creation failed!! Stack allocation failed.");
 #endif
-        return -1;
+		 goto error_handler;
     }
 
 #if (FILL_THREAD_STACK)
@@ -172,11 +264,6 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
     memset(stackMem, 0xAA, stackSize);
 #endif
 
-    // 3. Enter critical section by capturing the PRIMASK state.
-    uint32_t primask = __getCoreInterruptStatus();
-    __disable_irq();
-
-    int32_t id = -1;
     for (uint32_t i = 1; i < MAX_THREAD; i++)
     {
         if (!gYssThreadList[i].allocated)
@@ -190,18 +277,17 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
 
     if (id < 0)
     {
-        __setCoreInterruptStatus(primask);
         delete[] stackMem;
-        return -1;
+		goto error_handler;
     }
 
     // 5. Construct the initial ARM Cortex-M exception frame on the allocated stack[cite: 5, 9].
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
-    uintptr_t wordCount = stackSize >> 2;
+    wordCount = stackSize >> 2;
 #elif defined(YSS__CORE_CA35_H_GENERIC)
-    uintptr_t wordCount = stackSize >> 3;
+    wordCount = stackSize >> 3;
 #endif
-    uintptr_t *sp = (uintptr_t *)stackMem + wordCount;
+    sp = (uintptr_t *)stackMem + wordCount;
 
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
     // Ensure 8-byte stack alignment at exception entry point[cite: 5].
@@ -249,8 +335,10 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
     insertToActivatedThreadList(id);
     gNumOfThread++;
 
+error_handler :
     // 8. Restore the previous interrupt state.
     __setCoreInterruptStatus(primask);
+	semaphore::unlockSchedule();
 
     return id;
 }
@@ -276,8 +364,20 @@ void remove(threadId_t &id)
 		return;
 
 	// 1. A thread cannot remove itself via remove() (use terminateThread() instead), and invalid IDs are rejected[cite: 5].
-	if (id == gCurrentThreadNum || id <= 0)
+	if (id == gCurrentThreadNum[0]
+#if YSS__CORE_COUNT >= 2
+		|| id == gCurrentThreadNum[1]
+#endif
+#if YSS__CORE_COUNT >= 3
+		|| id == gCurrentThreadNum[2]
+#endif
+#if YSS__CORE_COUNT >= 4
+		|| id == gCurrentThreadNum[3]
+#endif
+		|| id <= 0)
+	{
 		return;
+	}
 
 	// 2. Wait until the thread's protection count drops to zero before proceeding[cite: 5, 9].
 	while (gYssThreadList[id].lockCnt > 0)
@@ -286,6 +386,7 @@ void remove(threadId_t &id)
 	}
 
 	// 3. Enter critical section by capturing the PRIMASK state and disabling interrupts.
+	uint32_t cid = semaphore::lockSchedule();
 	uint32_t primask = __getCoreInterruptStatus();
 	__disable_irq();
 
@@ -335,7 +436,7 @@ void remove(threadId_t &id)
 		}
 #endif
 
-		// 6. Free the allocated stack memory and reset task descriptor fields[cite: 5].
+		// Free the allocated stack memory and reset task descriptor fields[cite: 5].
 		delete[] gYssThreadList[id].malloc;
 		gYssThreadList[id].malloc = nullptr;
 		gYssThreadList[id].sp = nullptr;
@@ -343,26 +444,28 @@ void remove(threadId_t &id)
 		gNumOfThread--;
 	}
 
-	// 8. Invalidate the caller's thread ID reference[cite: 5, 9].
+	// Invalidate the caller's thread ID reference[cite: 5, 9].
 	id = 0;
 
-	// 9. Restore the previous interrupt state.
+	// Restore the previous interrupt state.
 	__setCoreInterruptStatus(primask);
+	semaphore::unlockSchedule();
 }
 
 threadId_t getCurrentThreadId(void)
 {
-	return gCurrentThreadNum;
+	return gCurrentThreadNum[semaphore::getId()];
 }
 
 void protect(void)
 {
     // 1. Capture current interrupt state and enter critical section.
+	uint32_t cid = semaphore::getId();
     uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     // 2. Atomically increment the protection count for the currently running thread[cite: 5, 9].
-    gYssThreadList[gCurrentThreadNum].lockCnt++;
+    gYssThreadList[gCurrentThreadNum[cid]].lockCnt++;
 
     // 3. Restore the previous interrupt state.
     __setCoreInterruptStatus(primask);
@@ -387,14 +490,15 @@ void protect(threadId_t id)
 void unprotect(void)
 {
     // 1. Capture current interrupt state and enter critical section.
+	uint32_t cid = semaphore::getId();
     uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     // 2. Atomically decrement the protection count, preventing negative underflow[cite: 5, 9].
-    if (gYssThreadList[gCurrentThreadNum].lockCnt > 0)
-        gYssThreadList[gCurrentThreadNum].lockCnt--;
+    if (gYssThreadList[gCurrentThreadNum[cid]].lockCnt > 0)
+        gYssThreadList[gCurrentThreadNum[cid]].lockCnt--;
 
-    bool isUnprotected = (gYssThreadList[gCurrentThreadNum].lockCnt == 0);
+    bool isUnprotected = (gYssThreadList[gCurrentThreadNum[cid]].lockCnt == 0);
 
     // 3. Restore the previous interrupt state.
     __setCoreInterruptStatus(primask);
@@ -402,23 +506,6 @@ void unprotect(void)
     // 4. If fully unprotected, yield to let any waiting remove() call proceed[cite: 5, 9].
     if (isUnprotected)
         yield();
-}
-
-void unprotect(threadId_t id)
-{
-    if (!isAllocatedThreadId(id))
-        return;
-
-    // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = __getCoreInterruptStatus();
-    __disable_irq();
-
-    // 2. Decrement the protection count for the designated thread[cite: 9].
-    if (gYssThreadList[id].lockCnt > 0)
-        gYssThreadList[id].lockCnt--;
-
-    // 3. Restore the previous interrupt state.
-    __setCoreInterruptStatus(primask);
 }
 
 /// @brief Terminate the current thread and switch to the next runnable thread.
@@ -429,6 +516,7 @@ void unprotect(threadId_t id)
 ///          switch away from this (now freed) thread.
 void terminateThread(void)
 {
+	uint32_t cid = semaphore::lockSchedule();
 	__disable_irq();
 
 	// Release the current thread's stack before requesting a context switch.
@@ -436,13 +524,13 @@ void terminateThread(void)
 	// current PSP before switching to another thread. yss guarantees that this
 	// stack cannot be reallocated during this transition, so the memory remains
 	// available until PendSV completes the context save.
-	delete[] gYssThreadList[gCurrentThreadNum].malloc;
-	gYssThreadList[gCurrentThreadNum].signalLock = true;
-	removeFromActivatedThreadList(gCurrentThreadNum);
-	gYssThreadList[gCurrentThreadNum].allocated = false;
+	delete[] gYssThreadList[gCurrentThreadNum[cid]].malloc;
+	gYssThreadList[gCurrentThreadNum[cid]].signalLock = true;
+	removeFromActivatedThreadList(gCurrentThreadNum[cid]);
+	gYssThreadList[gCurrentThreadNum[cid]].allocated = false;
 	gNumOfThread--;
 
-	__enable_irq();
+	semaphore::unlockSchedule();
 
 	// Yield to let PendSV select the next runnable thread.
 	thread::yield();
@@ -457,9 +545,10 @@ void delayUs(uint32_t delayTime)
 {
 #if defined(YSS_DELAY_TIMER)
 	// Compute the absolute wake-up time in microseconds.
+	uint32_t cid = semaphore::lockSchedule();
 	uint32_t primask = __getCoreInterruptStatus();
-
 	__disable_irq();
+
 	uint64_t curTime = runtime::getUsec();
 	uint64_t endTime = curTime + delayTime;
 
@@ -489,7 +578,7 @@ void delayUs(uint32_t delayTime)
 			setDelayTimer(gCurrentThreadNum, endTime - curTime - 500);
 		}
 
-		waitForSignal();
+		sleep();
 
 		__disable_irq();
 
@@ -550,42 +639,15 @@ void delayUs(uint32_t delayTime)
 #endif
 }
 
-/// @brief Put the current thread to sleep until it is signaled.
-/// @warning Must be called with interrupts DISABLED (PRIMASK set).
-///          Callers are responsible for masking interrupts beforehand.
-/// @details When no runnable thread remains, WFI is executed while PRIMASK is
-///          still set. A pending interrupt wakes the core from WFI even though
-///          its handler cannot run yet, so a signal() raised between the check
-///          and WFI is never lost. The handler runs once __enable_irq() is
-///          called afterward. SysTick is stopped here and restarted by signal().
-static void waitForSignal(void)
-{
-	uint32_t primask = __getCoreInterruptStatus();
-
-	__disable_irq();
-
-    removeFromActivatedThreadList(gCurrentThreadNum);
-	gYssThreadList[gCurrentThreadNum].waitingForSignal = true;
-
-	if(gActivatedThreadCount == 0)
-	{
-		disableSchedulerTimer();
-		__WFI();
-	}
-
-    yield();
-
-	__setCoreInterruptStatus(primask);
-}
-
 void waitForSignal(uint32_t timeout)
 {
 	if(timeout == 0)
 		return;
 
+	uint32_t cid = semaphore::lockSchedule();
 	uint32_t primask = __getCoreInterruptStatus();
-
 	__disable_irq();
+
 	uint64_t curTime = runtime::getUsec();
 	uint64_t endTime = curTime + timeout * 1000;
 
@@ -606,20 +668,20 @@ void waitForSignal(uint32_t timeout)
 		}
 
 		gYssDelayList[index].endtime = endTime;
-		gYssDelayList[index].id = gCurrentThreadNum;
+		gYssDelayList[index].id = gCurrentThreadNum[cid];
 
 		gDelayCount++;
 
 		if(index == 0)
 		{
-			setDelayTimer(gCurrentThreadNum, endTime - curTime - 500);
+			setDelayTimer(gCurrentThreadNum[cid], endTime - curTime - 500);
 		}
 
-		waitForSignal();
+		sleep();
 
 		for(index = 0; index < gDelayCount; index++)
 		{
-			if(gCurrentThreadNum == gYssDelayList[index].id)
+			if(gCurrentThreadNum[cid] == gYssDelayList[index].id)
 				break;
 		}
 
@@ -648,37 +710,92 @@ void waitForSignal(uint32_t timeout)
 	}
 
 	__setCoreInterruptStatus(primask);
+	semaphore::unlockSchedule();
 }
 
 void signal(threadId_t id)
 {	
-	volatile task_t *thread = &gYssThreadList[id];
     // 1. Capture current interrupt state and enter critical section.
+	uint32_t cid = semaphore::lockSchedule();
     uint32_t primask = __getCoreInterruptStatus();
-
-    if (!isAllocatedThreadId(id))
-        return;
-
     __disable_irq();
+
+	volatile task_t *thread = &gYssThreadList[id];
+
+	switch(cid)
+	{
+	case 0 :
+	    if (!isAllocatedThreadId(id)
+#if YSS__CORE_COUNT >= 2
+		 || id == gCurrentThreadNum[1]
+#endif
+#if YSS__CORE_COUNT >= 3
+		 || id == gCurrentThreadNum[2]
+#endif
+#if YSS__CORE_COUNT >= 4
+		 || id == gCurrentThreadNum[3]
+#endif
+		)
+			goto error_handler;
+		break;
+
+	case 1 :
+	    if (!isAllocatedThreadId(id)
+#if YSS__CORE_COUNT >= 2
+		 || id == gCurrentThreadNum[0]
+#endif
+#if YSS__CORE_COUNT >= 3
+		 || id == gCurrentThreadNum[2]
+#endif
+#if YSS__CORE_COUNT >= 4
+		 || id == gCurrentThreadNum[3]
+#endif
+		)
+			goto error_handler;
+		break;
+
+	case 2 :
+	    if (!isAllocatedThreadId(id)
+#if YSS__CORE_COUNT >= 2
+		 || id == gCurrentThreadNum[0]
+#endif
+#if YSS__CORE_COUNT >= 3
+		 || id == gCurrentThreadNum[1]
+#endif
+#if YSS__CORE_COUNT >= 4
+		 || id == gCurrentThreadNum[3]
+#endif
+		)
+			goto error_handler;
+		break;
+
+	case 3 :
+	    if (!isAllocatedThreadId(id)
+#if YSS__CORE_COUNT >= 2
+		 || id == gCurrentThreadNum[0]
+#endif
+#if YSS__CORE_COUNT >= 3
+		 || id == gCurrentThreadNum[1]
+#endif
+#if YSS__CORE_COUNT >= 4
+		 || id == gCurrentThreadNum[2]
+#endif
+		)
+			goto error_handler;
+		break;
+	}
 
     // 2. Reject invalid IDs or threads that explicitly disallow signaling[cite: 5, 9].
     if (id < 0 || thread->signalLock || thread->waitingForSignal == false)
-    {
-        __setCoreInterruptStatus(primask);
-        return;
-    }
+		goto error_handler;
 
     // 3. Guard against pending dispatch queue overflow[cite: 5].
     if (gPendingSignalThreadCount >= MAX_THREAD)
-    {
-        __setCoreInterruptStatus(primask);
-        return;
-    }
+		goto error_handler;
 
 	if(thread->able)
 	{
-	    __setCoreInterruptStatus(primask);
-		return;
+		goto error_handler;
 	}
 	else
 	{
@@ -718,7 +835,9 @@ finish:
 #endif
 
     // 9. Restore the previous interrupt state.
+error_handler :
     __setCoreInterruptStatus(primask);
+	semaphore::unlockSchedule();
 }
 
 void yield(void)
@@ -743,9 +862,10 @@ void disable(void);
 triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 {
 	volatile task_t *thread;
+    int32_t id = -1;
 
     if (!func)
-        return -1;
+        return id;
 
     // 1. Align stack size to an 8-byte boundary and enforce minimum size[cite: 5].
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
@@ -754,16 +874,12 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
     stackSize = (stackSize + 15) & ~0xF;
 #endif
     if (stackSize < MIN_STACK_SIZE)
-        return -1;
-
-    // 4. Validate slot capacity and locate an available scheduler slot[cite: 5].
-    if (gNumOfThread >= MAX_THREAD)
-        return -1;
+        return id;
 
     // 2. Pre-allocate stack buffer outside the critical section[cite: 5].
     uintptr_t *stackMem = new uintptr_t[stackSize / sizeof(uintptr_t)];
     if (!stackMem)
-        return -1;
+        return id;
 
 #if (FILL_THREAD_STACK)
     // Pre-fill stack buffer with watermark pattern for diagnostic analysis[cite: 5].
@@ -771,10 +887,14 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 #endif
 
     // 3. Enter critical section by capturing the PRIMASK state.
+	uint32_t cid = semaphore::lockSchedule();
     uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
-    int32_t id = -1;
+    // 4. Validate slot capacity and locate an available scheduler slot[cite: 5].
+    if (gNumOfThread >= MAX_THREAD)
+		goto error_handler;
+
     for (uint32_t i = 1; i < MAX_THREAD; i++)
     {
         if (!gYssThreadList[i].allocated)
@@ -788,9 +908,8 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 
     if (id < 0)
     {
-        __setCoreInterruptStatus(primask);
         delete[] stackMem;
-        return -1;
+		goto error_handler;
     }
 
     // 5. Initialize trigger task descriptor metadata[cite: 5].
@@ -808,8 +927,10 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 
     gNumOfThread++;
 
+error_handler :
     // 6. Restore the previous interrupt state.
     __setCoreInterruptStatus(primask);
+	semaphore::unlockSchedule();
 
     return id;
 }
@@ -821,12 +942,26 @@ triggerId_t add(void (*func)(void), int32_t  stackSize)
 
 void remove(triggerId_t &id)
 {
+	uint32_t cid = semaphore::lockSchedule();
+    uint32_t primask = __getCoreInterruptStatus();
+    __disable_irq();
+
     if (!isAllocatedThreadId(id))
-        return;
+		goto error_handler;
 
     // 1. A running trigger cannot remove itself directly, and invalid IDs are rejected[cite: 5, 9].
-    if (id == gCurrentThreadNum || id <= 0)
-        return;
+    if (id == gCurrentThreadNum[0]
+#if YSS__CORE_COUNT >= 2
+		|| id == gCurrentThreadNum[1]
+#endif	
+#if YSS__CORE_COUNT >= 3
+		|| id == gCurrentThreadNum[2]
+#endif	
+#if YSS__CORE_COUNT >= 4
+		|| id == gCurrentThreadNum[3]
+#endif	
+		|| id <= 0)
+		goto error_handler;
 
     // 2. Wait until the trigger's protection count drops to zero before proceeding[cite: 5, 9].
     while (gYssThreadList[id].lockCnt > 0)
@@ -835,8 +970,6 @@ void remove(triggerId_t &id)
     }
 
     // 3. Enter critical section by capturing the PRIMASK state and disabling interrupts.
-    uint32_t primask = __getCoreInterruptStatus();
-    __disable_irq();
 
     if (gYssThreadList[id].allocated)
     {
@@ -898,13 +1031,15 @@ void remove(triggerId_t &id)
     }
 
     // 9. Invalidate the caller's trigger ID reference[cite: 5, 9].
-    id = 0;
+    id = -1;
 
+error_handler :
     // 10. Restore the previous interrupt state.
     __setCoreInterruptStatus(primask);
+	semaphore::unlockSchedule();
 }
 
-static void prepareStack(triggerId_t id)
+static inline void prepareStack(triggerId_t id)
 {
 	volatile task_t *thread = &gYssThreadList[id];
 
@@ -948,28 +1083,23 @@ void run(triggerId_t id)
 {
 	volatile task_t *thread = &gYssThreadList[id];
 
-    if (!isAllocatedThreadId(id))
-        return;
-
     // Capture current interrupt state and enter critical section.
+	uint32_t cid = semaphore::lockSchedule();
     uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
+    if (!isAllocatedThreadId(id))
+        goto error_handler;
+
     // Reject tasks that are not configured as triggers or are already active[cite: 5].
     if (!thread->trigger || thread->able || thread->waitingForSignal || gPendingSignalThreadCount >= MAX_THREAD)
-    {
-        __setCoreInterruptStatus(primask);
-        return;
-    }
+        goto error_handler;
 
     // Prevent duplicate enqueueing if the trigger ID is already pending[cite: 5].
     for (uint32_t i = 0; i < gPendingSignalThreadCount; i++)
     {
         if (gPendingSignalThreadList[i] == id)
-        {
-            __setCoreInterruptStatus(primask);
-            return;
-        }
+	        goto error_handler;
     }
 
 
@@ -984,8 +1114,10 @@ void run(triggerId_t id)
 	GIC_SendSGI((IRQn_Type)0, 0, 2);
 #endif
 
+error_handler :
     // Restore the previous interrupt state.
     __setCoreInterruptStatus(primask);
+	semaphore::unlockSchedule();
 }
 
 /// @brief Disable the currently running trigger, preventing it from running until re-triggered.
@@ -1002,9 +1134,12 @@ void disable(void)
 	// (e.g., when run() is called from an interrupt context).
 	while(1)
 	{
+		uint32_t cid = semaphore::lockSchedule();
+
 		__disable_irq();
-		removeFromActivatedThreadList(gCurrentThreadNum);
-		__enable_irq();
+		removeFromActivatedThreadList(gCurrentThreadNum[cid]);
+
+		semaphore::unlockSchedule();
 		thread::yield();
 	}
 }
@@ -1012,27 +1147,12 @@ void disable(void)
 void protect(void)
 {
     // 1. Capture current interrupt state and enter critical section.
+	uint32_t cid = semaphore::getId();
     uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     // 2. Atomically increment the protection count for the current trigger task[cite: 5, 9].
-    gYssThreadList[gCurrentThreadNum].lockCnt++;
-
-    // 3. Restore the previous interrupt state.
-    __setCoreInterruptStatus(primask);
-}
-
-void protect(triggerId_t id)
-{
-    if (!isAllocatedThreadId(id))
-        return;
-
-    // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = __getCoreInterruptStatus();
-    __disable_irq();
-
-    // 2. Increment the protection count for the designated trigger[cite: 9].
-    gYssThreadList[id].lockCnt++;
+    gYssThreadList[gCurrentThreadNum[cid]].lockCnt++;
 
     // 3. Restore the previous interrupt state.
     __setCoreInterruptStatus(primask);
@@ -1041,14 +1161,15 @@ void protect(triggerId_t id)
 void unprotect(void)
 {
     // 1. Capture current interrupt state and enter critical section.
+	uint32_t cid = semaphore::getId();
     uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     // 2. Decrement protection count and check if it reached zero[cite: 5, 9].
-    if (gYssThreadList[gCurrentThreadNum].lockCnt > 0)
-        gYssThreadList[gCurrentThreadNum].lockCnt--;
+    if (gYssThreadList[gCurrentThreadNum[cid]].lockCnt > 0)
+        gYssThreadList[gCurrentThreadNum[cid]].lockCnt--;
 
-    bool isUnprotected = (gYssThreadList[gCurrentThreadNum].lockCnt == 0);
+    bool isUnprotected = (gYssThreadList[gCurrentThreadNum[cid]].lockCnt == 0);
 
     // 3. Restore the previous interrupt state.
     __setCoreInterruptStatus(primask);
@@ -1056,23 +1177,6 @@ void unprotect(void)
     // 4. Yield CPU if protection is fully released to allow pending trigger::remove() calls to execute[cite: 5, 9].
     if (isUnprotected)
         thread::yield();
-}
-
-void unprotect(triggerId_t id)
-{
-    if (!isAllocatedThreadId(id))
-        return;
-
-    // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = __getCoreInterruptStatus();
-    __disable_irq();
-
-    // 2. Decrement the protection count for the designated trigger[cite: 9].
-    if (gYssThreadList[id].lockCnt > 0)
-        gYssThreadList[id].lockCnt--;
-
-    // 3. Restore the previous interrupt state.
-    __setCoreInterruptStatus(primask);
 }
 }
 
@@ -1098,8 +1202,9 @@ extern "C"
 uintptr_t yss_switchContext(uintptr_t currentSp) __attribute__((optimize("-O2")));
 uintptr_t yss_switchContext(uintptr_t currentSp)
 {
+	uint32_t cid = semaphore::lockSchedule();
     // 1. Save the updated PSP of the interrupted thread into its task descriptor.
-    gYssThreadList[gCurrentThreadNum].sp = (uintptr_t *)currentSp;
+    gYssThreadList[gCurrentThreadNum[cid]].sp = (uintptr_t *)currentSp;
 
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
 	__disable_irq();
@@ -1110,20 +1215,43 @@ uintptr_t yss_switchContext(uintptr_t currentSp)
     {
         // Highest priority: Dispatched pending signals/triggers.
         gPendingSignalThreadCount--;
-        gCurrentThreadNum = gPendingSignalThreadList[gPendingSignalThreadCount];
+        gCurrentThreadNum[cid] = gPendingSignalThreadList[gPendingSignalThreadCount];
         gPendingSignalThreadList[gPendingSignalThreadCount] = 0;
 		
-		if(gYssThreadList[gCurrentThreadNum].trigger)
-			trigger::prepareStack(gCurrentThreadNum);
+		if(gYssThreadList[gCurrentThreadNum[cid]].trigger)
+			trigger::prepareStack(gCurrentThreadNum[cid]);
     }
     else
     {
+#if YSS__CORE_COUNT >= 2
+		gCurrentThreadNum[cid] = 0xFF;
+
+		do
+		{
+	        gRoundRobinThreadNum++;
+	        if (gRoundRobinThreadNum >= gActivatedThreadCount)
+	            gRoundRobinThreadNum = 0;
+		}while (gActivatedThreadList[gRoundRobinThreadNum] == gCurrentThreadNum[0]
+#if YSS__CORE_COUNT >= 2
+		 || gActivatedThreadList[gRoundRobinThreadNum] == gCurrentThreadNum[1]
+#endif
+#if YSS__CORE_COUNT >= 3
+		 || gActivatedThreadList[gRoundRobinThreadNum] == gCurrentThreadNum[2]
+#endif
+#if YSS__CORE_COUNT >= 4
+		 || gActivatedThreadList[gRoundRobinThreadNum] == gCurrentThreadNum[3]
+#endif
+		);
+
+        gCurrentThreadNum[cid] = gActivatedThreadList[gRoundRobinThreadNum];
+#else
         // Standard round-robin selection among active threads[cite: 5].
         gRoundRobinThreadNum++;
         if ((uint32_t)gRoundRobinThreadNum >= gActivatedThreadCount)
             gRoundRobinThreadNum = 0;
 
-        gCurrentThreadNum = gActivatedThreadList[gRoundRobinThreadNum];
+        gCurrentThreadNum[0] = gActivatedThreadList[gRoundRobinThreadNum];
+#endif
     }
 
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
@@ -1136,9 +1264,11 @@ uintptr_t yss_switchContext(uintptr_t currentSp)
 #elif defined(YSS__CORE_CA35_H_GENERIC)
 	raw_write_cntps_tval_el1(raw_read_cntfrq_el0() / THREAD_GIVEN_CLOCK);
 #endif
+	
+	semaphore::unlockSchedule();
 
     // 4. Return the next thread's saved top-of-stack pointer (passed back in R0)[cite: 5].
-    return (uintptr_t)gYssThreadList[gCurrentThreadNum].sp;
+    return (uintptr_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
 }
 
 void PendSV_Handler(void) __attribute__((naked));

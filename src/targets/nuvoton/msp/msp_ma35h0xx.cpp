@@ -147,6 +147,14 @@ void __WEAK initializeSystem(void)
              (1ULL << 14)  | // DZE: EL0에서 메모리 블록을 0으로 초기화(DC ZVA)하는 명령어 허용
              (1ULL << 15);   // UCT: EL0에서 캐시 타입 정보(CTR_EL0) 읽기 허용
     __asm__ volatile("msr sctlr_el1, %0\n isb" : : "r"(sctlr));
+
+	SYS->RLKTZS = 0x59;
+	SYS->RLKTZS = 0x16;
+	SYS->RLKTZS = 0x88;
+
+	CLK->SYSCLK1 |= CLK_SYSCLK1_HWSCKEN_Msk;
+
+	SYS->RLKTZS = 0x00;
 }
 
 extern "C"
@@ -190,6 +198,53 @@ extern "C"
 	{
 		while(1);
 	}
+}
+
+namespace semaphore
+{
+#define CORE_ID_UNLOCKED 0
+#define CORE_ID_A35      1
+#define CORE_ID_M4       2
+
+uint32_t getId()
+{
+	uint64_t mpidr;
+
+	__asm__ volatile ("mrs %0, mpidr_el1" : "=r" (mpidr));
+
+	return mpidr & 3;
+}
+
+#define HWSEM_MAGIC_KEY  0xAA
+
+uint32_t lockSchedule()
+{
+	uint64_t mpidr;
+	uint32_t id, key;
+
+	__asm__ volatile ("mrs %0, mpidr_el1" : "=r" (mpidr));
+	
+	mpidr &= 0x03;
+
+	do
+	{
+		HWSEM0->SEM[0] = (mpidr << HWSEM_SEM_KEY_Pos);
+		key = (HWSEM0->SEM[0] & HWSEM_SEM_KEY_Msk) >> HWSEM_SEM_KEY_Pos;
+		id = (HWSEM0->SEM[0] & HWSEM_SEM_ID_Msk) >> HWSEM_SEM_ID_Pos;
+	}while(id == CORE_ID_A35 && key != mpidr);
+    
+    return key;
+}
+
+void unlockSchedule()
+{
+	uint64_t mpidr;
+
+	__asm__ volatile ("mrs %0, mpidr_el1" : "=r" (mpidr));
+	
+	mpidr &= 0x03;
+	HWSEM0->SEM[0] = (mpidr << HWSEM_SEM_KEY_Pos);
+}
 }
 
 #endif

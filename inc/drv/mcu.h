@@ -173,6 +173,7 @@
 
 #elif  defined(__MA35H0_FAMILY)
 #define YSS__CORE_CA35_H_GENERIC
+#define YSS__CORE_COUNT		2
 
 #elif defined(__MAX32665_FAMILY)
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
