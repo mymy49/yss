@@ -13,11 +13,14 @@
 #include <targets/nuvoton/NuvotonSpi.h>
 #include <yss/scheduler.h>
 #include <yss/reg.h>
+#include <util/runtime.h>
 
 /**
  * @file drv_spi_nuvoton.cpp
  * @brief SPI target-specific driver source file for Nuvoton.
  */
+
+#pragma GCC optimize("O1")
 
 NuvotonSpi::NuvotonSpi(const Drv::setup_t drvSetup, const setup_t setup) : Spi(drvSetup)
 {
@@ -34,7 +37,7 @@ error_t NuvotonSpi::setSpecification(const specification_t &spec)
 	if (mLastSpec == &spec)
 		return error_t::ERROR_NONE;
 	
-	enable(false);
+	setBitData(mDev->CTL, false, SPI_CTL_SPIEN_Pos);
 
 	uint32_t reg, bit;
 	uint32_t div, clk = Drv::getClockFrequency(), mode = 0;
@@ -94,8 +97,8 @@ error_t NuvotonSpi::setSpecification(const specification_t &spec)
 	mDev->CLKDIV = div;
 
 	mLastSpec = &spec;
-
-	enable(true);
+	
+	setBitData(mDev->CTL, true, SPI_CTL_SPIEN_Pos);
 
 	return error_t::ERROR_NONE;
 }
@@ -128,54 +131,57 @@ error_t NuvotonSpi::initialize(config_t config)
 	return error_t::ERROR_NONE;
 }
 
-void NuvotonSpi::enable(bool en)
+error_t NuvotonSpi::send(void *src, int32_t  size, uint32_t timeout)
 {
-	setBitData(mDev->CTL, en, SPI_CTL_SPIEN_Pos);
-}
+	uint64_t endTime = runtime::getUsec() + ++timeout * 1000 - 500;
 
-error_t NuvotonSpi::send(void *src, int32_t  size)
-{
 	if(size == 0)
 		return error_t::ERROR_NONE;
 	
 	mTxDma->ready(mTxDmaInfo, src, size);
 
-	mDev->PDMACTL = SPI_PDMACTL_TXPDMAEN_Msk;
+	thread::resetWaitingSignalPendingFlag();
 
-	while (!mTxDma->isComplete())
-		thread::yield();
+	mDev->PDMACTL = SPI_PDMACTL_TXPDMAEN_Msk;
+	
+	thread::waitForSignal(timeout);
 
 	while (mDev->STATUS & SPI_STATUS_BUSY_Msk)
 		thread::yield();
 
 	mDev->PDMACTL = 0;
-
-	return error_t::ERROR_NONE;
+	
+	if(runtime::getUsec() >= endTime)
+		return error_t::TIMEOUT;
+	else
+		return error_t::ERROR_NONE;
 }
 
-error_t NuvotonSpi::exchange(void *des, int32_t  size)
+error_t NuvotonSpi::exchange(void *des, int32_t  size, uint32_t timeout)
 {
+	uint64_t endTime = runtime::getUsec() + ++timeout * 1000 - 500;
+
 	if(size == 0)
 		return error_t::ERROR_NONE;
 
 	while(~mDev->STATUS & SPI_STATUS_RXEMPTY_Msk)
 		mDev->RX;
 
-	// dc cvac 호출
+	mRxDma->ready(mRxDmaInfo, des, size, true);
+	mTxDma->ready(mTxDmaInfo, des, size, false);
 
-	mRxDma->ready(mRxDmaInfo, des, size);
-	mTxDma->ready(mTxDmaInfo, des, size);
+	thread::resetWaitingSignalPendingFlag();
 
 	mDev->PDMACTL = SPI_PDMACTL_RXPDMAEN_Msk | SPI_PDMACTL_TXPDMAEN_Msk;
 
-	while (!mTxDma->isComplete() && !mRxDma->isComplete() && mDev->STATUS & SPI_STATUS_BUSY_Msk)
-		thread::yield();
+	thread::waitForSignal(timeout);
 
 	mDev->PDMACTL = 0;
 
-	// dc ivac 호출
-
-	return error_t::ERROR_NONE;
+	if(runtime::getUsec() >= endTime)
+		return error_t::TIMEOUT;
+	else
+		return error_t::ERROR_NONE;
 }
 
 uint32_t NuvotonSpi::exchange(uint32_t data)

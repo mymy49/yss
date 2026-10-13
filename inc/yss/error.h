@@ -70,6 +70,7 @@ typedef enum
 	ACCESS_ERROR,                   ///< Access denied or permission error.
 	DIVIDE_BY_ZERO,
 	FUNCTION_CODE_EMPTY,
+	WRONG_INPUT_RANGE,
 
 	// FAT File System Errors
 	SECTOR_READ,                    ///< Failed to read sector.

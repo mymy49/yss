@@ -16,9 +16,12 @@
 
 #include <drv/peripheral.h>
 #include <drv/Dma.h>
-#include <util/ElapsedTime.h>
+#include <util/Timeout.h>
 #include <yss/reg.h>
 #include <yss/scheduler.h>
+#include <util/runtime.h>
+
+#pragma GCC optimize("O1")
 
 Dma::Dma(const Drv::setup_t drvSetup, const setup_t dmaSetup) : Drv(drvSetup)
 {
@@ -44,12 +47,15 @@ void Dma::initialize(void)
 	mDma->INTEN = 0xFFFF;
 }
 
-error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count)
+error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count, uint32_t timeout)
 {
+	Timeout tout(timeout);
+
 	if(count == 0)
 		return error_t::NO_DATA;
 	
 	uint32_t ctl = dmaInfo.ctl & ~(0xFFFF0000 | (1 << 14));
+	bool timeoutFlag;
 
 	ctl |= PDMA_OP_BASIC;
 	ctl &= ~PDMA_OP_SCATTER;
@@ -57,6 +63,7 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count)
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	mCircularModeFlag = false;
+	mSignalFlag = true;
 	mThreadId = thread::getCurrentThreadId();
 
 	if(dmaInfo.ctl & 1 << 14) // Memory -> Peripheral
@@ -87,11 +94,23 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count)
 	mChannel->CTL = ctl;
 
 	mDma->SWREQ |= 1 << mChNum;
+	mThreadId = thread::getCurrentThreadId();
 
-	while(!mCompleteFlag)
+	thread::waitForSignal(timeout);
+	
+	while(1)
+	{
+		timeoutFlag = tout.isTimeout();
+		if(mCompleteFlag || timeoutFlag)
+			break;
+
 		thread::yield();
-
-	return error_t::ERROR_NONE;
+	}
+	
+	if(timeoutFlag)
+		return error_t::TIMEOUT;
+	else
+		return error_t::ERROR_NONE;
 }
 
 void Dma::trigger(void)
@@ -99,7 +118,7 @@ void Dma::trigger(void)
 	mDma->SWREQ |= 1 << mChNum;
 }
 
-error_t Dma::ready(dmaInfo_t &dmaInfo, void *buf, int32_t count)
+error_t Dma::ready(dmaInfo_t &dmaInfo, void *buf, int32_t count, bool signal)
 {
 	if(count == 0)
 		return error_t::NO_DATA;
@@ -112,6 +131,7 @@ error_t Dma::ready(dmaInfo_t &dmaInfo, void *buf, int32_t count)
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	mCircularModeFlag = false;
+	mSignalFlag = signal;
 	mThreadId = thread::getCurrentThreadId();
 
 	if(dmaInfo.ctl & 1 << 14) // Memory -> Peripheral
@@ -303,8 +323,8 @@ void Dma::isr(void)
 	{
 		mCompleteFlag = true;
 	}
-	
-	thread::signal(mThreadId);
+	if(mSignalFlag)
+		thread::signal(mThreadId);
 }
 
 DmaChannel1::DmaChannel1(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)

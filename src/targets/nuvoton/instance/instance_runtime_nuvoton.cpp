@@ -16,6 +16,8 @@
 #include <util/runtime.h>
 #include <drv/peripheral.h>
 
+#pragma GCC optimize("O1")
+
 #define TOP				0xFFFFFF
 
 #if YSS_RUNTIME_TIMER == RUNTIME_TIMER0
@@ -49,7 +51,6 @@ static bool gUpdateFlag = true;
 
 extern "C"
 {
-	void ISR_RUNTIME(void) __attribute__((optimize("-O1")));
 	void ISR_RUNTIME(void)
 	{
 		RUNTIME_DEV->INTSTS = TIMER_INTSTS_TIF_Msk;
@@ -68,7 +69,6 @@ extern "C"
 	}
 }
 
-void initializeSystemTime(void) __attribute__((optimize("-O1")));
 void initializeSystemTime(void)
 {
 	uint32_t clk, reg;
@@ -119,30 +119,28 @@ namespace runtime
 {
 uint64_t gLastRequestTime;
 
-uint32_t getSec(void) __attribute__((optimize("-O1")));
 uint32_t getSec(void)
 {
 	return getUsec() / 1000000;
 }
 
-uint64_t getMsec(void) __attribute__((optimize("-O1")));
 uint64_t getMsec(void)
 {
 	uint64_t usec = getUsec();
 	return usec / 1000;
 }
 
-uint64_t getUsec(void) __attribute__((optimize("-O1")));
 uint64_t getUsec(void)
 {
 	uint32_t cnt, iflag;
 	uint64_t acc;
+	uint32_t primask = __getCoreInterruptStatus();
 
 	__disable_irq();
 	cnt = RUNTIME_DEV->CNT;
 	acc = gYssTimeSum;
 	iflag = gUpdateFlag;
-	__enable_irq();
+	__setCoreInterruptStatus(primask);
 	
 	if(iflag == true && cnt > (TOP * 6 / 8))
 		return cnt + acc - TOP;

@@ -53,6 +53,7 @@ typedef struct
 	bool trigger;             // Trigger thread flag
 	bool signalLock;          // Prevent thread from being signaled
 	bool waitingForSignal;
+	bool waitingForSignalPendingFlag;
 }volatile task_t;
 
 typedef struct
@@ -630,14 +631,37 @@ void delayUs(uint32_t delayTime)
 #endif
 }
 
+void resetWaitingSignalPendingFlag(void)
+{
+	uint32_t cid = semaphore::lockSchedule();
+	uint32_t primask = __getCoreInterruptStatus();
+	__disable_irq();
+	
+	gYssThreadList[gCurrentThreadNum[cid]].waitingForSignalPendingFlag = false;
+
+	__setCoreInterruptStatus(primask);
+	semaphore::unlockSchedule();		
+}
+
 void waitForSignal(uint32_t timeout)
 {
 	if(timeout == 0)
 		return;
 
-	uint32_t primask = __getCoreInterruptStatus();
-	__disable_irq();
 	uint32_t cid = semaphore::lockSchedule();
+	uint32_t primask = __getCoreInterruptStatus();
+	volatile task_t *thread = &gYssThreadList[gCurrentThreadNum[cid]];
+
+	__disable_irq();
+
+	if(thread->waitingForSignalPendingFlag)
+	{
+		thread->waitingForSignalPendingFlag = false;
+		__setCoreInterruptStatus(primask);
+		semaphore::unlockSchedule();
+		return;
+	}
+
 	uint64_t curTime = runtime::getUsec();
 	uint64_t endTime = curTime + timeout * 1000;
 
@@ -792,7 +816,13 @@ void signal(threadId_t id, bool lock)
     if (id < 0 || thread->signalLock || thread->waitingForSignal == false)
 		goto error_handler;
 
-    // 3. Guard against pending dispatch queue overflow.
+	if(thread->waitingForSignal == false)
+	{
+		thread->waitingForSignalPendingFlag = true;
+		return;
+	}
+
+    // 3. Guard against pending dispatch queue overflow[cite: 5].
     if (gPendingSignalThreadCount >= MAX_THREAD)
 		goto error_handler;
 

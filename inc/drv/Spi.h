@@ -166,15 +166,14 @@ public:
     mode_t mode; ///< SPI operating mode: master (MODE_MAIN) or slave (MODE_SUB).
   } config_t;
 
-  /**
-   * @brief Initializes the SPI peripheral.
-   * @details The device is initialized but not yet enabled.
-   *
-   * @param[in] config Configuration parameters.
-   * @return error_t Returns ERROR_NONE on success.
-   */
-  virtual error_t initialize(config_t config)
-      __attribute__((optimize("-O1"))) = 0;
+	/**
+	* @brief Initializes the SPI peripheral.
+	* @details The device is initialized but not yet enabled.
+	*
+	* @param[in] config Configuration parameters.
+	* @return error_t Returns ERROR_NONE on success.
+	*/
+	virtual error_t initialize(config_t config) = 0;
 
   /**
    * @brief Configures transmission specifications for the SPI peripheral.
@@ -185,8 +184,7 @@ public:
    * specifications.
    * @return error_t Returns ERROR_NONE on success.
    */
-  virtual error_t setSpecification(const specification_t &spec)
-      __attribute__((optimize("-O1"))) = 0;
+  virtual error_t setSpecification(const specification_t &spec) = 0;
 
   /**
    * @brief Transmits a single byte of data.
@@ -194,7 +192,7 @@ public:
    *
    * @param[in] data The data byte to transmit.
    */
-  virtual void send(uint32_t data) __attribute__((optimize("-O1"))) = 0;
+  virtual void send(uint32_t data) = 0;
 
   /**
    * @brief Transmits a block of data.
@@ -204,8 +202,7 @@ public:
    * @param[in] size The size of the data payload in bytes.
    * @return error_t Returns ERROR_NONE on success.
    */
-  virtual error_t send(void *src, int32_t size)
-      __attribute__((optimize("-O1"))) = 0;
+  virtual error_t send(void *src, int32_t size, uint32_t timeout = 1000) = 0;
 
   /**
    * @brief Transmits and receives a single byte of data simultaneously.
@@ -213,7 +210,7 @@ public:
    * @param[in] data The data byte to transmit.
    * @return uint32_t The received data byte.
    */
-  virtual uint32_t exchange(uint32_t data) __attribute__((optimize("-O1"))) = 0;
+  virtual uint32_t exchange(uint32_t data) = 0;
 
   /**
    * @brief Transmits and receives a block of data simultaneously.
@@ -224,25 +221,15 @@ public:
    * @param[in] size The size of the data block to exchange in bytes.
    * @return error_t Returns ERROR_NONE on success.
    */
-  virtual error_t exchange(void *des, int32_t size)
-      __attribute__((optimize("-O1"))) = 0;
+  virtual error_t exchange(void *des, int32_t size, uint32_t timeout = 1000) = 0;
 
   // The following are internal functions and do not need to be called by the
   // user application.
-  Spi(const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
+  Spi(const Drv::setup_t drvSetup);
 
 protected:
   const specification_t *mLastSpec;
   mode_t mMode;
-
-  /**
-   * @brief Enables or disables the SPI peripheral.
-   * @details To ensure correct transmission, call setSpecification() to
-   * configure target parameters before calling enable(true).
-   *
-   * @param[in] en If true, enables the SPI peripheral. If false, disables it.
-   */
-  virtual void enable(bool en) __attribute__((optimize("-O1"))) = 0;
 };
 
 #endif

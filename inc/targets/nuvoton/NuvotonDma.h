@@ -42,7 +42,7 @@ class Dma : public Drv
 	/**
 	 * @brief Initializes the DMA device.
 	 */
-	void initialize(void) __attribute__((optimize("-O1")));
+	void initialize(void);
 	
 	/**
 	 * @brief Executes a synchronous DMA transfer.
@@ -54,7 +54,7 @@ class Dma : public Drv
 	 * @param[in] count Total number of data elements to transfer.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t transfer(dmaInfo_t &dmaInfo, void *data, int32_t  count) __attribute__((optimize("-O1")));
+	error_t transfer(dmaInfo_t &dmaInfo, void *data, int32_t  count, uint32_t timeout = 1000);
 	
 	/**
 	 * @brief Prepares a DMA channel for a transfer without starting it immediately.
@@ -66,7 +66,7 @@ class Dma : public Drv
 	 * @param[in] count Total number of data elements to transfer.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t ready(dmaInfo_t &dmaInfo, void *data, int32_t  count) __attribute__((optimize("-O1")));
+	error_t ready(dmaInfo_t &dmaInfo, void *data, int32_t  count, bool signal = true);
 	
 	/**
 	 * @brief Configures and starts a continuous circular mode transfer.
@@ -78,14 +78,14 @@ class Dma : public Drv
 	 * @param[in] count Total number of data elements to transfer per cycle.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t transferAsCircularMode(const dmaInfo_t &dmaInfo, void *data, uint16_t count) __attribute__((optimize("-O1")));
+	error_t transferAsCircularMode(const dmaInfo_t &dmaInfo, void *data, uint16_t count);
 	
 	/**
 	 * @brief Gets the remaining number of data elements to transfer.
 	 *
 	 * @return uint16_t The remaining transfer count.
 	 */
-	uint16_t getRemainingTransferCount(void) __attribute__((optimize("-O1")));
+	uint16_t getRemainingTransferCount(void);
 	
 	/**
 	 * @brief Gets the number of completed circular buffer cycles.
@@ -93,7 +93,7 @@ class Dma : public Drv
 	 *
 	 * @return uint16_t The completed transfer count.
 	 */
-	uint16_t getCircularModeSentCount(void) __attribute__((optimize("-O1")));
+	uint16_t getCircularModeSentCount(void);
 	
 	/**
 	 * @brief Gets the buffer pointer of the last completed transfer chunk in circular mode.
@@ -106,39 +106,39 @@ class Dma : public Drv
 	/**
 	 * @brief Aborts the active DMA transfer on this channel.
 	 */
-	void stop(void) __attribute__((optimize("-O1")));
+	void stop(void);
 
 	/**
 	 * @brief Manually triggers a transfer that was configured via ready().
 	 */
-	void trigger(void) __attribute__((optimize("-O1")));
+	void trigger(void);
 
 	/**
 	 * @brief Checks if the last initiated DMA transfer completed successfully.
 	 *
 	 * @return bool True if the transfer is complete, false otherwise.
 	 */
-	bool isComplete(void) __attribute__((optimize("-O1")));
+	bool isComplete(void);
 	
 	/**
 	 * @brief Checks if an error occurred during the last DMA transfer.
 	 *
 	 * @return bool True if a transfer error occurred, false otherwise.
 	 */
-	bool isError(void) __attribute__((optimize("-O1")));
+	bool isError(void);
 
 	/**
 	 * @brief Sets the peripheral request source number for this DMA channel.
 	 *
 	 * @param[in] src The hardware peripheral trigger source ID.
 	 */
-	virtual void setSource(uint8_t src) __attribute__((optimize("-O1"))) = 0;
+	virtual void setSource(uint8_t src) = 0;
 	
 
 	// Internal system functions. Do not call from user application.
 	void remainingTransfer(void);
 
-	void isr(void) __attribute__((optimize("-O1")));
+	void isr(void);
 
 	struct setup_t
 	{
@@ -159,6 +159,7 @@ class Dma : public Drv
 	bool mCompleteFlag, mErrorFlag;
 	bool mCircularModeFlag;
 	bool mDirFlag;
+	bool mSignalFlag;
 };
 
 class DmaChannel1 : public Dma

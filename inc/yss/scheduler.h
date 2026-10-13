@@ -159,6 +159,8 @@ namespace thread
 	 */
 	void delayUs(uint32_t delayTime);
 
+	void resetWaitingSignalPendingFlag(void);
+
 	/**
 	 * @brief Block the current thread until it is signaled or the timeout (ms) expires.
 	 *
