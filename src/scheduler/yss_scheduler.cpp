@@ -813,7 +813,7 @@ void signal(threadId_t id, bool lock)
 	}
 
     // 2. Reject invalid IDs or threads that explicitly disallow signaling.
-    if (id < 0 || thread->signalLock || thread->waitingForSignal == false)
+    if (id < 0 || thread->signalLock)
 		goto error_handler;
 
 	if(thread->waitingForSignal == false)
