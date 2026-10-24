@@ -231,7 +231,10 @@ extern "C"
 
 	}
 
+	void TMR0_IRQHandler();
 	void TMR1_IRQHandler();
+	void TMR2_IRQHandler();
+	void TMR3_IRQHandler();
 	void PDMA0_IRQHandler();
 	void PDMA1_IRQHandler();
 	void PDMA2_IRQHandler();
@@ -246,8 +249,20 @@ extern "C"
 			GIC_SendSGI((IRQn_Type)0, 0, 2);
 			break;
 			
+		case TMR0_IRQn :
+			TMR0_IRQHandler();
+			break;
+
 		case TMR1_IRQn :
 			TMR1_IRQHandler();
+			break;
+
+		case TMR2_IRQn :
+			TMR2_IRQHandler();
+			break;
+
+		case TMR3_IRQn :
+			TMR3_IRQHandler();
 			break;
 
 		case PDMA0_IRQn :
@@ -297,6 +312,15 @@ extern "C"
 	{
 		while(1);
 	}
+
+	void __WEAK TMR0_IRQHandler() {}
+	void __WEAK TMR1_IRQHandler() {}
+	void __WEAK TMR2_IRQHandler() {}
+	void __WEAK TMR3_IRQHandler() {}
+	void __WEAK PDMA0_IRQHandler() {}
+	void __WEAK PDMA1_IRQHandler() {}
+	void __WEAK PDMA2_IRQHandler() {}
+	void __WEAK PDMA3_IRQHandler() {}
 }
 
 namespace semaphore

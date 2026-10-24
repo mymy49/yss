@@ -5,7 +5,7 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#if defined(__M251_SUBFAMILY) || defined(__M46x_SUBFAMILY)
+#if defined(__M251_SUBFAMILY) || defined(__M46x_SUBFAMILY) || defined(__MA35H0_FAMILY)
 
 #include <config.h>
 #include <yss/instance.h>
@@ -70,9 +70,9 @@ extern "C"
 		}
 		else
 		{
-			__disable_irq();
+			//__disable_irq();
 			thread::signal(gSleepId);
-			__enable_irq();
+			//__enable_irq();
 		}
 	}
 }

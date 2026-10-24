@@ -179,19 +179,23 @@ static inline bool isAllocatedThreadId(threadId_t id)
 /// @param cid Core ID of the calling processor.
 static inline void sleep(uint32_t cid)
 {
-    removeFromActivatedThreadList(gCurrentThreadNum[cid]);
-	gYssThreadList[gCurrentThreadNum[cid]].waitingForSignal = true;
+	threadId_t id = gCurrentThreadNum[cid];
+	removeFromActivatedThreadList(id);
+	gYssThreadList[id].waitingForSignal = true;
+	semaphore::unlockSchedule();
 
-	if(gActivatedThreadCount == 0)
+	while(gYssThreadList[id].waitingForSignal)
 	{
-		semaphore::unlockSchedule();
-		__WFI();
-		__enable_irq();
-	}
-	else
-	{
-		semaphore::unlockSchedule();
-		thread::yield();
+		if(gActivatedThreadCount == 0)
+		{
+			__enable_irq();
+			__WFI();
+			__disable_irq();
+		}
+		else
+		{
+			thread::yield();
+		}
 	}
 }
 
