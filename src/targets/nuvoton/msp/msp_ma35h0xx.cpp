@@ -169,9 +169,14 @@ void __WEAK initializeSystem(void)
 void __WEAK initializeSystem1(void)
 {
 	initializeMmu(l1_page_table1);
-}
 
-volatile uint32_t gCore1Step;
+	uint32_t clk = raw_read_cntfrq_el0();
+	if (clk == 0)
+	{
+		clk = 12000000;
+		raw_write_cntfrq_el0(clk);
+	}
+}
 
 void initializeMultiCore(void)
 {
@@ -190,8 +195,32 @@ extern "C"
 {
 	void main1()
 	{
-		gCore1Step++;
-		while(1);
+		GIC_CPUInterfaceInit();
+
+		__disableInterrupt(NonSecPhysicalTimer_IRQn);
+		__disableInterrupt(SecPhysicalTimer_IRQn);
+
+		uint32_t clk = raw_read_cntfrq_el0();
+ 
+		raw_write_cntps_tval_el1(clk / THREAD_GIVEN_CLOCK);
+		__ISB();
+	
+		raw_write_cntps_ctl_el1(1);
+		__ISB();
+
+		__setInterruptPriority(SecPhysicalTimer_IRQn, 0x10); 
+		__enableInterrupt(SecPhysicalTimer_IRQn);
+	
+	    GIC_SetPriority(SGI0_IRQn, 0x10);
+	    GIC_EnableIRQ(SGI0_IRQn);
+		GIC_SetGroup(SGI0_IRQn, 0);
+
+		__enable_irq();
+
+		while(1)
+		{
+			thread::yield();
+		}
 	}
 
 	void SystemCoreClockUpdate(void)
@@ -219,8 +248,14 @@ extern "C"
 		}
 	}
 
+	volatile uint64_t gFaultElr[2];
+	volatile uint64_t gFaultEsr[2];
+
 	void synchronousExceptionHandler()
 	{
+		uint32_t cid = semaphore::getId();
+		__asm__ volatile("mrs %0, elr_el1" : "=r"(gFaultElr[cid]));
+		__asm__ volatile("mrs %0, esr_el1" : "=r"(gFaultEsr[cid]));
 		while(1);
 	}
 
@@ -255,11 +290,12 @@ uint32_t getId()
 uint32_t lockSchedule()
 {
 	uint64_t mpidr;
-	uint32_t id, key;
+	uint32_t id, key, cid;
 
 	__asm__ volatile ("mrs %0, mpidr_el1" : "=r" (mpidr));
 	
-	mpidr &= 0x03;
+	cid = mpidr &= 0x03;
+	mpidr += 0xAA;
 
 	do
 	{
@@ -268,7 +304,7 @@ uint32_t lockSchedule()
 		id = (HWSEM0->SEM[0] & HWSEM_SEM_ID_Msk) >> HWSEM_SEM_ID_Pos;
 	}while(id == CORE_ID_A35 && key != mpidr);
     
-    return key;
+    return cid;
 }
 
 void unlockSchedule()
@@ -278,6 +314,8 @@ void unlockSchedule()
 	__asm__ volatile ("mrs %0, mpidr_el1" : "=r" (mpidr));
 	
 	mpidr &= 0x03;
+	mpidr += 0xAA;
+
 	HWSEM0->SEM[0] = (mpidr << HWSEM_SEM_KEY_Pos);
 }
 }

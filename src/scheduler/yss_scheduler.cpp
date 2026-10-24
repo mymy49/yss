@@ -1264,7 +1264,7 @@ uintptr_t yss_switchContext(uintptr_t currentSp)
     else
     {
 #if YSS__CORE_COUNT >= 2
-		gCurrentThreadNum[cid] = 0xFF;
+		gCurrentThreadNum[cid] = -1;
 
 		do
 		{
