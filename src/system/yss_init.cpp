@@ -164,7 +164,7 @@ void initializeYss(void)
 #endif
 
 #endif
-#if defined(YSS__MULTI_CORE)
+#if YSS__CORE_COUNT > 1
 	initializeMultiCore();
 #endif
 }

@@ -16,6 +16,7 @@
 
 #include <config.h>
 #include <yss/instance.h>
+#include <string.h>
 
 #if defined(__M46x_SUBFAMILY)
 #define FBDIV_VALUE		48
@@ -29,6 +30,8 @@ void initializeDma(void)
 {
 
 }
+
+extern "C" void reset_handler();
 
 // Stage-1 Level-1 Block Descriptor (1GB) 필드
 #define PTE_BLOCK		(0x1ULL)			// [1:0] = 01 : Block descriptor
@@ -44,9 +47,10 @@ void initializeDma(void)
 // 1. 메모리 지도(Page Table) 생성
 // 1GB 단위로 총 4GB 공간을 커버하므로 4칸짜리 배열이면 충분합니다.
 // (MMU 테이블은 메모리에서 4KB 단위로 정렬되어야 하므로 aligned 속성을 줍니다)
-static volatile uint64_t l1_page_table[4]  __attribute__((section(".non_init"), aligned(4096)));
+static volatile uint64_t l1_page_table0[4]  __attribute__((section(".non_init"), aligned(4096)));
+static volatile uint64_t l1_page_table1[4]  __attribute__((section(".non_init"), aligned(4096)));
 
-void __WEAK initializeSystem(void)
+void initializeMmu(volatile uint64_t *table)
 {
     // =========================================================================
     // 단계 1: 메모리 속성(Attribute) 2가지 정의 (MAIR_EL3 레지스터)
@@ -66,16 +70,16 @@ void __WEAK initializeSystem(void)
     // =========================================================================
 
 	// [인덱스 0] 0x00000000 ~ 0x3FFFFFFF (1GB) : SRAM 구역 -> 캐시 켜기(속성 1)
-	l1_page_table[0] = 0x00000000ULL | PTE_NORMAL;   // SRAM
+	table[0] = 0x00000000ULL | PTE_NORMAL;   // SRAM
 
 	// [인덱스 1] 0x40000000 ~ 0x7FFFFFFF (1GB) : 페리퍼럴 -> 캐시 끄기(속성 0)
-	l1_page_table[1] = 0x40000000ULL | PTE_DEVICE;   // 페리퍼럴
+	table[1] = 0x40000000ULL | PTE_DEVICE;   // 페리퍼럴
 
 	// [인덱스 2] 0x80000000 ~ 0xBFFFFFFF (1GB) : DDRAM 구역-> 캐시 켜기(속성 1)
-	l1_page_table[2] = 0x80000000ULL | PTE_NORMAL;   // DDR
+	table[2] = 0x80000000ULL | PTE_NORMAL;   // DDR
 
 	// [인덱스 3] 0xC0000000 ~ 0xFFFFFFFF (1GB) : DDRAM 구역 -> 캐시 켜기(속성 1)
-	l1_page_table[3] = 0xC0000000ULL | PTE_NORMAL;   // (일단 유지, 나중에 정리)
+	table[3] = 0xC0000000ULL | PTE_NORMAL;   // (일단 유지, 나중에 정리)
     // =========================================================================
     // 단계 3: 변환 제어 레지스터 (TCR_EL3) 설정
     // 32비트 주소 공간 사용(4GB), 4KB 페이지 단위 사용 설정
@@ -101,9 +105,9 @@ void __WEAK initializeSystem(void)
     // =========================================================================
     // 단계 4: 페이지 테이블 시작 주소 입력 (TTBR0_EL3)
     // =========================================================================
-    __asm__ volatile("msr ttbr0_el3, %0" : : "r"((uint64_t)l1_page_table));
-    __asm__ volatile("msr ttbr0_el2, %0" : : "r"((uint64_t)l1_page_table));
-    __asm__ volatile("msr ttbr0_el1, %0" : : "r"((uint64_t)l1_page_table));
+    __asm__ volatile("msr ttbr0_el3, %0" : : "r"((uint64_t)table));
+    __asm__ volatile("msr ttbr0_el2, %0" : : "r"((uint64_t)table));
+    __asm__ volatile("msr ttbr0_el1, %0" : : "r"((uint64_t)table));
     // =========================================================================
     // 단계 5: 기존 TLB 찌꺼기 초기화 및 동기화 배리어
     // =========================================================================
@@ -147,6 +151,11 @@ void __WEAK initializeSystem(void)
              (1ULL << 14)  | // DZE: EL0에서 메모리 블록을 0으로 초기화(DC ZVA)하는 명령어 허용
              (1ULL << 15);   // UCT: EL0에서 캐시 타입 정보(CTR_EL0) 읽기 허용
     __asm__ volatile("msr sctlr_el1, %0\n isb" : : "r"(sctlr));
+}
+
+void __WEAK initializeSystem(void)
+{
+	initializeMmu(l1_page_table0);
 
 	SYS->RLKTZS = 0x59;
 	SYS->RLKTZS = 0x16;
@@ -157,8 +166,34 @@ void __WEAK initializeSystem(void)
 	SYS->RLKTZS = 0x00;
 }
 
+void __WEAK initializeSystem1(void)
+{
+	initializeMmu(l1_page_table1);
+}
+
+volatile uint32_t gCore1Step;
+
+void initializeMultiCore(void)
+{
+	SYS->RLKTZS = 0x59;
+	SYS->RLKTZS = 0x16;
+	SYS->RLKTZS = 0x88;
+
+	SYS->CA35WRBADR1 = (uintptr_t)reset_handler;
+	__asm__ volatile("dsb sy");
+	sev();
+
+	SYS->RLKTZS = 0x00;
+}
+
 extern "C"
 {
+	void main1()
+	{
+		gCore1Step++;
+		while(1);
+	}
+
 	void SystemCoreClockUpdate(void)
 	{
 
