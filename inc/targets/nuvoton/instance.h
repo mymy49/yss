@@ -103,6 +103,78 @@ extern DmaChannel15 dmaChannel15;
 #if YSS__NUM_OF_DMA_CH >= 16
 extern DmaChannel16 dmaChannel16;
 #endif
+#if YSS__NUM_OF_DMA_CH >= 17
+extern DmaChannel17 dmaChannel17;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 18
+extern DmaChannel18 dmaChannel18;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 19
+extern DmaChannel19 dmaChannel19;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 20
+extern DmaChannel20 dmaChannel20;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 21
+extern DmaChannel21 dmaChannel21;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 22
+extern DmaChannel22 dmaChannel22;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 23
+extern DmaChannel23 dmaChannel23;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 24
+extern DmaChannel24 dmaChannel24;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 25
+extern DmaChannel25 dmaChannel25;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 26
+extern DmaChannel26 dmaChannel26;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 27
+extern DmaChannel27 dmaChannel27;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 28
+extern DmaChannel28 dmaChannel28;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 29
+extern DmaChannel29 dmaChannel29;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 30
+extern DmaChannel30 dmaChannel30;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 31
+extern DmaChannel31 dmaChannel31;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 32
+extern DmaChannel32 dmaChannel32;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 33
+extern DmaChannel33 dmaChannel33;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 34
+extern DmaChannel34 dmaChannel34;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 35
+extern DmaChannel35 dmaChannel35;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 36
+extern DmaChannel36 dmaChannel36;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 37
+extern DmaChannel37 dmaChannel37;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 38
+extern DmaChannel38 dmaChannel38;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 39
+extern DmaChannel39 dmaChannel39;
+#endif
+#if YSS__NUM_OF_DMA_CH >= 40
+extern DmaChannel40 dmaChannel40;
+#endif
 #endif
 
 #include "NuvotonFlash.h"

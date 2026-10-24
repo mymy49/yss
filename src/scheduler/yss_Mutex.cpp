@@ -48,7 +48,7 @@ Mutex::Mutex(void)
 
 uint32_t Mutex::lock(void)
 {
-#if defined(YSS__MULTI_CORE)
+#if YSS__CORE_COUNT > 1
 	semaphore::lockMutex();
 #endif
 
@@ -74,11 +74,11 @@ uint32_t Mutex::lock(void)
 		if (timeout < runtime::getMsec())
 			mutexWatchdogHandler();
 #endif
-#if defined(YSS__MULTI_CORE)
+#if YSS__CORE_COUNT > 1
 		semaphore::unlockMutex();
 #endif
 		thread::yield(); // Relinquish remaining time slice to allow other threads to run[cite: 2].
-#if defined(YSS__MULTI_CORE)
+#if YSS__CORE_COUNT > 1
 		semaphore::lockMutex();
 #endif
 	}
@@ -88,7 +88,7 @@ uint32_t Mutex::lock(void)
 	if (mIrqNum >= 0)
 		__disableInterrupt(mIrqNum);
 
-#if defined(YSS__MULTI_CORE)
+#if YSS__CORE_COUNT > 1
 		semaphore::unlockMutex();
 #endif
 
@@ -102,7 +102,7 @@ void Mutex::unlock(void)
 {
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 
-#if defined(YSS__MULTI_CORE)
+#if YSS__CORE_COUNT > 1
 	semaphore::lockMutex();
 #endif
 
@@ -127,7 +127,7 @@ void Mutex::unlock(void)
 	//if (mInit && mWaitNum != mCurrentNum)
 	//	thread::yield();
 
-#if defined(YSS__MULTI_CORE)
+#if YSS__CORE_COUNT > 1
 	semaphore::unlockMutex();
 #endif
 #endif

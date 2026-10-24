@@ -30,6 +30,8 @@
 #define FOUT_MAX_FREQ	500000000
 #endif
 
+#pragma GCC optimize("O1")
+
 uint32_t Clock::getHircFrequency(void)
 {
 	return HIRC_CLK_FREQ;
@@ -44,6 +46,23 @@ uint32_t Clock::getLircFrequency(void)
 {
 	return LIRC_CLK_FREQ;
 }
+
+void Clock::enableSystem0Clock(uint32_t position, bool en)
+{
+	if(en)
+		CLK->SYSCLK0 |= 1 << position;
+	else
+		CLK->SYSCLK0 &= ~(1 << position);		
+}
+
+void Clock::enableSystem1Clock(uint32_t position, bool en)
+{
+	if(en)
+		CLK->SYSCLK1 |= 1 << position;
+	else
+		CLK->SYSCLK1 &= ~(1 << position);		
+}
+
 #if 0
 
 error_t Clock::setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv, uint8_t pclk0Div, uint8_t pclk1Div)

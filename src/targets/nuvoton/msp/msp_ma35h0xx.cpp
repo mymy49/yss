@@ -18,11 +18,6 @@
 #include <yss/instance.h>
 #include <string.h>
 
-void initializeDma(void)
-{
-
-}
-
 extern "C" void reset_handler();
 
 // Stage-1 Level-1 Block Descriptor (1GB) 필드
@@ -188,6 +183,17 @@ void initializeMultiCore(void)
 	SYS->RLKTZS = 0x00;
 }
 
+void initializeDma(void)
+{
+	// DMA1
+	dmaChannel1.enableClock();
+	dmaChannel1.initialize();
+	dmaChannel11.initialize();
+	dmaChannel21.initialize();
+	dmaChannel31.initialize();
+	dmaChannel1.enableInterrupt();
+}
+
 extern "C"
 {
 	void main1()
@@ -226,6 +232,10 @@ extern "C"
 	}
 
 	void TMR1_IRQHandler();
+	void PDMA0_IRQHandler();
+	void PDMA1_IRQHandler();
+	void PDMA2_IRQHandler();
+	void PDMA3_IRQHandler();
 
 	void irqExceptionHandler(IRQn_Type irqNum)
 	{
@@ -239,7 +249,23 @@ extern "C"
 		case TMR1_IRQn :
 			TMR1_IRQHandler();
 			break;
+
+		case PDMA0_IRQn :
+			PDMA0_IRQHandler();
+			break;
 		
+		case PDMA1_IRQn :
+			PDMA1_IRQHandler();
+			break;
+
+		case PDMA2_IRQn :
+			PDMA2_IRQHandler();
+			break;
+
+		case PDMA3_IRQn :
+			PDMA3_IRQHandler();
+			break;
+
 		default :
 			break;
 		}
@@ -298,7 +324,7 @@ uint32_t lockSchedule()
 	__asm__ volatile ("mrs %0, mpidr_el1" : "=r" (mpidr));
 	
 	cid = mpidr &= 0x03;
-	mpidr += 0xAA;
+	mpidr += HWSEM_MAGIC_KEY;
 
 	do
 	{
@@ -319,9 +345,41 @@ void unlockSchedule()
 	__asm__ volatile ("mrs %0, mpidr_el1" : "=r" (mpidr));
 	
 	mpidr &= 0x03;
-	mpidr += 0xAA;
+	mpidr += HWSEM_MAGIC_KEY;
 	
 	HWSEM0->SEM[0] = (mpidr << HWSEM_SEM_KEY_Pos);
+}
+
+void lockMutex()
+{
+	uint64_t mpidr;
+	uint32_t id, key;
+
+	__asm__ volatile ("mrs %0, mpidr_el1" : "=r" (mpidr));
+	
+	mpidr &= 0x03;
+	mpidr += HWSEM_MAGIC_KEY;
+
+	do
+	{
+		HWSEM0->SEM[1] = (mpidr << HWSEM_SEM_KEY_Pos);
+		key = (HWSEM0->SEM[1] & HWSEM_SEM_KEY_Msk) >> HWSEM_SEM_KEY_Pos;
+		id = (HWSEM0->SEM[1] & HWSEM_SEM_ID_Msk) >> HWSEM_SEM_ID_Pos;
+	}while(id != CORE_ID_A35 || key != mpidr);
+    __DMB();
+}
+
+void unlockMutex()
+{
+	uint64_t mpidr;
+
+	__DMB();
+	__asm__ volatile ("mrs %0, mpidr_el1" : "=r" (mpidr));
+	
+	mpidr &= 0x03;
+	mpidr += HWSEM_MAGIC_KEY;
+	
+	HWSEM0->SEM[1] = (mpidr << HWSEM_SEM_KEY_Pos);
 }
 }
 

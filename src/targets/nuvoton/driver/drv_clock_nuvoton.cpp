@@ -78,6 +78,8 @@
 #define FOUT_MAX_FREQ	100000000
 #endif
 
+#pragma GCC optimize("O1")
+
 static uint32_t gHxtFreq __attribute__((section(".non_init")));
 
 error_t Clock::enableHxt(uint32_t hseHz)

@@ -274,6 +274,174 @@ public :
 	virtual void setSource(uint8_t src);
 };
 
+class DmaChannel17 : public Dma
+{
+public :
+	DmaChannel17(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel18 : public Dma
+{
+public :
+	DmaChannel18(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel19 : public Dma
+{
+public :
+	DmaChannel19(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel20 : public Dma
+{
+public :
+	DmaChannel20(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel21 : public Dma
+{
+public :
+	DmaChannel21(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel22 : public Dma
+{
+public :
+	DmaChannel22(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel23 : public Dma
+{
+public :
+	DmaChannel23(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel24 : public Dma
+{
+public :
+	DmaChannel24(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel25 : public Dma
+{
+public :
+	DmaChannel25(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel26 : public Dma
+{
+public :
+	DmaChannel26(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel27 : public Dma
+{
+public :
+	DmaChannel27(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel28 : public Dma
+{
+public :
+	DmaChannel28(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel29 : public Dma
+{
+public :
+	DmaChannel29(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel30 : public Dma
+{
+public :
+	DmaChannel30(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel31 : public Dma
+{
+public :
+	DmaChannel31(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel32 : public Dma
+{
+public :
+	DmaChannel32(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel33 : public Dma
+{
+public :
+	DmaChannel33(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel34 : public Dma
+{
+public :
+	DmaChannel34(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel35 : public Dma
+{
+public :
+	DmaChannel35(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel36 : public Dma
+{
+public :
+	DmaChannel36(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel37 : public Dma
+{
+public :
+	DmaChannel37(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel38 : public Dma
+{
+public :
+	DmaChannel38(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel39 : public Dma
+{
+public :
+	DmaChannel39(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
+class DmaChannel40 : public Dma
+{
+public :
+	DmaChannel40(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
+	virtual void setSource(uint8_t src);
+};
+
 #endif
 
 

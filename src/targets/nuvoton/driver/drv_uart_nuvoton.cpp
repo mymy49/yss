@@ -12,7 +12,7 @@
  * @brief UART target-specific driver source file for Nuvoton.
  */
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
 
 #include <yss.h>
 #include <drv/peripheral.h>
