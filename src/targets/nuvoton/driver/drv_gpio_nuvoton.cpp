@@ -7,7 +7,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
@@ -24,6 +24,8 @@ Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 	// Map DOUT register to bit-banded memory address space for fast atomic output control.
 	mOutputReg = (volatile uint32_t*)(((uint32_t)&mDev->DOUT - 0x40000000) * 32 + 0x42000000);
+#elif defined(__MA35H0_FAMILY)
+	mOutputReg = (volatile uint32_t*)((uintptr_t)mDev + 0x800);
 #elif defined(__M25x_FAMILY)
 	mOutputReg = (volatile uint32_t*)(((uint32_t)mDev + 0x800));
 #endif

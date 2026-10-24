@@ -133,6 +133,24 @@ extern Gpio gpioG;
 #if defined(PH) && defined(PH_EXIST)
 extern Gpio gpioH;
 #endif
+#if defined(PI) && defined(PI_EXIST)
+extern Gpio gpioI;
+#endif
+#if defined(PJ) && defined(PJ_EXIST)
+extern Gpio gpioJ;
+#endif
+#if defined(PK) && defined(PK_EXIST)
+extern Gpio gpioK;
+#endif
+#if defined(PL) && defined(PL_EXIST)
+extern Gpio gpioL;
+#endif
+#if defined(PM) && defined(PM_EXIST)
+extern Gpio gpioM;
+#endif
+#if defined(PN) && defined(PN_EXIST)
+extern Gpio gpioN;
+#endif
 
 #if defined(HBI)
 #include "NuvotonHbi.h"

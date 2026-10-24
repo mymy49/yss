@@ -167,5 +167,7 @@ void initializeYss(void)
 #if YSS__CORE_COUNT > 1
 	initializeMultiCore();
 #endif
+
+	__enable_irq();
 }
 

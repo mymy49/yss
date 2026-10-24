@@ -7,7 +7,7 @@
  * @copyright Copyright (0xC) 2021 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 
- #if defined(__M467KJHAN__)
+ #if defined(__MA35H04F764C__)
 #define PA_EXIST
 #define PB_EXIST
 #define PC_EXIST
@@ -16,6 +16,12 @@
 #define PF_EXIST
 #define PG_EXIST
 #define PH_EXIST
+#define PI_EXIST
+#define PJ_EXIST
+#define PK_EXIST
+#define PL_EXIST
+#define PM_EXIST
+#define PN_EXIST
 #endif
 
 typedef enum

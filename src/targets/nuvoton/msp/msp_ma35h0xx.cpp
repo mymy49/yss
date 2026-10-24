@@ -18,14 +18,6 @@
 #include <yss/instance.h>
 #include <string.h>
 
-#if defined(__M46x_SUBFAMILY)
-#define FBDIV_VALUE		48
-#elif defined(__M480_FAMILY)
-#define FBDIV_VALUE		46
-#elif defined(__M4xx_FAMILY)
-#define FBDIV_VALUE		34
-#endif
-
 void initializeDma(void)
 {
 
@@ -164,6 +156,11 @@ void __WEAK initializeSystem(void)
 	CLK->SYSCLK1 |= CLK_SYSCLK1_HWSCKEN_Msk;
 
 	SYS->RLKTZS = 0x00;
+
+	CLK->SYSCLK1 |=	CLK_SYSCLK1_GPACKEN_Msk | CLK_SYSCLK1_GPBCKEN_Msk | CLK_SYSCLK1_GPCCKEN_Msk | CLK_SYSCLK1_GPDCKEN_Msk |
+					CLK_SYSCLK1_GPECKEN_Msk | CLK_SYSCLK1_GPFCKEN_Msk | CLK_SYSCLK1_GPGCKEN_Msk | CLK_SYSCLK1_GPHCKEN_Msk |
+					CLK_SYSCLK1_GPHCKEN_Msk | CLK_SYSCLK1_GPICKEN_Msk | CLK_SYSCLK1_GPJCKEN_Msk | CLK_SYSCLK1_GPKCKEN_Msk |
+					CLK_SYSCLK1_GPLCKEN_Msk | CLK_SYSCLK1_GPMCKEN_Msk | CLK_SYSCLK1_GPNCKEN_Msk;
 }
 
 void __WEAK initializeSystem1(void)
@@ -248,19 +245,25 @@ extern "C"
 		}
 	}
 
-	volatile uint64_t gFaultElr[2];
-	volatile uint64_t gFaultEsr[2];
+	volatile uint64_t gSyncFaultElr[2];
+	volatile uint64_t gSyncFaultEsr[2];
 
 	void synchronousExceptionHandler()
 	{
 		uint32_t cid = semaphore::getId();
-		__asm__ volatile("mrs %0, elr_el1" : "=r"(gFaultElr[cid]));
-		__asm__ volatile("mrs %0, esr_el1" : "=r"(gFaultEsr[cid]));
+		__asm__ volatile("mrs %0, elr_el1" : "=r"(gSyncFaultElr[cid]));
+		__asm__ volatile("mrs %0, esr_el1" : "=r"(gSyncFaultEsr[cid]));
 		while(1);
 	}
 
+	volatile uint64_t gSErrorFaultElr[2];
+	volatile uint64_t gSErrorFaultEsr[2];
+
 	void sErrorExceptionHandler()
 	{
+		uint32_t cid = semaphore::getId();
+		__asm__ volatile("mrs %0, elr_el1" : "=r"(gSErrorFaultElr[cid]));
+		__asm__ volatile("mrs %0, esr_el1" : "=r"(gSErrorFaultEsr[cid]));
 		while(1);
 	}
 
@@ -302,8 +305,9 @@ uint32_t lockSchedule()
 		HWSEM0->SEM[0] = (mpidr << HWSEM_SEM_KEY_Pos);
 		key = (HWSEM0->SEM[0] & HWSEM_SEM_KEY_Msk) >> HWSEM_SEM_KEY_Pos;
 		id = (HWSEM0->SEM[0] & HWSEM_SEM_ID_Msk) >> HWSEM_SEM_ID_Pos;
-	}while(id == CORE_ID_A35 && key != mpidr);
-    
+	}while(id != CORE_ID_A35 || key != mpidr);
+    __DMB();
+
     return cid;
 }
 
@@ -311,11 +315,12 @@ void unlockSchedule()
 {
 	uint64_t mpidr;
 
+	__DMB();
 	__asm__ volatile ("mrs %0, mpidr_el1" : "=r" (mpidr));
 	
 	mpidr &= 0x03;
 	mpidr += 0xAA;
-
+	
 	HWSEM0->SEM[0] = (mpidr << HWSEM_SEM_KEY_Pos);
 }
 }
