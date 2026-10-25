@@ -26,7 +26,7 @@ Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 error_t Gpio::setAsOutput(uint8_t pin, outputDriveStrength_t strength)
 {
 	if(pin > 31)
-		return error_t::OUT_OF_PIN_INDEX_RANGE;
+		return error_t::INVALID_PIN_INDEX;
 	
 	mDev->en_set = 1 << pin;
 	mDev->out_en_set = 1 << pin;
@@ -59,7 +59,7 @@ void Gpio::setOutput(uint8_t pin, bool data)
 error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altfunc, outputDriveStrength_t strength)
 {
 	if(pin > 31)
-		return error_t::OUT_OF_PIN_INDEX_RANGE;
+		return error_t::INVALID_PIN_INDEX;
 	
 	mDev->out_en_clr = 1 << pin;
 	

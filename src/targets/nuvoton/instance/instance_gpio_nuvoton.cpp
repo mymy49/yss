@@ -47,8 +47,12 @@ const static Gpio::setup_t gConfigGpioA =
 	PA,				// YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPA_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
 	(uint32_t*)&SYS->GPA_MFPL	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPA_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPAB_MFOS,	// volatile uint32_t *mfos;
+	false
 #endif
 
 };
@@ -86,8 +90,12 @@ const static Gpio::setup_t gConfigGpioB =
 	PB,				// YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPB_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
-	(uint32_t*)&SYS->GPB_MFPL	// volatile uint32_t *mfp;
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
+	(uint32_t*)&SYS->GPB_MFPL,	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPB_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPAB_MFOS,	// volatile uint32_t *mfos;
+	true
 #endif
 };
 
@@ -124,8 +132,12 @@ const static Gpio::setup_t gConfigGpioC =
 	PC,				// YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPC_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
 	(uint32_t*)&SYS->GPC_MFPL	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPC_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPCD_MFOS,	// volatile uint32_t *mos;
+	false
 #endif
 };
 
@@ -162,8 +174,12 @@ const static Gpio::setup_t gConfigGpioD =
 	PD,				// YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPD_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
 	(uint32_t*)&SYS->GPD_MFPL	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPD_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPCD_MFOS,	// volatile uint32_t *mfos;
+	true
 #endif
 };
 
@@ -200,8 +216,12 @@ const static Gpio::setup_t gConfigGpioE =
 	PE,				// YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPE_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
 	(uint32_t*)&SYS->GPE_MFPL	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPE_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPEF_MFOS,	// volatile uint32_t *mfos;
+	false
 #endif
 };
 
@@ -238,8 +258,12 @@ const static Gpio::setup_t gConfigGpioF =
 	PF,				// YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPF_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
 	(uint32_t*)&SYS->GPF_MFPL	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPF_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPEF_MFOS,	// volatile uint32_t *mfos;
+	true
 #endif
 };
 
@@ -276,8 +300,12 @@ const static Gpio::setup_t gConfigGpioG =
 	PG,				// YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPG_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
 	(uint32_t*)&SYS->GPG_MFPL	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPG_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPGH_MFOS,	// volatile uint32_t *mfos;
+	false
 #endif
 };
 
@@ -314,8 +342,12 @@ const static Gpio::setup_t gConfigGpioH =
 	PH,				//YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPH_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
 	(uint32_t*)&SYS->GPH_MFPL	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPH_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPGH_MFOS,	// volatile uint32_t *mfos;
+	true
 #endif
 };
 
@@ -352,8 +384,12 @@ const static Gpio::setup_t gConfigGpioI =
 	PI,				//YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPI_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
 	(uint32_t*)&SYS->GPI_MFPL	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPI_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPIJ_MFOS,	// volatile uint32_t *mfos;
+	false
 #endif
 };
 
@@ -390,8 +426,12 @@ const static Gpio::setup_t gConfigGpioJ =
 	PJ,				//YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPJ_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
 	(uint32_t*)&SYS->GPJ_MFPL	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPJ_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPIJ_MFOS,	// volatile uint32_t *mfos;
+	true
 #endif
 };
 
@@ -426,8 +466,12 @@ const static Gpio::setup_t gConfigGpioK =
 	PK,				//YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPJ_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
 	(uint32_t*)&SYS->GPK_MFPL	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPK_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPKL_MFOS,	// volatile uint32_t *mfos;
+	false
 #endif
 };
 
@@ -462,8 +506,12 @@ const static Gpio::setup_t gConfigGpioL =
 	PL,				//YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPL_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
 	(uint32_t*)&SYS->GPL_MFPL	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPL_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPKL_MFOS,	// volatile uint32_t *mfos;
+	true
 #endif
 };
 
@@ -498,8 +546,12 @@ const static Gpio::setup_t gConfigGpioM =
 	PM,				//YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPJ_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
 	(uint32_t*)&SYS->GPM_MFPL	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPM_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPMN_MFOS,	// volatile uint32_t *mfos;
+	false
 #endif
 };
 
@@ -534,8 +586,12 @@ const static Gpio::setup_t gConfigGpioN =
 	PN,				//YSS_GPIO_Peri *dev;
 #if defined(__M46x_SUBFAMILY)
 	&SYS->GPN_MFP0	// volatile uint32_t *mfp;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
 	(uint32_t*)&SYS->GPN_MFPL	// volatile uint32_t *mfp;
+#elif defined(__MA35H0_FAMILY)
+	(uint32_t*)&SYS->GPN_MFPL,	// volatile uint32_t *mfp;
+	(uint32_t*)&SYS->GPMN_MFOS,	// volatile uint32_t *mfos;
+	true
 #endif
 };
 

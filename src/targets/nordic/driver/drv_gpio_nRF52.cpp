@@ -28,7 +28,7 @@ Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
 {
 	if(pin > 31)
-		return error_t::OUT_OF_PIN_INDEX_RANGE;
+		return error_t::INVALID_PIN_INDEX;
 
 	mDev->DIRSET = 1 << pin;
 

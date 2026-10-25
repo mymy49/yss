@@ -52,6 +52,16 @@ extern NuvotonCrc crc;
 extern NuvotonEadc eadc;
 #endif
 
+#if defined(EMAC0)
+#include "NuvotonEmac.h"
+extern NuvotonEmac emac0;
+#endif
+
+#if defined(EMAC1)
+#include "NuvotonEmac.h"
+extern NuvotonEmac emac1;
+#endif
+
 #if defined(PDMA) || defined(PDMA1)
 #include "NuvotonDma.h"
 

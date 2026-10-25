@@ -26,6 +26,8 @@ Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 	mOutputReg = (volatile uint32_t*)(((uint32_t)&mDev->DOUT - 0x40000000) * 32 + 0x42000000);
 #elif defined(__MA35H0_FAMILY)
 	mOutputReg = (volatile uint32_t*)((uintptr_t)mDev + 0x800);
+	mMfos = setup.mfos;
+	mMfosUpperFlag = setup.mMfosUpperFlag;
 #elif defined(__M25x_FAMILY)
 	mOutputReg = (volatile uint32_t*)(((uint32_t)mDev + 0x800));
 #endif
@@ -37,7 +39,7 @@ Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 error_t Gpio::setAsOutput(uint8_t pin, otype_t otype, slewrate_t slewrate)
 {
 	if(pin > 15)
-		return error_t::OUT_OF_PIN_INDEX_RANGE;
+		return error_t::INVALID_PIN_INDEX;
 	
 	setAsAltFunc(pin, PA0_GPIO, AF_PUSH_PULL, slewrate);
 
@@ -54,7 +56,7 @@ error_t Gpio::setAsInput(uint8_t pin)
 	uint32_t reg;
 
 	if(pin > 15)
-		return error_t::OUT_OF_PIN_INDEX_RANGE;
+		return error_t::INVALID_PIN_INDEX;
 	
 	pin <<= 1;
 	__disable_irq();
@@ -77,7 +79,12 @@ error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altfunc, atype_t atype, slewra
 	volatile uint32_t *des;
 
 	if(pin > 15)
-		return error_t::OUT_OF_PIN_INDEX_RANGE;
+		return error_t::INVALID_PIN_INDEX;
+	if(altfunc > 15)
+		return error_t::INVALID_ALT_FUNC;
+	if(atype > 1)
+		return error_t::INVALID_ALT_FUNC_OUTPUT_TYPE;
+
 #if defined(__M46x_SUBFAMILY)
 	__disable_irq();
 	des = &SYS->GPA_MFOS;
@@ -93,6 +100,19 @@ error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altfunc, atype_t atype, slewra
 	des = &des[((uint32_t)mDev - GPIOA_BASE) / 0x10];
 	setFieldData(des[index], 0x1F << pin, altfunc, pin);
 	__enable_irq();
+#elif defined(__MA35H0_FAMILY)
+	if(mMfosUpperFlag)
+		reg = pin + 16;
+	else
+		reg = pin;
+	setBitData(*mMfos, atype, reg)  ;
+
+	reg = pin << 1;
+	setFieldData(mDev->SLEWCTL, 0x03 << reg, slewrate, reg);
+
+	index = pin >> 3;
+	reg = (pin & 0x07) << 2;
+	setFieldData(mMfp[index], 0xF << reg, altfunc, reg);
 #elif defined(__M480_FAMILY) || defined(__M43x_SUBFAMILY) || defined(__M25x_FAMILY)
 	__disable_irq();
 	des = &SYS->GPA_MFOS;
@@ -126,7 +146,7 @@ error_t Gpio::setPackageAsAltFunc(altFuncPackage_t *package, uint8_t count, atyp
 		pin = package[i].pin;
 	
 		if(pin > 15)
-			return error_t::OUT_OF_PIN_INDEX_RANGE;
+			return error_t::INVALID_PIN_INDEX;
 		
 #if defined(__M46x_SUBFAMILY)
 		des = &SYS->GPA_MFOS;
@@ -165,7 +185,7 @@ error_t Gpio::setPullUpDown(uint8_t pin, pupd_t pupd)
 	uint32_t reg;
 
 	if(pin > 15)
-		return error_t::OUT_OF_PIN_INDEX_RANGE;
+		return error_t::INVALID_PIN_INDEX;
 	
 	pin *= 2;
 	
@@ -182,7 +202,7 @@ error_t Gpio::setPullUpDown(uint8_t pin, pupd_t pupd)
 error_t Gpio::setGpioInterrupt(uint8_t pin, source_t src, void (*isr)(void))
 {
 	if(pin >= 16)
-		return error_t::OUT_OF_PIN_INDEX_RANGE;
+		return error_t::INVALID_PIN_INDEX;
 
 	bool level = false;
 
@@ -221,7 +241,7 @@ error_t Gpio::setGpioInterrupt(uint8_t pin, source_t src, void (*isr)(void))
 error_t Gpio::setGpioInterrupt(uint8_t pin, source_t src, triggerId_t trigger)
 {
 	if(pin >= 16)
-		return error_t::OUT_OF_PIN_INDEX_RANGE;
+		return error_t::INVALID_PIN_INDEX;
 
 	bool level = false;
 	

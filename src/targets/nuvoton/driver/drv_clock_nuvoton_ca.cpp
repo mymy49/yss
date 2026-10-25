@@ -63,6 +63,70 @@ void Clock::enableSystem1Clock(uint32_t position, bool en)
 		CLK->SYSCLK1 &= ~(1 << position);		
 }
 
+uint32_t Clock::getSyspllClockFrequency(void)
+{
+	// SYS-PLL이 비활성화/불안정 상태이면 0 반환
+	if (!(CLK->STATUS & CLK_STATUS_SYSPLLSTB_Msk))
+		return 0;
+
+	// MA35H0의 SYS-PLL은 HXT(24MHz) 기준 180MHz 고정 클럭으로 동작
+	return 180000000;
+}
+
+uint32_t Clock::getEpllClockFrequency(void)
+{
+	uint32_t ctl0 = CLK->PLL[4].CTL0;
+	uint32_t ctl1 = CLK->PLL[4].CTL1;
+
+	// Power-down 상태이면 0 반환
+	if (ctl1 & CLK_PLLnCTL1_PD_Msk)
+		return 0;
+
+	// Bypass 상태이면 HXT(24MHz) 그대로 반환
+	if (ctl1 & CLK_PLLnCTL1_BP_Msk)
+		return getHxtFrequency();
+
+	uint64_t fref = getHxtFrequency();
+	uint32_t m = (ctl0 & CLK_PLLnCTL0_INDIV_Msk) >> CLK_PLLnCTL0_INDIV_Pos;
+	uint32_t n = (ctl0 & CLK_PLLnCTL0_FBDIV_Msk) >> CLK_PLLnCTL0_FBDIV_Pos;
+	uint32_t p = (ctl1 & CLK_PLLnCTL1_OUTDIV_Msk) >> CLK_PLLnCTL1_OUTDIV_Pos;
+	uint32_t mode = (ctl0 & CLK_PLLnCTL0_MODE_Msk) >> CLK_PLLnCTL0_MODE_Pos;
+
+	if (m == 0 || p == 0)
+		return 0;
+
+	if (mode == 0) // Integer Mode
+	{
+		return (uint32_t)((fref * n) / (m * p));
+	}
+	else // Fractional Mode (1) or Spread Spectrum Mode (2)
+	{
+		uint64_t frac = (ctl1 & CLK_PLLnCTL1_FRAC_Msk) >> CLK_PLLnCTL1_FRAC_Pos;
+		// N.X = N + (FRAC / 2^24) = ((N << 24) + FRAC) / 2^24
+		uint64_t fvco_shifted = fref * (((uint64_t)n << 24) + frac);
+		return (uint32_t)((fvco_shifted >> 24) / (m * p));
+	}
+}
+
+uint32_t Clock::getSysclk0ClockFrequency(void)
+{
+	uint32_t clk;
+
+	switch(getBitData(CLK->CLKSEL0, CLK_CLKSEL0_SYSCK0SEL_Pos))
+	{
+	case 0 : // EPLL/2
+		clk = getEpllClockFrequency() / 2;
+		break;
+	
+	case 1 : // SYS-PLL
+		clk = getSyspllClockFrequency();
+		break;
+	}  
+
+	return clk;
+}
+
+
 #if 0
 
 error_t Clock::setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv, uint8_t pclk0Div, uint8_t pclk1Div)

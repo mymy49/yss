@@ -219,6 +219,7 @@ SECTIONS
     . = ALIGN(MAX(__stack_core0_el3_start__ + __CORE0_EL3_STACKSIZE__ , .), 16);
   }
   __stack_core0_el3_end__ = __stack_core0_el3_start__ + SIZEOF(.stack_core0_el3);
+  __stack_end__ = __stack_core0_el3_end__;
   __stack_core0_el3_size__ = SIZEOF(.stack_core0_el3);
   __stack_core0_el3_load_end__ = __stack_core0_el3_end__;
 

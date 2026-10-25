@@ -118,6 +118,18 @@ public:
 	uint32_t getHclkClockFrequency(void);
 #endif
 	
+#if defined(__MA35H0_FAMILY)
+	uint32_t getSysclk0ClockFrequency(void);
+#endif
+
+#if defined(__MA35H0_FAMILY)
+	uint32_t getEpllClockFrequency(void);
+#endif
+
+#if defined(__MA35H0_FAMILY)
+	uint32_t getSyspllClockFrequency(void);
+#endif
+
 #if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Gets the APB0 bus clock frequency.
