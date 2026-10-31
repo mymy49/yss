@@ -7,7 +7,7 @@ TouchEventDispatcher::TouchEventDispatcher(uint32_t depth, uint32_t stackSize)
 	mEventMap = new eventMap_t[depth];
 	mCount = 0;
 	mPointerDev = nullptr;
-	mSelectedIndex = 0;
+	mSelectedIndex = -1;
 
 	activateTrigger(stackSize);
 }
@@ -54,10 +54,18 @@ void TouchEventDispatcher::trigger()
 			break;
 
 		case PointerDevice::EVENT_TOUCH_UP :
-			mEventMap[mSelectedIndex].callback(event);			
+			if(mSelectedIndex >= 0)
+			{
+				area = mEventMap[mSelectedIndex].area;
+				event.x -= area.getX();
+				event.y -= area.getY();
+				mEventMap[mSelectedIndex].callback(event);			
+			}
 			return;
 		
 		case PointerDevice::EVENT_TOUCH_DOWN :
+			mSelectedIndex = -1;
+
 			for(uint32_t i = 0; i < mCount; i++)
 			{
 				area = mEventMap[i].area;
@@ -68,12 +76,19 @@ void TouchEventDispatcher::trigger()
 					event.y -= area.getY();
 					mEventMap[i].callback(event);
 					mSelectedIndex = i;
+					break;
 				}
 			}
 			break;
 
 		case PointerDevice::EVENT_TOUCH_DRAG :
-			mEventMap[mSelectedIndex].callback(event);
+			if(mSelectedIndex >= 0)
+			{
+				area = mEventMap[mSelectedIndex].area;
+				event.x -= area.getX();
+				event.y -= area.getY();
+				mEventMap[mSelectedIndex].callback(event);
+			}
 			break;
 		}
 	}
@@ -82,6 +97,7 @@ void TouchEventDispatcher::trigger()
 void TouchEventDispatcher::clear()
 {
 	mCount = 0;
+	mSelectedIndex = -1;
 	if(mPointerDev != nullptr)
 		mPointerDev->clearEvent();
 }

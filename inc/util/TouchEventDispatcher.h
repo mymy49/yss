@@ -35,7 +35,7 @@ private :
 	eventMap_t *mEventMap;
 	uint32_t mDepth;
 	uint32_t mCount;
-	uint32_t mSelectedIndex;
+	int32_t mSelectedIndex;
 	PointerDevice *mPointerDev;
 
 	void trigger() override;

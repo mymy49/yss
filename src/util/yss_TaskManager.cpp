@@ -21,10 +21,10 @@ TaskManager::~TaskManager()
 int16_t TaskManager::add(void (*worker)(void*), uint32_t workerStackSize)
 {
 	int16_t id;
+	lock();
 
 	if(mCount < mMaxCount)
 	{
-		lock();
 		id = mCount++;
 		mWorker[id].count = 1;
 		mWorker[id].worker1 = worker;
@@ -33,16 +33,19 @@ int16_t TaskManager::add(void (*worker)(void*), uint32_t workerStackSize)
 		return id;
 	}
 	else
+	{
+		unlock();
 		return -1;
+	}
 }
 
 int16_t TaskManager::add(void (*worker1)(void*), void (*worker2)(void*), uint32_t worker1StackSize, uint32_t worker2StackSize)
 {
 	int16_t id;
+	lock();
 
 	if(mCount < mMaxCount)
 	{
-		lock();
 		id = mCount++;
 		mWorker[id].count = 2;
 		mWorker[id].worker1 = worker1;
@@ -53,16 +56,19 @@ int16_t TaskManager::add(void (*worker1)(void*), void (*worker2)(void*), uint32_
 		return id;
 	}
 	else
+	{
+		unlock();
 		return -1;
+	}
 }
 
 int16_t TaskManager::add(void (*worker1)(void*), void (*worker2)(void*), void (*worker3)(void*), uint32_t worker1StackSize, uint32_t worker2StackSize, uint32_t worker3StackSize)
 {
 	int16_t id;
+	lock();
 
 	if(mCount < mMaxCount)
 	{
-		lock();
 		id = mCount++;
 		mWorker[id].count = 3;
 		mWorker[id].worker1 = worker1;
@@ -75,7 +81,10 @@ int16_t TaskManager::add(void (*worker1)(void*), void (*worker2)(void*), void (*
 		return id;
 	}
 	else
+	{
+		unlock();
 		return -1;
+	}
 }
 
 void TaskManager::play(int16_t id, void *var1, void *var2, void *var3)

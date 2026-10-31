@@ -23,7 +23,7 @@ bool Mutex::mInit = false;
 
 void  __attribute__((weak)) mutexWatchdogHandler(void)
 {
-#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC)
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined (YSS__CORE_CM23_H_GENERIC)
 #if __CM4_CMSIS_VERSION_MAIN == 3
 	NVIC_SystemReset();
 #else
