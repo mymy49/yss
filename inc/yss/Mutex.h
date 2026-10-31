@@ -38,20 +38,7 @@ public:
 	 *
 	 * @return uint32_t Current lock key value (the ticket number obtained).
 	 */
-	uint32_t lock(void) __attribute__((optimize("-O1")));
-	
-	/**
-	 * @brief Attempt to lock the mutex without blocking.
-	 *
-	 * @details Checks whether the mutex is currently free (mWaitNum == mCurrentNum).
-	 *          If free, atomically acquires it by incrementing mWaitNum and optionally
-	 *          disabling the associated IRQ, then returns true.
-	 *          If already held by another thread, returns false immediately without waiting.
-	 *
-	 * @return true if the mutex was successfully acquired.
-	 * @return false if the mutex is already locked.
-	 */
-	bool check(void) __attribute__((optimize("-O1")));
+	uint32_t lock(void);
 	
 	/**
 	 * @brief Unlock the previously acquired mutex and wake waiting threads.
@@ -64,7 +51,7 @@ public:
 	 *
 	 *          Unlocking a mutex that is not currently held may lead to undefined behavior.
 	 */
-	void unlock(void) __attribute__((optimize("-O1")));
+	void unlock(void);
 	
 	/**
 	 * @brief Associate an IRQ with this mutex so it is disabled while the mutex is held.
@@ -76,7 +63,7 @@ public:
 	 *
 	 * @param irq IRQ number to disable during the locked period.
 	 */
-	void setIrq(IRQn_Type irq) __attribute__((optimize("-O1")));
+	void setIrq(IRQn_Type irq);
 
 	/**
 	 * @brief Construct a new Mutex object and initialize its ticket-lock counters.
@@ -85,7 +72,7 @@ public:
 	 *          served) and mIrqNum to -1 (no associated IRQ).
 	 *          This constructor is intended for internal system use.
 	 */
-	Mutex(void) __attribute__((optimize("-O1")));
+	Mutex(void);
 
 	/**
 	 * @brief Initialize the mutex subsystem and enable watchdog functionality.
@@ -94,12 +81,13 @@ public:
 	 *          thread::yield() when other threads are waiting for the lock.
 	 *          Must be called once during system startup before any mutex is used.
 	 */
-	void initializeMutex(void) __attribute__((optimize("-O1")));
+	void initializeMutex(void);
 
 private:
 	uint32_t mWaitNum, mCurrentNum;
 	IRQn_Type mIrqNum;
 	static bool mInit;
+	void (*mLinkRegister)(void);
 };
 
 #endif

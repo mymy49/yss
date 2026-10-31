@@ -21,7 +21,7 @@
  *    using `Gpio::setAsAltFunc()`.
  * 2. Supply clock to the peripheral using `enableClock()`.
  * 3. Initialize the USART using `initialize()` (inherited from `Uart`).
- * 4. Enable the peripheral interrupts using `enableInterrupt()`.
+ * 4. Enable the peripheral interrupts using `__enableInterrupt()`.
  * 5. Optionally enable the SCK output using `enableSck()`.
  */
 
@@ -71,7 +71,7 @@ public:
 //		- Use Gpio::setAsAltFunc() to configure target pins for USART function.
 //		- Supply clock to the peripheral using enableClock().
 //		- Call initialize() to configure the receive buffer and baud rate, and enable the device.
-//		- Enable USART interrupts using enableInterrupt().
+//		- Enable USART interrupts using __enableInterrupt().
 
 // Transmit guide:
 //		- Call lock() to prevent concurrent access from other threads.

@@ -21,34 +21,73 @@ void lockHmalloc(void)
 {
 	uint32_t myNum;
 
+#if defined(YSS__MULTI_CORE)
+	semaphore::lockMutex();
+#endif
+
 	// Protect against context switches while updating the ticket counter.
+    uint32_t primask = __getCoreInterruptStatus();
 	thread::protect();
 	__disable_irq();
 	myNum = gWaitNum;
 	gWaitNum++;
-	__enable_irq();
 
 	// Wait until our ticket number is served.
 	while (myNum != gCurrentNum)
 	{
+#if defined(YSS__MULTI_CORE)
+		semaphore::unlockMutex();
+#endif
+		__enable_irq();
 		thread::yield();
+#if defined(YSS__MULTI_CORE)
+		semaphore::lockMutex();
+#endif
 	}
+
+	__setCoreInterruptStatus(primask);
+
+#if defined(YSS__MULTI_CORE)
+	semaphore::unlockMutex();
+#endif
 }
 
 void unlockHmalloc(void)
 {
+#if defined(YSS__MULTI_CORE)
+	semaphore::lockMutex();
+#endif
+
+    uint32_t primask = __getCoreInterruptStatus();
+
 	// Release the ticket lock and restore thread protection state.
 	__disable_irq();
 	gCurrentNum++;
-	__enable_irq();
+	__setCoreInterruptStatus(primask);
+
 	thread::unprotect();
+
+#if defined(YSS__MULTI_CORE)
+	semaphore::unlockMutex();
+#endif
 }
 
+/**
+ * @brief Allocates a block of heap memory.
+ *
+ * This function does not acquire the heap lock internally.
+ * The caller is responsible for acquiring and releasing the heap lock
+ * with lockHmalloc() and unlockHmalloc() when heap access must be
+ * protected from concurrent execution.
+ *
+ * This separation is intentional. It allows multiple heap operations
+ * to be grouped into a single critical section when required.
+ */
 void *hmalloc(uint32_t size)
 {
 	void* addr = malloc(size);
 
-	if((uint32_t)addr > 0)
+	if(addr != nullptr)
 	{
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
@@ -61,6 +100,17 @@ void *hmalloc(uint32_t size)
 	return addr;
 }
 
+/**
+ * @brief Releases a block of heap memory allocated by hmalloc().
+ *
+ * This function does not acquire the heap lock internally.
+ * The caller is responsible for acquiring and releasing the heap lock
+ * with lockHmalloc() and unlockHmalloc() when heap access must be
+ * protected from concurrent execution.
+ *
+ * This separation is intentional. It allows multiple heap operations
+ * to be grouped into a single critical section when required.
+ */
 void hfree(void *addr)
 {
 	// Retrieve the stored allocation size from the metadata header.
@@ -74,7 +124,7 @@ uint32_t getHeapRemainingCapacity(void)
 	return gFreeSpace;
 }
 
-void *operator new[](unsigned int size)
+void *operator new[](size_t size)
 {
 	void *addr;
 	
@@ -82,7 +132,7 @@ void *operator new[](unsigned int size)
 	lockHmalloc();
 	addr = malloc(size);
 
-	if((uint32_t)addr > 0)
+	if(addr != nullptr)
 	{
 		// Deduct the recorded allocation size from the global heap budget.
 		uint32_t *msize = &((uint32_t*)addr)[-1];
@@ -93,7 +143,7 @@ void *operator new[](unsigned int size)
 	return addr;
 }
 
-void *operator new(unsigned int size)
+void *operator new(size_t size)
 {
 	void *addr;
 
@@ -101,7 +151,7 @@ void *operator new(unsigned int size)
 	lockHmalloc();
 	addr = malloc(size);
 
-	if((uint32_t)addr > 0)
+	if(addr != nullptr)
 	{
 		uint32_t *size = &((uint32_t*)addr)[-1];
 		gFreeSpace -= *size;	

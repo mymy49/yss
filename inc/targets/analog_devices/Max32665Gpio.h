@@ -17,25 +17,6 @@ class Gpio : public Drv
 {
 public:
 	/**
-	 * @brief Enumeration for GPIO output types.
-	 */
-	typedef enum 
-	{
-		PUSH_PULL = 1,   ///< Push-pull output mode
-		OPEN_DRAIN,      ///< Open-drain output mode
-		QUASI_BIDIR      ///< Quasi-bidirectional mode
-	}otype_t;
-	
-	/**
-	 * @brief Enumeration for alternate function output types.
-	 */
-	typedef enum
-	{
-		AF_PUSH_PULL = 0, ///< Alternate function Push-pull mode
-		AF_OPEN_DRAIN,    ///< Alternate function Open-drain mode
-	}atype_t;
-	
-	/**
 	 * @brief Enumeration for GPIO slew rate settings.
 	 */
 	typedef enum
@@ -114,11 +95,10 @@ public:
 	 *
 	 * @param[in] pin Pin number (0 ~ 15).
 	 * @param[in] altfunc Alternate function enum value.
-	 * @param[in] atype Alternate function output type (AF_PUSH_PULL or AF_OPEN_DRAIN).
 	 * @param[in] slewrate Slew rate speed.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t setAsAltFunc(uint8_t pin, altFunc_t altfunc, atype_t atype = AF_PUSH_PULL, outputDriveStrength_t strength = STRENGTH_MEDIUM_HIGH) __attribute__((optimize("-O1")));
+	error_t setAsAltFunc(uint8_t pin, altFunc_t altfunc, outputDriveStrength_t strength = STRENGTH_MEDIUM_HIGH) __attribute__((optimize("-O1")));
 
 	/**
 	 * @brief Sets the internal pull-up/pull-down resistor settings for the pin.
@@ -164,7 +144,7 @@ public:
 	 * @param[in] slewrate Slew rate speed.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t setPackageAsAltFunc(altFuncPackage_t *package, uint8_t count, atype_t atype = AF_PUSH_PULL, outputDriveStrength_t strength = STRENGTH_MEDIUM_HIGH);
+	error_t setPackageAsAltFunc(altFuncPackage_t *package, uint8_t count, outputDriveStrength_t strength = STRENGTH_MEDIUM_HIGH);
 
 	/**
 	 * @brief Reads the input logic state of a pin.

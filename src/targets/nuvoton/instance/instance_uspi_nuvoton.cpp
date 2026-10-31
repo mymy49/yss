@@ -47,7 +47,7 @@ static void enableUsci0Clock(bool en)
 
 static void enableUsci0Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(USCI0_IRQn, en);
 }
 
@@ -123,7 +123,7 @@ static void enableSpi1Clock(bool en)
 
 static void enableSpi1Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(SPI1_IRQn, en);
 }
 
@@ -220,7 +220,7 @@ static void enableSpi2Clock(bool en)
 
 static void enableSpi2Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(SPI2_IRQn, en);
 }
 
@@ -317,7 +317,7 @@ static void enableSpi3Clock(bool en)
 
 static void enableSpi3Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(SPI3_IRQn, en);
 }
 

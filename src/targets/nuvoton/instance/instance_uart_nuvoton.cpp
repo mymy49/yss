@@ -11,7 +11,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -32,7 +32,7 @@ static void enableUart0Clock(bool en)
 
 static void enableUart0Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART0_IRQn, en);
 }
 
@@ -59,7 +59,11 @@ static uint32_t getUart0ClockFrequency(void)
 		break;
 	
 	case 1 : // PLL
+#if defined(__M25x_FAMILY)
 		clk = clock.getPllFrequency();
+#elif defined(__M46x_SUBFAMILY)
+		clk = clock.getPllFrequency() / 2;
+#endif
 		break;
 
 	case 2 : // LXT
@@ -131,7 +135,7 @@ static void enableUart1Clock(bool en)
 
 static void enableUart1Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART1_IRQn, en);
 }
 
@@ -230,7 +234,7 @@ static void enableUart2Clock(bool en)
 
 static void enableUart2Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART2_IRQn, en);
 }
 
@@ -329,7 +333,7 @@ static void enableUart3Clock(bool en)
 
 static void enableUart3Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART3_IRQn, en);
 }
 
@@ -428,7 +432,7 @@ static void enableUart4Clock(bool en)
 
 static void enableUart4Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART4_IRQn, en);
 }
 
@@ -519,7 +523,7 @@ static void enableUart5Clock(bool en)
 
 static void enableUart5Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART5_IRQn, en);
 }
 
@@ -610,7 +614,7 @@ static void enableUart6Clock(bool en)
 
 static void enableUart6Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART6_IRQn, en);
 }
 
@@ -701,7 +705,7 @@ static void enableUart7Clock(bool en)
 
 static void enableUart7Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART7_IRQn, en);
 }
 
@@ -792,7 +796,7 @@ static void enableUart8Clock(bool en)
 
 static void enableUart8Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART8_IRQn, en);
 }
 
@@ -871,7 +875,7 @@ static void enableUart9Clock(bool en)
 
 static void enableUart9Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART9_IRQn, en);
 }
 

@@ -10,6 +10,7 @@
 
 #include <drv/mcu.h>
 #include <yss/Mutex.h>
+#include <yss/error.h>
 
 typedef int32_t		threadId_t;
 
@@ -158,14 +159,14 @@ namespace thread
 	 */
 	void delayUs(uint32_t delayTime);
 
+	void resetWaitingSignalPendingFlag(void);
+
 	/**
-	 * @brief Block the current thread until it receives a signal.
+	 * @brief Block the current thread until it is signaled or the timeout (ms) expires.
 	 *
-	 * @details Marks the current thread as non-runnable (able = false) so the round-robin
-	 *          scheduler will skip it, then yields to force an immediate context switch.
-	 *          The thread remains suspended until thread::signal() re-enables it.
+	 * @param timeout Maximum wait duration in milliseconds.
 	 */
-	void waitForSignal(void);
+	void waitForSignal(uint32_t timeout);
 
 	/**
 	 * @brief Signal a thread to wake it and schedule it for execution.
@@ -178,17 +179,19 @@ namespace thread
 	 *          switch is handled at the earliest safe opportunity.
 	 *
 	 * @param id Thread ID to signal.
+	 * @param lock If true, disables interrupts and acquires the scheduler semaphore internally.
+	 *             Set to false when calling from a context that already holds the scheduler lock.
 	 */
-	void signal(threadId_t id);
+	void signal(threadId_t id, bool lock = true);
 
 extern "C"
 {
 	/**
 	 * @brief Yield execution to allow a context switch.
 	 *
-	 * @details Writing SCB_ICSR_PENDSVSET to ICSR pends the PendSV exception.
-	 *          Because PendSV is configured at the lowest interrupt priority it will only
-	 *          run after all higher-priority ISRs complete, making it safe to call from
+	 * @details Writing SCB_ICSR_PENDSVSET to ICSR (or sending SGI0 on Cortex-A35) pends a context
+	 *          switch exception. Because it is configured at the lowest interrupt priority it will
+	 *          only run after all higher-priority ISRs complete, making it safe to call from
 	 *          both thread and interrupt context.
 	 */
 	void yield(void);
@@ -233,18 +236,18 @@ namespace trigger
 	 *          prevent a preemption that could corrupt the task list, and the function
 	 *          busy-waits if the trigger's protection count is non-zero.
 	 *
-	 * @param num Reference to the trigger ID to remove; set to 0 on success.
+	 * @param num Reference to the trigger ID to remove; set to -1 on success.
 	 */
 	void remove(triggerId_t &num);
 
 	/**
 	 * @brief Activate a trigger task for one-shot execution.
 	 *
-	 * @details Rebuilds the initial exception frame in the trigger's stack buffer every
-	 *          time it is called, so the trigger function always re-executes from its
-	 *          start.  Guards against re-entrancy by checking both the able flag and the
-	 *          pending queue.  After enqueuing, the current thread is marked as the
-	 *          holding thread so that PendSV will return to it after the trigger finishes.
+	 * @details Marks the trigger as runnable and pushes its ID into the pending dispatch
+	 *          queue so that the next context switch rebuilds its stack frame via
+	 *          prepareStack() and executes the trigger from the beginning.
+	 *          Guards against re-entrancy by checking both the able flag and the
+	 *          pending queue.
 	 *
 	 * @param num Trigger ID to run.
 	 */
@@ -301,6 +304,10 @@ namespace semaphore
 	 * @brief Releases the scheduling hardware semaphore lock.
 	 */
 	void unlockSchedule();
+
+	void lockMutex();
+
+	void unlockMutex();
 
 	void lockPeripherals();
 

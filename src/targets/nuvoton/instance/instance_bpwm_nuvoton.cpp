@@ -28,7 +28,7 @@ static void enableBpwm0Clock(bool en)
 
 static void enableBpwm0Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(BPWM0_IRQn, en);
 }
 
@@ -79,7 +79,7 @@ static void enableBpwm1Clock(bool en)
 
 static void enableBpwm1Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(BPWM1_IRQn, en);
 }
 

@@ -32,7 +32,11 @@ void initializeDmaCopy(void);
 
 void initializeSystemTime(void);
 
+void initializeDelayTimer(void);
+
 void initializeMultiCore(void);
+
+void enable_simple_mmu_cache();
 
 void initializeLheap(void)
 {
@@ -62,6 +66,10 @@ void initializeYss(void)
 	initializeSystemTime();
 #endif
 
+#if defined YSS_DELAY_TIMER
+	initializeDelayTimer();
+#endif
+
 #if defined(ERROR_MCU_NOT_ABLE) == false
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 	// Initialize a global mutex here before any instance constructors can call mutex.lock().
@@ -70,8 +78,34 @@ void initializeYss(void)
 	mutex.initializeMutex();
 
 	// Enable the system tick timer for scheduler time slices.
-	NVIC_SetPriority(PendSV_IRQn, 15);
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC)
+    __setInterruptPriority(PendSV_IRQn, 15);
 	SysTick_Config(THREAD_GIVEN_CLOCK);
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+	__disableInterrupt(NonSecPhysicalTimer_IRQn);
+	__disableInterrupt(SecPhysicalTimer_IRQn);
+
+	uint32_t clk = raw_read_cntfrq_el0();
+	if (clk == 0)
+	{
+		clk = 12000000;
+		raw_write_cntfrq_el0(clk);
+	}
+ 
+	raw_write_cntps_tval_el1(clk / THREAD_GIVEN_CLOCK);
+	__ISB();
+	
+	raw_write_cntps_ctl_el1(1);
+	__ISB();
+
+	__setInterruptPriority(SecPhysicalTimer_IRQn, 0x10); 
+	__enableInterrupt(SecPhysicalTimer_IRQn);
+	
+    GIC_SetPriority(SGI0_IRQn, 0x10);
+    GIC_EnableIRQ(SGI0_IRQn);
+	GIC_SetGroup(SGI0_IRQn, 0);
+#endif
+
 #endif
 
 	// Enable DMA peripheral clock
@@ -86,7 +120,7 @@ void initializeYss(void)
 #if USE_GUI == true && !defined(YSS_DRV_DMA2D_UNSUPPORTED) && defined(DMA2D_ENABLE)
 	dma2d.enableClock(true);
 	dma2d.initialize();
-	dma2d.enableInterrupt(true);
+	dma2d.__enableInterrupt(true);
 #endif
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT && !defined(YSS_DRV_DMA2D_UNSUPPORTED)
@@ -95,43 +129,45 @@ void initializeYss(void)
 
 #if defined(EXTI)
 	exti.enableClock(true);
-	exti.enableInterrupt(true);
+	exti.__enableInterrupt(true);
 #elif defined(__M46x_SUBFAMILY)
 #if defined(PA) && defined(PA_EXIST)
-	gpioA.enableInterrupt();
+	gpioA.__enableInterrupt();
 #endif
 #if defined(PB) && defined(PB_EXIST)
-	gpioB.enableInterrupt();
+	gpioB.__enableInterrupt();
 #endif
 #if defined(PC) && defined(PC_EXIST)
-	gpioC.enableInterrupt();
+	gpioC.__enableInterrupt();
 #endif
 #if defined(PD) && defined(PD_EXIST)
-	gpioD.enableInterrupt();
+	gpioD.__enableInterrupt();
 #endif
 #if defined(PE) && defined(PE_EXIST)
-	gpioE.enableInterrupt();
+	gpioE.__enableInterrupt();
 #endif
 #if defined(PF) && defined(PF_EXIST)
-	gpioF.enableInterrupt();
+	gpioF.__enableInterrupt();
 #endif
 #if defined(PG) && defined(PG_EXIST)
-	gpioG.enableInterrupt();
+	gpioG.__enableInterrupt();
 #endif
 #if defined(PH) && defined(PH_EXIST)
-	gpioH.enableInterrupt();
+	gpioH.__enableInterrupt();
 #endif
 #if defined(PI) && defined(PI_EXIST)
-	gpioI.enableInterrupt();
+	gpioI.__enableInterrupt();
 #endif
 #if defined(PJ) && defined(PJ_EXIST)
-	gpioJ.enableInterrupt();
+	gpioJ.__enableInterrupt();
 #endif
 #endif
 
 #endif
-#if defined(YSS__MULTI_CORE)
+#if YSS__CORE_COUNT > 1
 	initializeMultiCore();
 #endif
+
+	__enable_irq();
 }
 

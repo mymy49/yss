@@ -80,7 +80,7 @@ error_t NuvotonUuart::initialize(config_t config)
 	
 	if(config.mode != MODE_RX_ONLY)
 	{
-		mTxDma = system::allocateDma();
+		mTxDma = yss::allocateDma();
 		if(mTxDma == nullptr)
 			return error_t::DMA_ALLOCATION_FAILED;
 

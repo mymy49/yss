@@ -164,7 +164,7 @@ error_t Sdmmc::connect(void)
 	if(mConnectedFlag)
 		return error_t::ALREADY_OPENED;
 
-	uint32_t ocr, capacity, temp;
+	uint32_t ocr;
 	cardStatus_t sts;
 	error_t result;
 	uint8_t cbuf[16];

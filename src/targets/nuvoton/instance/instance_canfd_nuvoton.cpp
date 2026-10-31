@@ -26,7 +26,7 @@ static void enableCanfd0Clock(bool en)
 
 static void enableCanfd0Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(CANFD00_IRQn, en);
 }
 

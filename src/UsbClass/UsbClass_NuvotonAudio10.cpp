@@ -186,7 +186,7 @@ void NuvotonAudio10::handleSetConfiguration(uint16_t value)
 
 void NuvotonAudio10::handleClassSpecificRequest(void)
 {
-	uint8_t rcvSize, bufU8;
+	uint8_t bufU8;
 	uint32_t bufU32;
 	uint16_t bufU16;
 

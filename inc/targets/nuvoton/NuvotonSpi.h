@@ -38,7 +38,7 @@ class NuvotonSpi : public Spi
 	 * @param[in] config Configuration settings for the SPI peripheral (e.g. Master/Slave).
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t initialize(config_t config) __attribute__((optimize("-O1")));
+	error_t initialize(config_t config) override;
 
 	/**
 	 * @brief Sets the physical SPI communication specifications.
@@ -47,21 +47,14 @@ class NuvotonSpi : public Spi
 	 * @param[in] spec Pointer to target device specification settings.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t setSpecification(const specification_t &spec) __attribute__((optimize("-O1")));
+	error_t setSpecification(const specification_t &spec) override;
 	
-	/**
-	 * @brief Enables or disables the SPI peripheral.
-	 *
-	 * @param[in] en If set to true, enables SPI; otherwise disables it.
-	 */
-	virtual void enable(bool en) __attribute__((optimize("-O1")));
-
 	/**
 	 * @brief Sends a single word of data synchronously.
 	 *
 	 * @param[in] data Data word to send.
 	 */
-	virtual void send(uint32_t data) __attribute__((optimize("-O1")));
+	void send(uint32_t data) override;
 	
 	/**
 	 * @brief Sends a data block asynchronously/synchronously using DMA.
@@ -70,7 +63,7 @@ class NuvotonSpi : public Spi
 	 * @param[in] size Size of the data block to send.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t send(void *src, int32_t  size) __attribute__((optimize("-O1")));
+	error_t send(void *src, int32_t  size, uint32_t timeout) override;
 
 	/**
 	 * @brief Exchanges a single word of data synchronously (Full-Duplex).
@@ -78,7 +71,7 @@ class NuvotonSpi : public Spi
 	 * @param[in] data Data word to send.
 	 * @return uint32_t Received data word.
 	 */
-	virtual uint32_t exchange(uint32_t data) __attribute__((optimize("-O1")));
+	uint32_t exchange(uint32_t data) override;
 
 	/**
 	 * @brief Exchanges a data block using DMA (Full-Duplex).
@@ -87,7 +80,7 @@ class NuvotonSpi : public Spi
 	 * @param[in] size Size of the data block in bytes.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t exchange(void *des, int32_t size) __attribute__((optimize("-O1")));
+	error_t exchange(void *des, int32_t size, uint32_t timeout = 1000) override;
 
 	// Internal system configurations. Do not call from user application.
 	struct setup_t
@@ -97,9 +90,9 @@ class NuvotonSpi : public Spi
 		Dma::dmaInfo_t rxDmaInfo;
 	};
 
-	NuvotonSpi(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	NuvotonSpi(const Drv::setup_t drvSetup, const setup_t setup);
 
-	void isr(void) __attribute__((optimize("-O1")));
+	void isr(void);
 
 private:
 	SPI_T *mDev;

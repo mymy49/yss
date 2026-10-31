@@ -35,7 +35,7 @@ static void enableClock(bool en)
  *
  * @param[in] en Set to `true` to enable the WDT interrupt, `false` to disable it.
  */
-static void enableInterrupt(bool en)
+static void __enableInterrupt(bool en)
 {
 	nvic.enableInterrupt(WDT_IRQn, en);
 }
@@ -50,7 +50,7 @@ static void enableInterrupt(bool en)
 static const Drv::setup_t gDrvWdtSetup = 
 {
 	enableClock,		//void (*clockFunc)(bool en);
-	enableInterrupt,	//void (*nvicFunc)(bool en);
+	__enableInterrupt,	//void (*nvicFunc)(bool en);
 	0,					//void (*resetFunc)(void);
 	0					//uint32_t (*getClockFunc)(void);
 };

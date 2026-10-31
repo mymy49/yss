@@ -19,7 +19,7 @@
  * 1. Configure the GPIO pins related to the I2C peripheral (SCL, SDA) as alternative functions using `Gpio::setAsAltFunc()`.
  * 2. Supply clock to the peripheral using `enableClock()`.
  * 3. Initialize the I2C driver setting the speed configuration (Standard Mode, Fast Mode) using `initialize()`.
- * 4. Enable the peripheral interrupts using `enableInterrupt()`.
+ * 4. Enable the peripheral interrupts using `__enableInterrupt()`.
  *
  * ### Initialization Example
  * @code
@@ -35,7 +35,7 @@
  * };
  * 
  * i2c1.initialize(i2cConfig);
- * i2c1.enableInterrupt(); // Enable interrupt service
+ * i2c1.__enableInterrupt(); // Enable interrupt service
  * @endcode
  *
  * ### Transmission Flow

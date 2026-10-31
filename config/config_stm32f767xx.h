@@ -36,7 +36,7 @@
 // ####################### 스케줄러 설정 #######################
 // runtime 함수를 지원할 PWM 장치 설정 (RUNTIME_TIM2 ~ RUNTIME_TIM14)
 // RUNTIME_TIM1, RUNTIME_TIM8, RUNTIME_TIM10, RUNTIME_TIM13은 사용이 불가능 합니다.
-#define YSS_TIMER			RUNTIME_TIM2
+#define YSS_RUNTIME_TIMER			RUNTIME_TIM2
 
 // 쓰레드당 할당 받는 Systick Clock의 수
 #define THREAD_GIVEN_CLOCK	20000

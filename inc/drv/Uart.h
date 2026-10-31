@@ -19,7 +19,7 @@
  * 1. Configure the GPIO pins related to the UART as alternative functions using `Gpio::setAsAltFunc()`.
  * 2. Supply clock to the peripheral using `enableClock()`.
  * 3. Initialize the UART driver, setting the baud rate, mode, stop bits, parity, and receive buffer configuration using `initialize()`.
- * 4. Enable the peripheral interrupts using `enableInterrupt()`.
+ * 4. Enable the peripheral interrupts using `__enableInterrupt()`.
  *
  * ### Initialization Example
  * @code
@@ -40,7 +40,7 @@
  * };
  * 
  * uart2.initialize(uartConfig);
- * uart2.enableInterrupt(); // Enable RX/TX interrupt handling
+ * uart2.__enableInterrupt(); // Enable RX/TX interrupt handling
  * @endcode
  *
  * ### Transmission Flow
@@ -110,47 +110,48 @@ public:
 	/**
 	 * @brief Enumeration for UART operating modes.
 	 */
-	typedef enum
+	enum mode_t : uint8_t
 	{
 		MODE_NORMAL,  ///< Standard Tx and Rx mode.
 		MODE_TX_ONLY, ///< Transmitter-only mode.
 		MODE_RX_ONLY, ///< Receiver-only mode.
 		MODE_ONE_WIRE ///< Single-wire half-duplex mode.
-	}mode_t;
+	};
 
 	/**
 	 * @brief Enumeration for UART stop bit configuration.
 	 */
-	typedef enum
+	enum stopbit_t : uint8_t
 	{
 		STOP_1BIT = 0,
 		STOP_2BIT = 1
-	}stopbit_t;
+	};
 
 	/**
 	 * @brief Enumeration for UART parity configuration.
 	 */
-	typedef enum
+	enum parityBit_t : uint8_t
 	{
 		PARITY_NONE = 0,
 		PARITY_ODD,
 		PARITY_EVEN,
 		PARITY_MARK,
 		PARITY_SPACE
-	}parityBit_t;
+	};
 
 	/**
 	 * @brief Configuration parameters for UART peripheral setup.
 	 */
-	typedef struct
+	struct config_t
 	{
 		mode_t mode;        ///< UART operating mode.
 		uint32_t baudrate;  ///< Baud rate.
 		stopbit_t stopbit;  ///< Number of stop bits.
 		parityBit_t parity; ///< Parity setting.
+		bool hwfc;
 		void *rcvBuf;       ///< Pointer to user-allocated receive buffer (if nullptr, memory will be allocated dynamically).
 		uint32_t rcvBufSize;///< Size of the receive buffer.
-	}config_t;
+	};
 	
 	/**
 	 * @brief Callback handlers for UART interrupt events.
@@ -235,14 +236,14 @@ public:
 	 * @param[in] size The size of the data payload in bytes.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t send(void *src, int32_t  size) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t send(void *src, int32_t  size, uint32_t timeout = 1000) __attribute__((optimize("-O1"))) = 0;
 	
 	/**
 	 * @brief Transmits a single byte of data.
 	 * 
 	 * @param[in] data The byte to transmit.
 	 */
-	virtual void send(int8_t data) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t send(int8_t data, uint32_t timeout = 1000) __attribute__((optimize("-O1"))) = 0;
 
 	/**
 	 * @brief Registers callback handler functions for UART interrupt events.
@@ -270,7 +271,7 @@ protected:
 //		- Use Gpio::setAsAltFunc() to configure target pins for UART function.
 //		- Supply clock to the peripheral using enableClock().
 //		- Call initialize() to configure the receive buffer and baud rate, and enable the device.
-//		- Enable UART interrupts using enableInterrupt().
+//		- Enable UART interrupts using __enableInterrupt().
 
 // Transmit guide:
 //		- Call lock() to prevent concurrent access from other threads.

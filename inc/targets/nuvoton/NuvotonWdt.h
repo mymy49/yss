@@ -22,7 +22,7 @@
  *
  * ### Initialization Flow
  * 1. Enable the WDT peripheral clock using the `enableClock()` function.
- * 2. Enable the WDT interrupt using the `enableInterrupt()` function if ISR
+ * 2. Enable the WDT interrupt using the `__enableInterrupt()` function if ISR
  *    handling is needed.
  * 3. Initialize the watchdog with the desired timeout interval using
  *    `initialize()`. The default interval is `INTERVAL_26p214_Sec`.

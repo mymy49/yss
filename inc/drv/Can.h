@@ -21,7 +21,7 @@
  * 2. Define the device configuration struct (e.g., target-specific `config_t`).
  * 3. Supply the peripheral clock using the `enableClock()` function.
  * 4. Initialize the CAN device using the target-specific `initialize()` function.
- * 5. Enable the peripheral interrupts using the `enableInterrupt()` function.
+ * 5. Enable the peripheral interrupts using the `__enableInterrupt()` function.
  * 6. Configure reception filters using target-specific filter functions (e.g., `setStdMaskFilter()` or `setExtMaskFilter()`).
  * 
  * ### Initialization Example (Target-Specific, e.g., Nuvoton/STM32)
@@ -38,7 +38,7 @@
  * 
  * can1.enableClock();                 // Enable CAN1 peripheral clock
  * can1.initialize(canConfig);         // Initialize CAN1 peripheral
- * can1.enableInterrupt();             // Enable CAN1 interrupt
+ * can1.__enableInterrupt();             // Enable CAN1 interrupt
  * can1.setExtMaskFilter(0, 0x0, 0x0); // Configure mask 0 to accept all extended frames
  * @endcode
  * 

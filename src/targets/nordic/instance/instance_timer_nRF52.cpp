@@ -12,14 +12,19 @@
 #include <drv/peripheral.h>
 #include <nrf52840_bitfields.h>
 
+#pragma GCC optimize("O1")
+
 static uint32_t getTimerClockFrequency(void)
 {
 	return 16000000;
 }
 
 #if defined(NRF_TIMER0) && TIMER0_ENABLE
-#if YSS_TIMER == RUNTIME_TIMER0
+#if YSS_RUNTIME_TIMER == RUNTIME_TIMER0
 #error "TIMER0 is currently used by the Yss OS Runtime. General use is not allowed."
+#endif
+#if YSS_DELAY_TIMER == RUNTIME_TIMER0
+#error "TIMER0 is currently used by the Yss OS delay time. General use is not allowed."
 #endif
 
 static void enableTimer0Interrupt(bool en)
@@ -55,8 +60,11 @@ extern "C"
 
 
 #if defined(NRF_TIMER1) && TIMER1_ENABLE
-#if YSS_TIMER == RUNTIME_TIMER1
+#if YSS_RUNTIME_TIMER == RUNTIME_TIMER1
 #error "TIMER1 is currently used by the Yss OS Runtime. General use is not allowed."
+#endif
+#if YSS_DELAY_TIMER == RUNTIME_TIMER1
+#error "TIMER0 is currently used by the Yss OS delay time. General use is not allowed."
 #endif
 
 static void enableTimer1Interrupt(bool en)
@@ -92,8 +100,11 @@ extern "C"
 
 
 #if defined(NRF_TIMER2) && TIMER2_ENABLE
-#if YSS_TIMER == RUNTIME_TIMER2
+#if YSS_RUNTIME_TIMER == RUNTIME_TIMER2
 #error "TIMER2 is currently used by the Yss OS Runtime. General use is not allowed."
+#endif
+#if YSS_DELAY_TIMER == RUNTIME_TIMER2
+#error "TIMER0 is currently used by the Yss OS delay time. General use is not allowed."
 #endif
 
 static void enableTimer2Interrupt(bool en)
@@ -129,8 +140,11 @@ extern "C"
 
 
 #if defined(NRF_TIMER3) && TIMER3_ENABLE
-#if YSS_TIMER == RUNTIME_TIMER3
+#if YSS_RUNTIME_TIMER == RUNTIME_TIMER3
 #error "TIMER3 is currently used by the Yss OS Runtime. General use is not allowed."
+#endif
+#if YSS_DELAY_TIMER == RUNTIME_TIMER3
+#error "TIMER0 is currently used by the Yss OS delay time. General use is not allowed."
 #endif
 
 static void enableTimer3Interrupt(bool en)
@@ -166,8 +180,11 @@ extern "C"
 
 
 #if defined(NRF_TIMER4) && TIMER4_ENABLE
-#if YSS_TIMER == RUNTIME_TIMER4
+#if YSS_RUNTIME_TIMER == RUNTIME_TIMER4
 #error "TIMER4 is currently used by the Yss OS Runtime. General use is not allowed."
+#endif
+#if YSS_DELAY_TIMER == RUNTIME_TIMER4
+#error "TIMER0 is currently used by the Yss OS delay time. General use is not allowed."
 #endif
 
 static void enableTimer4Interrupt(bool en)

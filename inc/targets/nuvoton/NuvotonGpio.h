@@ -66,6 +66,8 @@ public:
 #include "def_gpio_m25x.h"
 #elif defined(__M43x_SUBFAMILY)
 #include "def_gpio_m43x.h"
+#elif defined(__MA35H0_FAMILY)
+#include "def_gpio_ma35h0.h"
 #endif
 
 	/**
@@ -196,6 +198,10 @@ public:
 	{
 		GPIO_T *dev;
 		volatile uint32_t *mfp;
+#if defined(__MA35H0_FAMILY)
+		volatile uint32_t *mfos;
+		bool mMfosUpperFlag;
+#endif
 	};
 
 	Gpio(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
@@ -205,6 +211,10 @@ public:
 private:
 	GPIO_T *mDev;
 	volatile uint32_t *mMfp, *mOutputReg;
+#if defined(__MA35H0_FAMILY)
+	volatile uint32_t *mMfos;
+	bool mMfosUpperFlag;
+#endif
 	void (*mIsr[16])(void);
 	bool mTriggerFlag[16];
 	int32_t  mTriggerNum[16];

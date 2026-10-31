@@ -25,7 +25,7 @@
  * 2. Supply clock to the ADC peripheral using the `enableClock()` function.
  * 3. Initialize the ADC driver settings using the `initialize()` function.
  * 4. Register input channels using the `add()` function.
- * 5. Enable the interrupt for the peripheral using the `enableInterrupt()`
+ * 5. Enable the interrupt for the peripheral using the `__enableInterrupt()`
  * function.
  * 6. Start the conversion process using the `convert()` function.
  *
@@ -39,7 +39,7 @@
  * // Register channel 4 with Low Pass Filter level 10 and 12-bit resolution
  * adc1.add(define::gpio::analog::PA4_ADC_IN4, Adc::LPF_LV10, Adc::RES_BIT12);
  *
- * adc1.enableInterrupt();
+ * adc1.__enableInterrupt();
  * adc1.convert(true); // Start converting
  * @endcode
  *

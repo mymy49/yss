@@ -9,11 +9,17 @@
 #define YSS_CLASS_TIMER_MAX32665__H_
 
 #include <drv/Timer.h>
+#include <hal/Pwm.h>
 #include <yss/error.h>
 
-class Max32665Timer : public Timer
+class Max32665Timer : public Timer, public Pwm
 {
 public:
+	typedef enum
+	{
+
+	}mode_t;
+
 	Max32665Timer(const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
 
 	/**
@@ -24,6 +30,9 @@ public:
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
 	virtual error_t initialize(uint32_t freq) override __attribute__((optimize("-O1")));
+
+
+	error_t initializeAsPwm(uint32_t freq) __attribute__((optimize("-O1")));
 
 	/**
 	 * @brief Sets the timer to run in one-pulse mode (stops after one cycle).
@@ -65,6 +74,12 @@ public:
 	 * @return uint32_t The current hardware timer counter value.
 	 */
 	virtual uint32_t getCounterValue(void) __attribute__((optimize("-O1")));
+
+	virtual uint32_t getTopValue(void) override __attribute__((optimize("-O1")));
+
+	virtual void setDutyRatio(float ratio) override __attribute__((optimize("-O1")));
+
+	virtual void setCompareValue(uint32_t  counter) override __attribute__((optimize("-O1")));
 
 	struct setup_t
 	{

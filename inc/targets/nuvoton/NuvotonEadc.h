@@ -29,7 +29,7 @@
  * 2. Supply clock to the EADC peripheral using `enableClock()`.
  * 3. Initialize driver resources using `initialize()`.
  * 4. Register EADC channels using `add()`.
- * 5. Enable the interrupt for the module using `enableInterrupt()`.
+ * 5. Enable the interrupt for the module using `__enableInterrupt()`.
  * 6. Start the conversion process using `convert(true)`.
  *
  * ### Initialization Example
@@ -39,7 +39,7 @@
  * eadc.enableClock();
  * eadc.initialize(1);  // Reserve space for 1 channel
  * eadc.add(4, Adc::LPF_LV10, Adc::RES_BIT12); // Add EADC channel 4 with LPF level 10 and 12-bit resolution
- * eadc.enableInterrupt();
+ * eadc.__enableInterrupt();
  * eadc.convert(true);  // Start conversions
  * @endcode
  *

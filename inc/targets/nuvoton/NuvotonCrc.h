@@ -27,7 +27,7 @@
 class NuvotonCrc : public Crc
 {
 public :
-	NuvotonCrc(const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
+	NuvotonCrc(const Drv::setup_t drvSetup);
 
 	/**
 	 * @brief Initializes the CRC device with the given configuration.
@@ -36,7 +36,7 @@ public :
 	 * @param[in] config Configuration settings for the CRC device.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t initialize(config_t config) __attribute__((optimize("-O1")));
+	error_t initialize(config_t config);
 
 	/**
 	 * @brief Configures the CRC device settings.
@@ -45,7 +45,7 @@ public :
 	 * @param[in] config Configuration settings for the CRC device.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t configure(config_t config) __attribute__((optimize("-O1")));
+	error_t configure(config_t config) override;
 
 	/**
 	 * @brief Calculates the CRC checksum for a data block.
@@ -54,12 +54,12 @@ public :
 	 * @param[in] size Size of the data block in bytes.
 	 * @return uint32_t The calculated CRC checksum.
 	 */
-	virtual uint32_t calculate(void *src, uint32_t size) __attribute__((optimize("-O1")));
+	uint32_t calculate(void *src, uint32_t size) override;
 
 	/**
 	 * @brief Resets the CRC checksum calculation to its initial seed state.
 	 */
-	virtual void resetChecksum(void) __attribute__((optimize("-O1")));
+	void resetChecksum(void) override;
 
 private :
 	CRC_T *mDev;

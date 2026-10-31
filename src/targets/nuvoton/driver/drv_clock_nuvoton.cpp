@@ -9,6 +9,7 @@
 
 #include <targets/nuvoton/NuvotonClock.h>
 #include <yss/reg.h>
+#include <drv/peripheral.h>
 
 /**
  * @file drv_clock_nuvoton.cpp
@@ -76,6 +77,8 @@
 #define FOUT_MIN_FREQ	 16000000
 #define FOUT_MAX_FREQ	100000000
 #endif
+
+#pragma GCC optimize("O1")
 
 static uint32_t gHxtFreq __attribute__((section(".non_init")));
 

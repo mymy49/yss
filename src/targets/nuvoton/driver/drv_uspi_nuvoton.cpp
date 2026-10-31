@@ -84,11 +84,11 @@ error_t NuvotonUspi::initialize(config_t config)
 
 	mDev->PROTCTL = 0;
 
-	mTxDma = system::allocateDma();
+	mTxDma = yss::allocateDma();
 	if(mTxDma == nullptr)
 		return error_t::DMA_ALLOCATION_FAILED;
 
-	mRxDma = system::allocateDma();
+	mRxDma = yss::allocateDma();
 	if(mRxDma == nullptr)
 		return error_t::DMA_ALLOCATION_FAILED;
 

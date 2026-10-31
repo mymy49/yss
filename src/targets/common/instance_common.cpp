@@ -16,7 +16,5 @@ Flash flash;
 
 // NVIC Instance
 #ifndef YSS_DRV_NVIC_UNSUPPORTED
-#if defined(NVIC)
 Nvic nvic;
-#endif
 #endif

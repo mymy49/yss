@@ -142,7 +142,7 @@ void initializeDma(void)
 	// DMA1
 	dmaChannel1.enableClock();
 	dmaChannel1.initialize();
-	dmaChannel1.enableInterrupt();
+	dmaChannel1.__enableInterrupt();
 }
 
 extern "C"

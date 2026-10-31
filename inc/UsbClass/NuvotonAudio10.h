@@ -104,7 +104,7 @@ private :
  *
  *     usbd.enableClock();          // Enable USBD peripheral clock
  *     usbd.initialize(audio10);    // Initialize USBD stack as Audio Class
- *     usbd.enableInterrupt();      // Enable USBD interrupts
+ *     usbd.__enableInterrupt();      // Enable USBD interrupts
  * }
  * @endcode
  */

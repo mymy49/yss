@@ -161,15 +161,22 @@
 #endif
 
 #elif defined(__M25x_FAMILY)
-#define YSS__CORE_CM0_H_GENERIC
+#define YSS__CORE_CM23_H_GENERIC
 #define YSS__RUNTIME_SUPPORT
 #define YSS__DMA_ALLOCATION
+#define YSS__CORE_COUNT		1
 
 #if defined(__M251KG6AE__) || defined(__M251LG6AE__)
 #define YSS__NUM_OF_DMA_CH		8
 #elif defined(__M251FC2AE__) || defined(__M251ZD2AE__)
 #define YSS__NUM_OF_DMA_CH		5
 #endif
+
+#elif  defined(__MA35H0_FAMILY)
+#define YSS__CORE_CA35_H_GENERIC
+#define YSS__CORE_COUNT			2
+#define YSS__NUM_OF_DMA_CH		40
+#define YSS__DMA_ALLOCATION
 
 #elif defined(__MAX32665_FAMILY)
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
@@ -179,6 +186,20 @@
 
 #define ERROR_MCU_NOT_ABLE
 
+#endif
+
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC)
+#define __getCoreInterruptStatus	__get_PRIMASK
+#define __setCoreInterruptStatus	__set_PRIMASK
+#define __enableInterrupt			NVIC_EnableIRQ
+#define __disableInterrupt			NVIC_DisableIRQ
+#define __setInterruptPriority		NVIC_SetPriority
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+#define __getCoreInterruptStatus	raw_read_daif
+#define __setCoreInterruptStatus	raw_write_daif
+#define __enableInterrupt			GIC_EnableIRQ
+#define __disableInterrupt			GIC_DisableIRQ
+#define __setInterruptPriority		GIC_SetPriority
 #endif
 
 #endif

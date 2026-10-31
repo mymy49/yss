@@ -32,7 +32,7 @@ typedef volatile uint32_t		YSS_DAC_Peri;
  * 2. Supply clock to the DAC peripheral using the `enableClock()` function.
  * 3. Initialize the DAC driver configurations using the `initialize()` function.
  * 4. Enable individual DAC channels using `enableChannel1()` or `enableChannel2()`.
- * 5. Note: `enableInterrupt()` can be called but has no functional effect for the DAC driver.
+ * 5. Note: `__enableInterrupt()` can be called but has no functional effect for the DAC driver.
  * 
  * ### Initialization Example
  * @code
@@ -41,7 +41,7 @@ typedef volatile uint32_t		YSS_DAC_Peri;
  * dac1.enableClock();
  * dac1.initialize();
  * dac1.enableChannel1();
- * dac1.enableInterrupt();
+ * dac1.__enableInterrupt();
  * @endcode
  * 
  * ### Usage

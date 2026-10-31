@@ -18,7 +18,7 @@
 /**
  * @brief Unified error code enumeration.
  */
-typedef enum
+enum error_t
 {
 	ERROR_NONE = 0,                 ///< No error.
 
@@ -68,6 +68,9 @@ typedef enum
 	DATA_LENGTH_ERROR,              ///< Length of data is incorrect.
 	DATA_LIMIT_ERROR,               ///< Data limits exceeded.
 	ACCESS_ERROR,                   ///< Access denied or permission error.
+	DIVIDE_BY_ZERO,
+	FUNCTION_CODE_EMPTY,
+	WRONG_INPUT_RANGE,
 
 	// FAT File System Errors
 	SECTOR_READ,                    ///< Failed to read sector.
@@ -111,8 +114,11 @@ typedef enum
 	ERROR_INTERRUP,                 ///< CAN error interrupt occurred.
 
 	// GPIO Errors
-	OUT_OF_PIN_INDEX_RANGE,         ///< Pin index is out of bounds.
+	INVALID_PIN_INDEX,         ///< Pin index is out of bounds.
+	INVALID_ALT_FUNC,
+	INVALID_ALT_FUNC_OUTPUT_TYPE,
 	THIS_PIN_DO_NOT_HAVE_GPIO_OUTPUT, ///< Pin does not support GPIO output function.
+	UNSUPPORTED_GPIO_PORT,			
 
 	// Flash Memory Errors
 	LOCK_MODE,                      ///< FMC lock mode error.
@@ -123,6 +129,6 @@ typedef enum
 	// USB Errors
 	UNSUPPORTED_EP,                 ///< Endpoint is unsupported.
 	UNSUPPORTED_EP_BUF,             ///< Endpoint buffer allocation size unsupported.
-}error_t;
+};
 
 #endif

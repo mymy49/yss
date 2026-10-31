@@ -53,10 +53,12 @@ typedef struct
 // GPIO class definition selection depending on target MCU
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0) || defined(GD32F1) || defined(STM32G4)
 #include <targets/st/class_gpio_stm32.h>
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
 #include <targets/nuvoton/NuvotonGpio.h>
 #elif defined(__MAX32665_FAMILY)
 #include <targets/analog_devices/Max32665Gpio.h>
+#elif defined(NRF52840_XXAA)
+#include <targets/nordic/nRF52_Gpio.h>
 #else
 
 class Gpio : public Drv
@@ -76,7 +78,7 @@ public:
 	 * @param[in] pin Pin number (0 ~ 15).
 	 * @return bool True if pin state is High, false if pin state is Low.
 	 */
-	bool getInputData(uint8_t pin) {}
+	bool getInputData(uint8_t pin) { return false; }
 	
 	Gpio(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1"))) {}
 

@@ -28,7 +28,7 @@ static void enableEpwm0Clock(bool en)
 
 static void enableEpwm0Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(EPWM0P0_IRQn, en);
 	nvic.enableInterrupt(EPWM0P1_IRQn, en);
 	nvic.enableInterrupt(EPWM0P2_IRQn, en);

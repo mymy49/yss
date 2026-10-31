@@ -6,10 +6,13 @@
  */
 
 #include <yss/Mutex.h>
+#include <drv/mcu.h>
 #include <drv/peripheral.h>
 #include <yss/scheduler.h>
 #include <config.h>
 #include <util/runtime.h>
+
+#pragma GCC optimize("O1")
 
 bool Mutex::mInit = false;
 
@@ -20,10 +23,14 @@ bool Mutex::mInit = false;
 
 void  __attribute__((weak)) mutexWatchdogHandler(void)
 {
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC)
 #if __CM4_CMSIS_VERSION_MAIN == 3
 	NVIC_SystemReset();
 #else
 	__NVIC_SystemReset();
+#endif
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+
 #endif
 }
 
@@ -41,30 +48,53 @@ Mutex::Mutex(void)
 
 uint32_t Mutex::lock(void)
 {
+	void *lr = __builtin_return_address(0);
+
+#if YSS__CORE_COUNT > 1
+	semaphore::lockMutex();
+#endif
+
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
-	thread::protect(); // Prevent scheduler changes while queueing.
-	__disable_irq();   // Disable interrupts during the atomic ticket-number fetch.
+	thread::protect(); // Prevent thread removal while waiting for or holding the mutex[cite: 2, 6].
+
 #if THREAD_WATCHDOG_ENABLE
-	// Capture the deadline as an absolute millisecond timestamp.
+	// Capture the deadline timestamp before entering the wait loop.
 	uint64_t timeout = runtime::getMsec() + THREAD_WATCHDOG_OVERFLOW_TIME;
 #endif
-	// Take the next available ticket; mWaitNum acts as the ticket dispenser.
-	uint32_t num = mWaitNum;
-	mWaitNum++;
-	if(mIrqNum >= 0)
-		NVIC_DisableIRQ(mIrqNum); // Disable the mutex-associated IRQ if configured.
-	__enable_irq();    // Re-enable interrupts after the ticket has been issued.
 
-	// Wait until the mutex service counter reaches our ticket number.
+	// 1. Atomically issue a ticket number using PRIMASK preservation.
+	uint32_t primask = __getCoreInterruptStatus();
+	__disable_irq();
+	uint32_t num = mWaitNum++;
+	__setCoreInterruptStatus(primask);
+
+	// 2. Wait until the service counter matches our ticket number[cite: 2].
 	while (num != mCurrentNum)
 	{
 #if THREAD_WATCHDOG_ENABLE
-		// If the deadline has passed without acquiring the lock, invoke the watchdog.
-		if(timeout < runtime::getMsec())
+		// Trigger watchdog recovery if acquisition deadline is exceeded[cite: 2].
+		if (timeout < runtime::getMsec())
 			mutexWatchdogHandler();
 #endif
-		thread::yield(); // Yield the CPU while waiting for earlier holders to unlock.
+#if YSS__CORE_COUNT > 1
+		semaphore::unlockMutex();
+#endif
+		thread::yield(); // Relinquish remaining time slice to allow other threads to run[cite: 2].
+#if YSS__CORE_COUNT > 1
+		semaphore::lockMutex();
+#endif
 	}
+
+	// 3. Disable the associated peripheral IRQ only after acquiring ownership[cite: 2, 6].
+	// This prevents earlier unlock() calls from prematurely re-enabling the IRQ.
+	if (mIrqNum >= 0)
+		__disableInterrupt(mIrqNum);
+
+	mLinkRegister = (void (*)(void))lr;
+
+#if YSS__CORE_COUNT > 1
+		semaphore::unlockMutex();
+#endif
 
 	return num;
 #else
@@ -72,42 +102,39 @@ uint32_t Mutex::lock(void)
 #endif
 }
 
-bool Mutex::check(void)
-{
-#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
-	thread::protect(); // Protect scheduler state while checking lock availability.
-	__disable_irq();   // Disable interrupts during the lock check.
-	uint32_t num = mWaitNum;
-
-	if(num != mCurrentNum)
-	{
-		__enable_irq();
-		return false; // Mutex is already held by another thread; do not block.
-	}
-
-	// The mutex is free: claim the next ticket and disable the associated IRQ.
-	mWaitNum++;
-	if(mIrqNum >= 0)
-		NVIC_DisableIRQ(mIrqNum); // Disable any associated IRQ for the new lock holder.
-	__enable_irq();   // Re-enable interrupts after successfully acquiring the lock.
-
-	return true;
-#else
-	return true;
-#endif
-}
-
 void Mutex::unlock(void)
 {
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
-	__disable_irq(); // Disable interrupts while updating the service counter.
-	mCurrentNum++;   // Advance the service counter so the next ticket holder can proceed.
-	if(mIrqNum >= 0)
-		NVIC_EnableIRQ(mIrqNum); // Re-enable the IRQ that was disabled while locking.
-	__enable_irq();
-	thread::unprotect(); // Allow scheduler operations (e.g., preemption) to resume.
-	if (mInit && mWaitNum != mCurrentNum)
-		thread::yield(); // Yield if there are threads waiting for this mutex.
+
+#if YSS__CORE_COUNT > 1
+	semaphore::lockMutex();
+#endif
+
+	// 1. Re-enable peripheral IRQ and advance service counter atomically[cite: 2].
+	uint32_t primask = __getCoreInterruptStatus();
+	__disable_irq();
+
+	if (mIrqNum >= 0)
+		__enableInterrupt(mIrqNum); // Restore the peripheral IRQ as lock ownership is released[cite: 2, 6].
+
+	mCurrentNum++; // Advance ticket counter to hand over ownership to the next waiter[cite: 2, 6].
+	mLinkRegister = nullptr;
+	__setCoreInterruptStatus(primask);
+
+	// 2. Allow thread removal operations to resume[cite: 2].
+	thread::unprotect();
+
+	// It seems that objects are frequently called with Mutex::unlock(), taken quick, 
+	// light action, and then locked again with Mutex::lock(),
+	// so I commented out the part calling yield() in the Mutex::unlock() function.
+
+	// 3. Yield immediately if other threads are waiting for this mutex[cite: 2, 6].
+	//if (mInit && mWaitNum != mCurrentNum)
+	//	thread::yield();
+
+#if YSS__CORE_COUNT > 1
+	semaphore::unlockMutex();
+#endif
 #endif
 }
 

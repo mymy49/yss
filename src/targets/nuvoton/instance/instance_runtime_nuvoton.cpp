@@ -9,34 +9,36 @@
  * @brief OS runtime timer initialization for Nuvoton target.
  */
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
 
 #include <config.h>
 #include <yss/instance.h>
 #include <util/runtime.h>
 #include <drv/peripheral.h>
 
+#pragma GCC optimize("O1")
+
 #define TOP				0xFFFFFF
 
-#if YSS_TIMER == RUNTIME_TIMER0
+#if YSS_RUNTIME_TIMER == RUNTIME_TIMER0
 #define ISR_RUNTIME		TMR0_IRQHandler
 #define RUNTIME_DEV		TIMER0
 #define CLK_CLKSEL_Msk	CLK_CLKSEL1_TMR0SEL_Msk
 #define CLK_TMR_EN_Msk	CLK_APBCLK0_TMR0CKEN_Msk
 #define RUNTIME_IRQ		TMR0_IRQn
-#elif YSS_TIMER == RUNTIME_TIMER1
+#elif YSS_RUNTIME_TIMER == RUNTIME_TIMER1
 #define ISR_RUNTIME		TMR1_IRQHandler
 #define RUNTIME_DEV		TIMER1
 #define CLK_CLKSEL_Msk	CLK_CLKSEL1_TMR1SEL_Msk
 #define CLK_TMR_EN_Msk	CLK_APBCLK0_TMR1CKEN_Msk
 #define RUNTIME_IRQ		TMR1_IRQn
-#elif YSS_TIMER == RUNTIME_TIMER2
+#elif YSS_RUNTIME_TIMER == RUNTIME_TIMER2
 #define ISR_RUNTIME		TMR2_IRQHandler
 #define RUNTIME_DEV		TIMER2
 #define CLK_CLKSEL_Msk	CLK_CLKSEL1_TMR2SEL_Msk
 #define CLK_TMR_EN_Msk	CLK_APBCLK0_TMR2CKEN_Msk
 #define RUNTIME_IRQ		TMR2_IRQn
-#elif YSS_TIMER == RUNTIME_TIMER3
+#elif YSS_RUNTIME_TIMER == RUNTIME_TIMER3
 #define ISR_RUNTIME		TMR3_IRQHandler
 #define RUNTIME_DEV		TIMER3
 #define CLK_CLKSEL_Msk	CLK_CLKSEL1_TMR3SEL_Msk
@@ -49,7 +51,6 @@ static bool gUpdateFlag = true;
 
 extern "C"
 {
-	void ISR_RUNTIME(void) __attribute__((optimize("-O1")));
 	void ISR_RUNTIME(void)
 	{
 		RUNTIME_DEV->INTSTS = TIMER_INTSTS_TIF_Msk;
@@ -68,12 +69,11 @@ extern "C"
 	}
 }
 
-void initializeSystemTime(void) __attribute__((optimize("-O1")));
 void initializeSystemTime(void)
 {
 	uint32_t clk, reg;
 
-#if defined(HSE_CLOCK_FREQ)
+#if defined(HXT_CLOCK_FREQ)
 
 	// Switch timer clock source to HXT
 	reg = CLK->CLKSEL1;
@@ -94,38 +94,53 @@ void initializeSystemTime(void)
 	reg &= ~TIMER_CTL_PSC_Msk;
 	reg |= ((clk / 1000000 - 1) << TIMER_CTL_PSC_Pos) | TIMER_CTL_CNTEN_Msk | (3 << TIMER_CTL_OPMODE_Pos) | TIMER_CTL_INTEN_Msk;
 	RUNTIME_DEV->CTL = reg;
-
 	RUNTIME_DEV->CMP = (TOP * 6 / 8);
-	NVIC_EnableIRQ(RUNTIME_IRQ);
+
+
+#if defined(__MA35H0_FAMILY)
+	SYS->RLKTZS = 0x59;
+	SYS->RLKTZS = 0x16;
+	SYS->RLKTZS = 0x88;
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
+	SYS->REGLCTL = 0x59;
+	SYS->REGLCTL = 0x16;
+	SYS->REGLCTL = 0x88;
+#endif
+	//RUNTIME_DEV->CTL |= TIMER_CTL_ICEDEBUG_Msk;
+
+#if defined(__MA35H0_FAMILY)
+	SYS->RLKTZS = 0x00;
+#endif
+
+	__enableInterrupt(RUNTIME_IRQ);
 }
 
 namespace runtime
 {
 uint64_t gLastRequestTime;
 
-uint32_t getSec(void) __attribute__((optimize("-O1")));
 uint32_t getSec(void)
 {
 	return getUsec() / 1000000;
 }
 
-uint64_t getMsec(void) __attribute__((optimize("-O1")));
 uint64_t getMsec(void)
 {
-	return getUsec() / 1000;
+	uint64_t usec = getUsec();
+	return usec / 1000;
 }
 
-uint64_t getUsec(void) __attribute__((optimize("-O1")));
 uint64_t getUsec(void)
 {
-	register uint32_t cnt, iflag;
-	register uint64_t acc;
+	uint32_t cnt, iflag;
+	uint64_t acc;
+	uint32_t primask = __getCoreInterruptStatus();
 
 	__disable_irq();
 	cnt = RUNTIME_DEV->CNT;
 	acc = gYssTimeSum;
 	iflag = gUpdateFlag;
-	__enable_irq();
+	__setCoreInterruptStatus(primask);
 	
 	if(iflag == true && cnt > (TOP * 6 / 8))
 		return cnt + acc - TOP;

@@ -9,6 +9,8 @@
 #include <yss.h>
 
 void initializeSystem(void);
+void initializeSystem1(void);
+
 void initializeSdram(void);
 
 void initializeLheap(void);
@@ -45,6 +47,13 @@ extern "C"
 		yss::initializeCheap();
 #endif
 	}
+
+#if YSS__CORE_COUNT >= 2
+	void SystemInit1()
+	{
+		initializeSystem1();
+	}
+#endif
 
 	void __attribute__((weak)) SystemCoreClockUpdate(void)
 	{
