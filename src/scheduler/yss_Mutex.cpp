@@ -48,6 +48,8 @@ Mutex::Mutex(void)
 
 uint32_t Mutex::lock(void)
 {
+	void *lr = __builtin_return_address(0);
+
 #if YSS__CORE_COUNT > 1
 	semaphore::lockMutex();
 #endif
@@ -88,6 +90,8 @@ uint32_t Mutex::lock(void)
 	if (mIrqNum >= 0)
 		__disableInterrupt(mIrqNum);
 
+	mLinkRegister = (void (*)(void))lr;
+
 #if YSS__CORE_COUNT > 1
 		semaphore::unlockMutex();
 #endif
@@ -114,6 +118,7 @@ void Mutex::unlock(void)
 		__enableInterrupt(mIrqNum); // Restore the peripheral IRQ as lock ownership is released[cite: 2, 6].
 
 	mCurrentNum++; // Advance ticket counter to hand over ownership to the next waiter[cite: 2, 6].
+	mLinkRegister = nullptr;
 	__setCoreInterruptStatus(primask);
 
 	// 2. Allow thread removal operations to resume[cite: 2].

@@ -87,6 +87,7 @@ private:
 	uint32_t mWaitNum, mCurrentNum;
 	IRQn_Type mIrqNum;
 	static bool mInit;
+	void (*mLinkRegister)(void);
 };
 
 #endif

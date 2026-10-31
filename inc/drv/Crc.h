@@ -52,14 +52,14 @@ public :
 	 * @struct config_t
 	 * @brief Configuration structure for the CRC device.
 	 */
-	typedef struct
+	struct config_t
 	{
 		mode_t mode;                    ///< The CRC calculation mode/polynomial type.
 		datalen_t datalen;              ///< The data width of the write operations to the CRC core.
 		uint32_t seed;                  ///< The initial seed value used when resetting the checksum.
 		bool writeBitOrderReverse;      ///< True to reverse the bit order of incoming data written to the core.
 		bool checksumBitOrderReverse;   ///< True to reverse the bit order of the calculated checksum result.
-	}config_t;
+	};
 
 	/**
 	 * @brief Configures the operation mode of the CRC device.

@@ -20,6 +20,8 @@
  * @brief CRC target-specific driver source file for Nuvoton.
  */
 
+ #pragma GCC optimize("O1")
+
 NuvotonCrc::NuvotonCrc(const Drv::setup_t drvSetup) : Crc(drvSetup)
 {
 	// Default data length to 32-bit width.

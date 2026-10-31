@@ -106,7 +106,7 @@ void initializeSystemTime(void)
 	SYS->REGLCTL = 0x16;
 	SYS->REGLCTL = 0x88;
 #endif
-	RUNTIME_DEV->CTL |= TIMER_CTL_ICEDEBUG_Msk;
+	//RUNTIME_DEV->CTL |= TIMER_CTL_ICEDEBUG_Msk;
 
 #if defined(__MA35H0_FAMILY)
 	SYS->RLKTZS = 0x00;

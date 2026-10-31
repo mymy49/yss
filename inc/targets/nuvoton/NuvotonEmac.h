@@ -12,6 +12,10 @@
 #include <drv/Drv.h>
 #include <yss/error.h>
 
+#if !defined(EMAC_T)
+typedef uint32_t EMAC_T;
+#endif
+
 class NuvotonEmac : public Ethernet, public Drv
 {
 public :

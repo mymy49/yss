@@ -135,7 +135,8 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count, uint32_t tim
 		ctl |= (count - 1) << 16;
 		mRemainSize = 0;
 	}
-
+	
+	thread::resetWaitingSignalPendingFlag();
 	mChannel->CTL = ctl;
 
 	mDma->SWREQ |= 1 << mChNum;

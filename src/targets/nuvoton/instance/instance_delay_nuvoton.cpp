@@ -111,8 +111,8 @@ void setDelayTimer(threadId_t id, uint64_t sleepTime)
 	RUNTIME_DEV->INTSTS = TIMER_INTSTS_TIF_Msk;
 	RUNTIME_DEV->CNT = 0;
 
-	if(sleepTime == 0)
-		sleepTime = 1;
+	if(sleepTime < 100)
+		sleepTime = 100;
 
 	gSleepId = id;
 

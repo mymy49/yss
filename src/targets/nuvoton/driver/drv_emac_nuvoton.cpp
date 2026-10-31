@@ -2,6 +2,8 @@
 #include <drv/peripheral.h>
 #include <util/Timeout.h>
 
+#if defined(__MA35H0_FAMILY)
+
 NuvotonEmac::NuvotonEmac(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
@@ -103,3 +105,6 @@ void NuvotonEmac::updateConfig()
 {
 	setFieldData(mDev->GmiiAddr, EMAC_GmiiAddr_PA_Msk, mPhysicalLayerAddr, EMAC_GmiiAddr_PA_Pos);  
 }
+
+#endif
+

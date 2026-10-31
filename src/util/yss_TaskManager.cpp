@@ -10,7 +10,7 @@ TaskManager::TaskManager(int16_t maxCount)
 	mUpdateIndex = 0;
 	mResetter = nullptr;
 
-	activateTrigger(512);
+	activateTrigger(1024);
 }
 
 TaskManager::~TaskManager()
