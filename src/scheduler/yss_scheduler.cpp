@@ -187,9 +187,6 @@ static inline void sleep(uint32_t cid)
 
 	while(gYssThreadList[id].waitingForSignal)
 	{
-		if(gYssThreadList[id].waitingForSignalPendingFlag)
-			gYssThreadList[id].waitingForSignal = false;
-
 		semaphore::unlockSchedule();
 		thread::yield();
 		//else if(gActivatedThreadCount == 0)
@@ -579,21 +576,16 @@ void delayUs(uint32_t delayTime)
 		gDelayCount++;
 
 		thread->waitingForSignalPendingFlag = false;
-		thread->waitingForSignal = true;
 
 		if(index == 0)
 		{
 			setDelayTimer(gCurrentThreadNum[cid], endTime - curTime - 500);
 		}
 
-		thread->waitingForSignalPendingFlag = false;
-
 		sleep(cid);
 
 		__disable_irq();
 		cid = semaphore::lockSchedule();
-
-		thread->waitingForSignal = false;
 
 		for(index = 0; index < gDelayCount; index++)
 		{
@@ -661,7 +653,6 @@ void resetWaitingSignalPendingFlag(void)
 	task_t *thread = &gYssThreadList[gCurrentThreadNum[cid]];
 	
 	thread->waitingForSignalPendingFlag = false;
-	thread->waitingForSignal = true;
 
 	__setCoreInterruptStatus(primask);
 	semaphore::unlockSchedule();		
@@ -857,7 +848,7 @@ void signal(threadId_t id, bool lock)
 	{
 	    // 4. Ensure the target thread is re-inserted into the active runnable list.
 	    insertToActivatedThreadList(id);
-		if(thread->trigger && thread->waitingForSignal)
+		if(thread->trigger)
 			thread->triggerContinueFromSignal = true;
 
 		thread->waitingForSignal = false;
