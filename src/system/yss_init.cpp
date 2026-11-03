@@ -132,34 +132,34 @@ void initializeYss(void)
 	exti.__enableInterrupt(true);
 #elif defined(__M46x_SUBFAMILY)
 #if defined(PA) && defined(PA_EXIST)
-	gpioA.__enableInterrupt();
+	gpioA.enableInterrupt();
 #endif
 #if defined(PB) && defined(PB_EXIST)
-	gpioB.__enableInterrupt();
+	gpioB.enableInterrupt();
 #endif
 #if defined(PC) && defined(PC_EXIST)
-	gpioC.__enableInterrupt();
+	gpioC.enableInterrupt();
 #endif
 #if defined(PD) && defined(PD_EXIST)
-	gpioD.__enableInterrupt();
+	gpioD.enableInterrupt();
 #endif
 #if defined(PE) && defined(PE_EXIST)
-	gpioE.__enableInterrupt();
+	gpioE.enableInterrupt();
 #endif
 #if defined(PF) && defined(PF_EXIST)
-	gpioF.__enableInterrupt();
+	gpioF.enableInterrupt();
 #endif
 #if defined(PG) && defined(PG_EXIST)
-	gpioG.__enableInterrupt();
+	gpioG.enableInterrupt();
 #endif
 #if defined(PH) && defined(PH_EXIST)
-	gpioH.__enableInterrupt();
+	gpioH.enableInterrupt();
 #endif
 #if defined(PI) && defined(PI_EXIST)
-	gpioI.__enableInterrupt();
+	gpioI.enableInterrupt();
 #endif
 #if defined(PJ) && defined(PJ_EXIST)
-	gpioJ.__enableInterrupt();
+	gpioJ.enableInterrupt();
 #endif
 #endif
 

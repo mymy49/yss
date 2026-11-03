@@ -37,7 +37,7 @@ error_t NuvotonI2sInSpi::initialize(const config_t &spec)
 	uint32_t ctl, wordWidth;
 	
 	clk = bclk = getClockFrequency();
-	mCurrentDma = system::allocateDma();
+	mCurrentDma = yss::allocateDma();
 	if(mCurrentDma == nullptr)
 		return error_t::DMA_ALLOCATION_FAILED;
 

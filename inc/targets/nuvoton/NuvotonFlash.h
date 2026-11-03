@@ -34,7 +34,7 @@ public :
 	 * @param[in] page The page index to erase.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t erasePage(uint16_t page) __attribute__((optimize("-O1")));
+	error_t erasePage(uint16_t page);
 
 	/**
 	 * @brief Calculates the start address of a specified flash page.
@@ -42,7 +42,7 @@ public :
 	 * @param[in] page The page index.
 	 * @return uint32_t The absolute hardware memory address of the page.
 	 */
-	uint32_t getPageAddress(uint16_t page) __attribute__((optimize("-O1")));
+	uint32_t getPageAddress(uint16_t page);
 
 	/**
 	 * @brief Programs a block of flash memory at a specific destination address.
@@ -52,7 +52,7 @@ public :
 	 * @param[in] count Number of 32-bit words to program.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t program(void *des, uint32_t *src, uint32_t count) __attribute__((optimize("-O1")));
+	error_t program(void *des, uint32_t *src, uint32_t count);
 
 	/**
 	 * @brief Programs a block of flash memory starting at the beginning of a specified page.
@@ -62,7 +62,7 @@ public :
 	 * @param[in] count Number of 32-bit words to program.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t program(uint16_t page, uint32_t *src, uint32_t count) __attribute__((optimize("-O1")));
+	error_t program(uint16_t page, uint32_t *src, uint32_t count);
 	
 	/**
 	 * @brief Reads data from flash memory in 32-bit (4-byte) word units.
@@ -73,7 +73,7 @@ public :
 	 * @param[out] dataReg Pointer to the destination buffer to store the read data.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t read4Xbytes(uint16_t page, uint16_t sector, uint16_t count, uint32_t *dataReg) __attribute__((optimize("-O1")));
+	error_t read4Xbytes(uint16_t page, uint16_t sector, uint16_t count, uint32_t *dataReg);
 
 	/**
 	 * @brief Reads the unique identifier (UID) of the MCU.
@@ -85,13 +85,13 @@ public :
 	error_t readUniqueId(uint32_t *des, uint8_t index);
 	
 private :
-	error_t executeCommand(uint8_t cmd) __attribute__((optimize("-O1")));
+	error_t executeCommand(uint8_t cmd);
 
-	error_t enable(bool en) __attribute__((optimize("-O1")));
+	error_t enable(bool en);
 
-	error_t program32bit(uint32_t addr, uint32_t data) __attribute__((optimize("-O1")));
+	error_t program32bit(uint32_t addr, uint32_t data);
 
-	error_t read32bit(uint32_t addr, uint32_t* data) __attribute__((optimize("-O1")));
+	error_t read32bit(uint32_t addr, uint32_t* data);
 };
 
 #endif

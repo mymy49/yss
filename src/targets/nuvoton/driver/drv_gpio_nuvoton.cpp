@@ -12,6 +12,8 @@
 #include <drv/Gpio.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_gpio_nuvoton.cpp
  * @brief GPIO target-specific driver source file for Nuvoton.
@@ -58,8 +60,9 @@ error_t Gpio::setAsInput(uint8_t pin)
 	if(pin > 15)
 		return error_t::INVALID_PIN_INDEX;
 	
-	pin <<= 1;
 	__disable_irq();
+	setAsAltFunc(pin, (altFunc_t)0);
+	pin <<= 1;
 	setFieldData(mDev->MODE, 0x03 << pin, 0x00, pin);
 	__enable_irq();
 	 

@@ -116,9 +116,7 @@ void TaskManager::trigger(void)
 	}
 	if(mWorker[mUpdateIndex].count > 0)
 		mWorker1Id = thread::add(mWorker[mUpdateIndex].worker1, mVar1, mWorker[mUpdateIndex].worker1StackSize);
-	unlock();
 
-	lock();
 	if(mWorker2Id > 0)
 	{
 		thread::remove(mWorker2Id);
@@ -126,9 +124,7 @@ void TaskManager::trigger(void)
 	}
 	if(mWorker[mUpdateIndex].count > 1)
 		mWorker2Id = thread::add(mWorker[mUpdateIndex].worker2, mVar2, mWorker[mUpdateIndex].worker2StackSize);
-	unlock();
 
-	lock();
 	if(mWorker3Id > 0)
 	{
 		thread::remove(mWorker3Id);

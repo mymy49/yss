@@ -19,6 +19,8 @@
 #include <util/Timeout.h>
 #include <yss/scheduler.h>
 
+#pragma GCC optimize("O1")
+
 #define FMC_ISPCMD_FLASH_READ					(0x00)
 #define FMC_ISPCME_FLASH_READ_64BIT				(0x40)
 #define FMC_ISPCMD_READ_UNIQUE_ID				(0x04)
@@ -118,7 +120,7 @@ error_t Flash::readUniqueId(uint32_t *des, uint8_t index)
 
 uint32_t Flash::getPageAddress(uint16_t page)
 {
-#if defined(__M251_SUBFAMILY)
+#if defined(__M251_SUBFAMILY) || defined(__M46x_SUBFAMILY)
 	return (uint32_t)page * 512;
 #else
 	return (uint32_t)page * 4096;

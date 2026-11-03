@@ -153,6 +153,7 @@
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 #define YSS__RUNTIME_SUPPORT
 #define YSS__DMA_ALLOCATION
+#define YSS__CORE_COUNT		1
 
 #if defined(__M480_FAMILY) || defined(__M46x_SUBFAMILY)
 #define YSS__NUM_OF_DMA_CH		16

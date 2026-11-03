@@ -12,7 +12,7 @@
 #include <drv/Drv.h>
 #include <yss/error.h>
 
-#if !defined(EMAC_T)
+#if !defined(__MA35H0_FAMILY) && !defined(__M46x_SUBFAMILY)
 typedef uint32_t EMAC_T;
 #endif
 
