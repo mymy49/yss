@@ -1321,6 +1321,7 @@ uintptr_t yss_switchContext(uintptr_t currentSp)
 		);
 
 		id = gCurrentThreadNum[cid] = gActivatedThreadList[gRoundRobinThreadNum];
+		thread = &gYssThreadList[id];
 #else
 		// Standard round-robin selection among active threads.
 		gRoundRobinThreadNum++;
