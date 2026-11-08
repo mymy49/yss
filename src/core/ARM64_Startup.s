@@ -111,7 +111,7 @@ Purpose   : Generic startup and exception handlers for ARM64 devices.
 	.global main1
 	.type Reset_Handler, function
 	.equ reset_handler, Reset_Handler
-	.section .init, "ax"
+	.section .vectors, "ax"
 
 Reset_Handler:
 	// MMU, D-cache, I-cache 끄기
@@ -199,6 +199,9 @@ Reset_Handler:
 5:
 	dsb     sy
 	isb
+
+	ldr		x0, =__stack_core0_el3_end__
+	mov		sp, x0	
 	
 	// SystemInit Call
 	bl SystemInit

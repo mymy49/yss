@@ -142,7 +142,17 @@ void initializeMmu(volatile uint64_t *table)
 
 void __WEAK initializeSystem(void)
 {
+	uint32_t clk = raw_read_cntfrq_el0();
+
+	if (clk == 0)
+	{
+		clk = 12000000;
+		raw_write_cntfrq_el0(clk);
+	}
+
 	initializeMmu(l1_page_table0);
+
+	GIC_Enable();
 
 	SYS->RLKTZS = 0x59;
 	SYS->RLKTZS = 0x16;

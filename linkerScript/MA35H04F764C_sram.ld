@@ -14,7 +14,7 @@ SECTIONS
   __RAM1_segment_end__ = 0x28040000;
   __RAM1_segment_size__ = 0x00040000;
 
-  __HEAPSIZE__ = 128 * 1024;
+  __HEAPSIZE__ = 64 * 1024;
   __SEGGER_RTL_vfprintf = __SEGGER_RTL_vfprintf_int_nwp;
   __SEGGER_RTL_vfscanf = __SEGGER_RTL_vfscanf_int;
   __CORE0_EL3_STACKSIZE__ = 2 * 1024;
