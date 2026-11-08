@@ -20,13 +20,10 @@ Nvic::Nvic(void) : Drv(0, 0)
 
 void Nvic::enableInterrupt(IRQn_Type position, bool en)
 {
-	// Disables interrupts globally to perform atomic NVIC state change.
-	__disable_irq();	
 	if(en)
 		__enableInterrupt(position);
 	else
 		__disableInterrupt(position);
-	__enable_irq();
 }
 
 #endif

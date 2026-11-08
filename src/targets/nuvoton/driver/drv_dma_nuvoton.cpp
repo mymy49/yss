@@ -21,51 +21,6 @@
 #include <yss/scheduler.h>
 #include <util/runtime.h>
 
-#if defined(__MA35H0_FAMILY)
-/*---------------------------------------------------------------------------------------------------------*/
-/*  Operation Mode Constant Definitions                                                                    */
-/*---------------------------------------------------------------------------------------------------------*/
-#define PDMA_OP_STOP        0x00000000UL            /*!<DMA Stop Mode  \hideinitializer */
-#define PDMA_OP_BASIC       0x00000001UL            /*!<DMA Basic Mode  \hideinitializer */
-#define PDMA_OP_SCATTER     0x00000002UL            /*!<DMA Scatter-gather Mode  \hideinitializer */
-
-/*---------------------------------------------------------------------------------------------------------*/
-/*  Data Width Constant Definitions                                                                        */
-/*---------------------------------------------------------------------------------------------------------*/
-#define PDMA_WIDTH_8        0x00000000UL            /*!<DMA Transfer Width 8-bit  \hideinitializer */
-#define PDMA_WIDTH_16       0x00001000UL            /*!<DMA Transfer Width 16-bit  \hideinitializer */
-#define PDMA_WIDTH_32       0x00002000UL            /*!<DMA Transfer Width 32-bit  \hideinitializer */
-
-/*---------------------------------------------------------------------------------------------------------*/
-/*  Address Attribute Constant Definitions                                                                 */
-/*---------------------------------------------------------------------------------------------------------*/
-#define PDMA_SAR_INC        0x00000000UL            /*!<DMA SAR increment  \hideinitializer */
-#define PDMA_SAR_FIX        0x00000300UL            /*!<DMA SAR fix address  \hideinitializer */
-#define PDMA_DAR_INC        0x00000000UL            /*!<DMA DAR increment  \hideinitializer */
-#define PDMA_DAR_FIX        0x00000C00UL            /*!<DMA DAR fix address  \hideinitializer */
-
-/*---------------------------------------------------------------------------------------------------------*/
-/*  Burst Mode Constant Definitions                                                                        */
-/*---------------------------------------------------------------------------------------------------------*/
-#define PDMA_REQ_SINGLE     0x00000004UL            /*!<DMA Single Request  \hideinitializer */
-#define PDMA_REQ_BURST      0x00000000UL            /*!<DMA Burst Request  \hideinitializer */
-
-#define PDMA_BURST_128      0x00000000UL            /*!<DMA Burst 128 Transfers  \hideinitializer */
-#define PDMA_BURST_64       0x00000010UL            /*!<DMA Burst 64 Transfers  \hideinitializer */
-#define PDMA_BURST_32       0x00000020UL            /*!<DMA Burst 32 Transfers  \hideinitializer */
-#define PDMA_BURST_16       0x00000030UL            /*!<DMA Burst 16 Transfers  \hideinitializer */
-#define PDMA_BURST_8        0x00000040UL            /*!<DMA Burst 8 Transfers  \hideinitializer */
-#define PDMA_BURST_4        0x00000050UL            /*!<DMA Burst 4 Transfers  \hideinitializer */
-#define PDMA_BURST_2        0x00000060UL            /*!<DMA Burst 2 Transfers  \hideinitializer */
-#define PDMA_BURST_1        0x00000070UL            /*!<DMA Burst 1 Transfers  \hideinitializer */
-
-/*---------------------------------------------------------------------------------------------------------*/
-/*  Table Interrupt Disable Constant Definitions                                                           */
-/*---------------------------------------------------------------------------------------------------------*/
-#define PDMA_TBINTDIS_ENABLE  (0x0UL<<PDMA_DSCT_CTL_TBINTDIS_Pos)  /*!<DMA Table Interrupt Enabled   \hideinitializer */
-#define PDMA_TBINTDIS_DISABLE (0x1UL<<PDMA_DSCT_CTL_TBINTDIS_Pos)  /*!<DMA Table Interrupt Disabled  \hideinitializer */
-#endif
-
 #pragma GCC optimize("O1")
 
 Dma::Dma(const Drv::setup_t drvSetup, const setup_t dmaSetup) : Drv(drvSetup)

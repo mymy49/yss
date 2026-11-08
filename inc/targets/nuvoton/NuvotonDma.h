@@ -12,6 +12,10 @@
 #include <yss/error.h>
 #include <yss/scheduler.h>
 
+#if defined(__MA35H0_FAMILY)
+#include "ma35h_pdma.h"
+#endif
+
 /**
  * @file NuvotonDma.h
  * @brief DMA (Direct Memory Access) driver class header file for Nuvoton MCUs.

@@ -123,6 +123,10 @@ public:
 #endif
 
 #if defined(__MA35H0_FAMILY)
+	uint32_t getSysclk1ClockFrequency(void);
+#endif
+
+#if defined(__MA35H0_FAMILY)
 	uint32_t getEpllClockFrequency(void);
 #endif
 
@@ -253,7 +257,7 @@ public:
 	void enableAhb1Clock(uint32_t position, bool en = true);
 #endif	
 
-#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY) || defined(__MA35H0_FAMILY)
 	/**
 	 * @brief Enables or disables a clock gate on the APB0 bus.
 	 *

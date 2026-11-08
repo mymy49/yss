@@ -27,31 +27,62 @@
 static void enableUart0Clock(bool en)
 {
 	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
+	clock.lock();
 	clock.enableApb0Clock(CLK_APBCLK0_UART0CKEN_Pos, en);
+	clock.unlock();
 }
 
 static void enableUart0Interrupt(bool en)
 {
 	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
+	nvic.lock();
 	nvic.enableInterrupt(UART0_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetUart0(void)
 {
-	__disable_irq();
+	clock.lock();
+
+ #if defined(__MA35H0_FAMILY)
+	SYS->RLKTZS = 0x59;
+	SYS->RLKTZS = 0x16;
+	SYS->RLKTZS = 0x88;
+ #endif
+
 	setBitData(SYS->IPRST1, true, SYS_IPRST1_UART0RST_Pos);
-	__NOP();
-	__NOP();
-	__NOP();
-	__NOP();
+	__DSB();
+	(void)SYS->IPRST1;
+
 	setBitData(SYS->IPRST1, false, SYS_IPRST1_UART0RST_Pos);
-	__enable_irq();
+	__DSB();
+	(void)SYS->IPRST1;
+
+ #if defined(__MA35H0_FAMILY)
+	SYS->RLKTZS = 0x00;
+ #endif
+
+	clock.unlock();
 }
 
 static uint32_t getUart0ClockFrequency(void)
 {
 	uint32_t clk = 0;
+	
+#if defined(__MA35H0_FAMILY)
+	switch((CLK->CLKSEL2 & CLK_CLKSEL2_UART0SEL_Msk) >> CLK_CLKSEL2_UART0SEL_Pos)
+	{
+	case 0 : // HXT
+		clk = clock.getHxtFrequency();
+		break;
+	
+	case 1 : // PLL
+		clk = clock.getSysclk1ClockFrequency() / 2;
+		break;
+	}
 
+	return clk / (((CLK->CLKDIV1 & CLK_CLKDIV1_UART0DIV_Msk) >> CLK_CLKDIV1_UART0DIV_Pos) + 1);
+#else
 	switch((CLK->CLKSEL1 & CLK_CLKSEL1_UART0SEL_Msk) >> CLK_CLKSEL1_UART0SEL_Pos)
 	{
 	case 0 : // HXT
@@ -84,6 +115,7 @@ static uint32_t getUart0ClockFrequency(void)
 	}
 
 	return clk / (((CLK->CLKDIV0 & CLK_CLKDIV0_UART0DIV_Msk) >> CLK_CLKDIV0_UART0DIV_Pos) + 1);
+#endif
 }
 
 static const Drv::setup_t gDrvUart0Setup = 

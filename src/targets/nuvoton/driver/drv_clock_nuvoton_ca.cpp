@@ -111,7 +111,7 @@ uint32_t Clock::getEpllClockFrequency(void)
 uint32_t Clock::getSysclk0ClockFrequency(void)
 {
 	uint32_t clk;
-
+ 
 	switch(getBitData(CLK->CLKSEL0, CLK_CLKSEL0_SYSCK0SEL_Pos))
 	{
 	case 0 : // EPLL/2
@@ -124,6 +124,32 @@ uint32_t Clock::getSysclk0ClockFrequency(void)
 	}  
 
 	return clk;
+}
+
+uint32_t Clock::getSysclk1ClockFrequency(void)
+{
+	uint32_t clk;
+	
+	switch(getBitData(CLK->CLKSEL0, CLK_CLKSEL0_SYSCK1SEL_Pos))
+	{
+	case 0 :
+		clk = getHxtFrequency();
+		break;
+	
+	case 1 : // SYS-PLL
+		clk = getSyspllClockFrequency();
+		break;
+	}  
+
+	return clk;
+}
+
+void Clock::enableApb0Clock(uint32_t position, bool en)
+{
+	if(en)
+		CLK->APBCLK0 |= 1 << position;
+	else
+		CLK->APBCLK0 &= ~(1 << position);
 }
 
 
@@ -252,15 +278,6 @@ void Clock::enableAhb1Clock(uint32_t position, bool en)
 #endif
 }
 
-void Clock::enableApb0Clock(uint32_t position, bool en)
-{
-	__disable_irq();	
-	if(en)
-		CLK->APBCLK0 |= 1 << position;
-	else
-		CLK->APBCLK0 &= ~(1 << position);		
-	__enable_irq();
-}
 
 void Clock::enableApb1Clock(uint32_t position, bool en)
 {
