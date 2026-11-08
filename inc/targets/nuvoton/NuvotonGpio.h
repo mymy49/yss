@@ -173,19 +173,6 @@ public:
 	error_t setGpioInterrupt(uint8_t pin, source_t src, triggerId_t trigger);
 	
 	/**
-	 * @brief Configures multiple pins to their alternate function states.
-	 * @details Intended to configure startup IO functions before BSS section is initialized.
-	 * Using other GPIO functions before BSS initialization may result in undefined behaviors.
-	 *
-	 * @param[in] package Pointer to an array of altFuncPackage_t.
-	 * @param[in] count Number of packages in the array.
-	 * @param[in] atype Alternate function output type.
-	 * @param[in] slewrate Slew rate speed.
-	 * @return error_t Returns an error code (ERROR_NONE on success).
-	 */
-	error_t setPackageAsAltFunc(altFuncPackage_t *package, uint8_t count, atype_t atype = AF_PUSH_PULL, slewrate_t slewrate = SLEWRATE_NORMAL);
-
-	/**
 	 * @brief Reads the input logic state of a pin.
 	 *
 	 * @param[in] pin Pin number (0 ~ 15).

@@ -42,13 +42,16 @@ error_t Gpio::setAsOutput(uint8_t pin, otype_t otype, slewrate_t slewrate)
 {
 	if(pin > 15)
 		return error_t::INVALID_PIN_INDEX;
+
+	uint32_t primask = __getCoreInterruptStatus();
+	__disable_irq();
 	
 	setAsAltFunc(pin, PA0_GPIO, AF_PUSH_PULL, slewrate);
 
 	pin <<= 1;
-	__disable_irq();
 	setFieldData(mDev->MODE, 0x03 << pin, otype, pin);
-	__enable_irq();
+
+	__setCoreInterruptStatus(primask);
 
 	return error_t::ERROR_NONE;
 }
@@ -60,11 +63,15 @@ error_t Gpio::setAsInput(uint8_t pin)
 	if(pin > 15)
 		return error_t::INVALID_PIN_INDEX;
 	
+	uint32_t primask = __getCoreInterruptStatus();
 	__disable_irq();
+
 	setAsAltFunc(pin, (altFunc_t)0);
+
 	pin <<= 1;
 	setFieldData(mDev->MODE, 0x03 << pin, 0x00, pin);
-	__enable_irq();
+
+	__setCoreInterruptStatus(primask);
 	 
 		
 	return error_t::ERROR_NONE;
@@ -88,8 +95,10 @@ error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altfunc, atype_t atype, slewra
 	if(atype > 1)
 		return error_t::INVALID_ALT_FUNC_OUTPUT_TYPE;
 
-#if defined(__M46x_SUBFAMILY)
+	uint32_t primask = __getCoreInterruptStatus();
 	__disable_irq();
+
+#if defined(__M46x_SUBFAMILY)
 	des = &SYS->GPA_MFOS;
 	des = &des[((uint32_t)mDev - GPIOA_BASE) / 0x40];
 	setBitData(*des, atype, pin);
@@ -102,7 +111,6 @@ error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altfunc, atype_t atype, slewra
 	des = &SYS->GPA_MFP0;
 	des = &des[((uint32_t)mDev - GPIOA_BASE) / 0x10];
 	setFieldData(des[index], 0x1F << pin, altfunc, pin);
-	__enable_irq();
 #elif defined(__MA35H0_FAMILY)
 	if(mMfosUpperFlag)
 		reg = pin + 16;
@@ -117,7 +125,6 @@ error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altfunc, atype_t atype, slewra
 	reg = (pin & 0x07) << 2;
 	setFieldData(mMfp[index], 0xF << reg, altfunc, reg);
 #elif defined(__M480_FAMILY) || defined(__M43x_SUBFAMILY) || defined(__M25x_FAMILY)
-	__disable_irq();
 	des = &SYS->GPA_MFOS;
 	des = &des[((uint32_t)mDev - GPIOA_BASE) / 0x40];
 	setBitData(*des, atype, pin);
@@ -130,55 +137,8 @@ error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altfunc, atype_t atype, slewra
 	des = &SYS->GPA_MFPL;
 	des = &des[((uint32_t)mDev - GPIOA_BASE) / 0x20];
 	setFieldData(des[index], 0x0F << pin, altfunc, pin);
-	__enable_irq();
 #endif
-
-	return error_t::ERROR_NONE;
-}
-
-error_t Gpio::setPackageAsAltFunc(altFuncPackage_t *package, uint8_t count, atype_t atype, slewrate_t slewrate)
-{
-	GPIO_T *port;
-	uint8_t pin, pinOffset;
-	uint32_t reg, index;
-	volatile uint32_t *des;
-	
-	for (uint8_t i = 0; i < count; i++)
-	{
-		port = package[i].port;
-		pin = package[i].pin;
-	
-		if(pin > 15)
-			return error_t::INVALID_PIN_INDEX;
-		
-#if defined(__M46x_SUBFAMILY)
-		des = &SYS->GPA_MFOS;
-		des = &des[((uint32_t)port - GPIOA_BASE) / 0x10];
-		setBitData(*des, atype, pin);
-
-		index = pin << 1;
-		setFieldData(port->SLEWCTL, 0x03 << index, slewrate, index);
-
-		index = pin >> 2;
-		pin = (pin << 3) & 0x1F;
-		des = &SYS->GPA_MFP0;
-		des = &des[((uint32_t)port - GPIOA_BASE) / 0x10];
-		setFieldData(des[index], 0x1F << pin, package[i].func, pin);
-#elif defined(__M251_SUBFAMILY) || defined(__M43x_SUBFAMILY)
-		des = &SYS->GPA_MFOS;
-		des = &des[((uint32_t)port - GPIOA_BASE) / 0x10];
-		setBitData(*des, atype, pin);
-
-		index = pin << 1;
-		setFieldData(port->SLEWCTL, 0x03 << index, slewrate, index);
-
-		index = pin >> 3;
-		pin = (pin << 2) & 0x1F;
-		des = &SYS->GPA_MFPL;
-		des = &des[((uint32_t)port - GPIOA_BASE) / 0x10];
-		setFieldData(des[index], 0x0F << pin, package[i].func, pin);
-#endif
-	}
+	__setCoreInterruptStatus(primask);
 
 	return error_t::ERROR_NONE;
 }
@@ -190,14 +150,16 @@ error_t Gpio::setPullUpDown(uint8_t pin, pupd_t pupd)
 	if(pin > 15)
 		return error_t::INVALID_PIN_INDEX;
 	
-	pin *= 2;
-	
+	uint32_t primask = __getCoreInterruptStatus();
 	__disable_irq();
+
+	pin *= 2;
 	reg = mDev->PUSEL;
 	reg &= ~(0x3 << pin);
 	reg |= pupd << pin;
 	mDev->PUSEL = reg;
-	__enable_irq();
+
+	__setCoreInterruptStatus(primask);
 
 	return error_t::ERROR_NONE;
 }
@@ -206,6 +168,9 @@ error_t Gpio::setGpioInterrupt(uint8_t pin, source_t src, void (*isr)(void))
 {
 	if(pin >= 16)
 		return error_t::INVALID_PIN_INDEX;
+
+	uint32_t primask = __getCoreInterruptStatus();
+	__disable_irq();
 
 	bool level = false;
 
@@ -238,6 +203,8 @@ error_t Gpio::setGpioInterrupt(uint8_t pin, source_t src, void (*isr)(void))
 
 	setBitData(mDev->INTTYPE, level, pin);
 
+	__setCoreInterruptStatus(primask);
+
 	return error_t::ERROR_NONE;
 }
 
@@ -245,6 +212,9 @@ error_t Gpio::setGpioInterrupt(uint8_t pin, source_t src, triggerId_t trigger)
 {
 	if(pin >= 16)
 		return error_t::INVALID_PIN_INDEX;
+
+	uint32_t primask = __getCoreInterruptStatus();
+	__disable_irq();
 
 	bool level = false;
 	
@@ -276,6 +246,8 @@ error_t Gpio::setGpioInterrupt(uint8_t pin, source_t src, triggerId_t trigger)
 	}
 
 	setBitData(mDev->INTTYPE, level, pin);
+
+	__setCoreInterruptStatus(primask);
 
 	return error_t::ERROR_NONE;
 }
