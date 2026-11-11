@@ -70,7 +70,7 @@ public:
 	 * @param[in] pin Pin number (0 ~ 15).
 	 * @param[in] data Output state (true for High, false for Low).
 	 */
-	void setOutput(uint8_t pin, bool data) __attribute__((optimize("-O1"))) {}
+	void setOutput(uint8_t pin, bool data) {}
 
 	/**
 	 * @brief Reads the input logic state of a pin.
@@ -80,7 +80,7 @@ public:
 	 */
 	bool getInputData(uint8_t pin) { return false; }
 	
-	Gpio(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1"))) {}
+	Gpio(const Drv::setup_t drvSetup, const setup_t setup) {}
 
 	void isr(void) {}
 

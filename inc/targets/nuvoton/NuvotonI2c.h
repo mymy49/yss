@@ -35,7 +35,7 @@ public:
 	 * @param[in] config Master configuration settings (e.g., bus speed).
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t initialize(mainConfig_t config) __attribute__((optimize("-O1")));
+	virtual error_t initialize(mainConfig_t config);
 
 	/**
 	 * @brief Transmits a data block to a specified slave address.
@@ -46,7 +46,7 @@ public:
 	 * @param[in] timeout Transaction timeout duration in milliseconds (default is 500).
 	 * @return error_t Returns an error code (ERROR_NONE on success, or NACK/TIMEOUT).
 	 */
-	virtual error_t send(uint8_t addr, void *src, uint32_t size, uint32_t timeout = 500) __attribute__((optimize("-O1")));
+	virtual error_t send(uint8_t addr, void *src, uint32_t size, uint32_t timeout = 500);
 
 	/**
 	 * @brief Receives a data block from a specified slave address.
@@ -57,12 +57,12 @@ public:
 	 * @param[in] timeout Transaction timeout duration in milliseconds (default is 500).
 	 * @return error_t Returns an error code (ERROR_NONE on success, or NACK/TIMEOUT).
 	 */
-	virtual error_t receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout = 500) __attribute__((optimize("-O1")));
+	virtual error_t receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout = 500);
 
 	/**
 	 * @brief Generates an I2C STOP condition on the bus.
 	 */
-	virtual void stop(void) __attribute__((optimize("-O1")));
+	virtual void stop(void);
 
 	// Internal system functions. Do not call from user application.
 	struct setup_t
@@ -70,9 +70,9 @@ public:
 		I2C_T *dev;
 	};
 
-	NuvotonI2c(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	NuvotonI2c(const Drv::setup_t drvSetup, const setup_t setup);
 
-	void isr(void) __attribute__((optimize("-O1")));
+	void isr(void);
 
 private :
 	I2C_T *mDev;

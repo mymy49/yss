@@ -114,7 +114,7 @@ public:
 	 * @param[in] config Main setup configurations.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t initialize(mainConfig_t config) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t initialize(mainConfig_t config) = 0;
 
 	/**
 	 * @brief Transmits a block of data to a slave device.
@@ -125,7 +125,7 @@ public:
 	 * @param[in] timeout Timeout limit for the operation in milliseconds.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t send(uint8_t addr, void *src, uint32_t size, uint32_t timeout = 500) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t send(uint8_t addr, void *src, uint32_t size, uint32_t timeout = 500) = 0;
 
 	/**
 	 * @brief Receives a block of data from a slave device.
@@ -136,15 +136,15 @@ public:
 	 * @param[in] timeout Timeout limit for the operation in milliseconds.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout = 500) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout = 500) = 0;
 
 	/**
 	 * @brief Generates an I2C STOP condition to release the bus.
 	 */
-	virtual void stop(void) __attribute__((optimize("-O1"))) = 0;
+	virtual void stop(void) = 0;
 
 	// The following are internal functions and do not need to be called by the user application.
-	I2c(const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
+	I2c(const Drv::setup_t drvSetup);
 };
 
 #endif

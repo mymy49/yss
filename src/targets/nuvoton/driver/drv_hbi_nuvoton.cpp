@@ -16,6 +16,8 @@
 #include <yss/debug.h>
 #include <util/Timeout.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_hbi_nuvoton.cpp
  * @brief HBI (HyperBus Interface) target-specific driver source file for Nuvoton.

@@ -54,28 +54,28 @@ public :
 	uint32_t getSampleRate(void);
 
 	// Internal system functions. Do not call from user application.
-	NuvotonAudio10(void) __attribute__((optimize("-O1")));
+	NuvotonAudio10(void);
 
-	virtual error_t initialize(const config_t &config = {"Nuvoton", "USB Audio"}) __attribute__((optimize("-O1")));
+	virtual error_t initialize(const config_t &config = {"Nuvoton", "USB Audio"});
 
-	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des) __attribute__((optimize("-O1")));
+	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des);
 
-	virtual void handleGetDeviceDescriptor(void) __attribute__((optimize("-O1")));
+	virtual void handleGetDeviceDescriptor(void);
 
-	virtual void handleGetConfigDescriptor(uint16_t size) __attribute__((optimize("-O1")));
+	virtual void handleGetConfigDescriptor(uint16_t size);
 
-	virtual void handleGetDeviceQualifierDescriptor(void) __attribute__((optimize("-O1")));
+	virtual void handleGetDeviceQualifierDescriptor(void);
 
-	virtual void handleGetStringDescriptor(uint8_t index, uint16_t size) __attribute__((optimize("-O1")));
+	virtual void handleGetStringDescriptor(uint8_t index, uint16_t size);
 
-	virtual uint8_t getUsingEpCount(void) __attribute__((optimize("-O1")));
+	virtual uint8_t getUsingEpCount(void);
 
 private :
 	config_t mConfig;
 
-	virtual void handleClassSpecificRequest(void) __attribute__((optimize("-O1")));
+	virtual void handleClassSpecificRequest(void);
 
-	virtual void handleSetConfiguration(uint16_t value) __attribute__((optimize("-O1")));
+	virtual void handleSetConfiguration(uint16_t value);
 };
 
 #endif

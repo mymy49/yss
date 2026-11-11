@@ -7,6 +7,8 @@
 
 #include <drv/I2s.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_I2s.cpp
  * @brief Generic I2S (Inter-IC Sound) driver source file.

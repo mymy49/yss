@@ -17,6 +17,8 @@
 #include <config.h>
 #include <yss.h>
 
+#pragma GCC optimize("O1")
+
 #if defined(USBD) && USBD_ENABLE
 static void enableUsbdClock(bool en)
 {

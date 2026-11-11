@@ -15,6 +15,8 @@
 #include <config.h>
 #include <max32665.h>
 
+#pragma GCC optimize("O1")
+
 static uint32_t getTimerClockFrequency(void)
 {
 	return clock.getApbClockFrequency();

@@ -15,6 +15,8 @@
 #include <yss/debug.h>
 #include <string.h>
 
+#pragma GCC optimize("O1")
+
 static void trigger_process(void *var)
 {
 	UsbClass *obj = (UsbClass*)var;

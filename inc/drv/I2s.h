@@ -132,21 +132,21 @@ public:
 	 * @param[in] config Reference to I2S configuration parameters.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t initialize(const config_t &config) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t initialize(const config_t &config) = 0;
 	
 	/**
 	 * @brief Gets the actual LRCLK frequency of the I2S interface.
 	 * 
 	 * @return uint32_t Frequency in Hz.
 	 */
-	virtual uint32_t getLrclkFrequency(void) __attribute__((optimize("-O1"))) = 0;
+	virtual uint32_t getLrclkFrequency(void) = 0;
 	
 	/**
 	 * @brief Gets the actual MCLK frequency of the I2S interface.
 	 * 
 	 * @return uint32_t Frequency in Hz.
 	 */
-	virtual uint32_t getMclkFrequency(void) __attribute__((optimize("-O1"))) = 0;
+	virtual uint32_t getMclkFrequency(void) = 0;
 	
 	/**
 	 * @brief Starts transmitting/receiving a data buffer using DMA as a circular ring buffer.
@@ -158,12 +158,12 @@ public:
 	 * @param[in] count The buffer depth in terms of audio data frames (maximum 65535).
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t transfer(void *src, uint16_t count) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t transfer(void *src, uint16_t count) = 0;
 	
 	/**
 	 * @brief Stops DMA-based data transfer.
 	 */
-	virtual void stop(void) __attribute__((optimize("-O1"))) = 0;
+	virtual void stop(void) = 0;
 	
 	/**
 	 * @brief Gets the accumulated count of words sent out of the ring buffer.
@@ -171,7 +171,7 @@ public:
 	 * 
 	 * @return uint32_t Word count sent.
 	 */
-	virtual uint32_t getTxCount(void) __attribute__((optimize("-O1"))) = 0;
+	virtual uint32_t getTxCount(void) = 0;
 	
 	/**
 	 * @brief Gets the accumulated count of words received into the ring buffer.
@@ -179,21 +179,21 @@ public:
 	 * 
 	 * @return uint32_t Word count received.
 	 */
-	virtual uint32_t getRxCount(void) __attribute__((optimize("-O1"))) = 0;
+	virtual uint32_t getRxCount(void) = 0;
 	
 	/**
 	 * @brief Gets the pointer to the next section of the ring buffer to write/read.
 	 * 
 	 * @return void* Pointer to the current active buffer index.
 	 */
-	virtual void* getCurrentBuffer(void) __attribute__((optimize("-O1"))) = 0;
+	virtual void* getCurrentBuffer(void) = 0;
 	
 	/**
 	 * @brief Advances the ring buffer's current write/read pointer.
 	 * 
 	 * @param[in] count Number of frames/words written or read by the application.
 	 */
-	virtual void releaseBuffer(int32_t count) __attribute__((optimize("-O1"))) = 0;
+	virtual void releaseBuffer(int32_t count) = 0;
 
 	/**
 	 * @brief Gets the size of one complete audio channel frame in bytes.
@@ -206,7 +206,7 @@ public:
 	 *
 	 * @return uint32_t Size of one audio channel frame in bytes.
 	 */
-	uint32_t getChannelFrameSize(void) __attribute__((optimize("-O1")));
+	uint32_t getChannelFrameSize(void);
 
 	/**
 	 * @brief Gets the configured data word width of the I2S interface.
@@ -218,7 +218,7 @@ public:
 	 *
 	 * @return wordWidth_t The configured word width enumeration value.
 	 */
-	virtual wordWidth_t getWordWidth(void) __attribute__((optimize("-O1"))) = 0;
+	virtual wordWidth_t getWordWidth(void) = 0;
 
 	/**
 	 * @brief Gets the configured I2S audio protocol standard.
@@ -231,10 +231,10 @@ public:
 	 *
 	 * @return std_t The configured I2S standard enumeration value.
 	 */
-	virtual std_t getI2sStandard(void) __attribute__((optimize("-O1"))) = 0;
+	virtual std_t getI2sStandard(void) = 0;
 	
 	// The following are internal functions and do not need to be called by the user application.
-	I2s(const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
+	I2s(const Drv::setup_t drvSetup);
 
 protected :
 	mode_t mMode;                              ///< Current I2S operating mode (master/slave, TX/RX).

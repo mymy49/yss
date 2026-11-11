@@ -37,7 +37,7 @@ public:
 	 * @param[in] freq Desired frequency of the PWM output in Hz.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t initialize(uint32_t freq) __attribute__((optimize("-O1")));
+	error_t initialize(uint32_t freq);
 
 	/**
 	 * @brief Changes the output frequency of the BPWM device.
@@ -48,24 +48,24 @@ public:
 	 * @param[in] freq Desired frequency of the PWM output in Hz.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t changeFrequency(uint32_t freq) __attribute__((optimize("-O1")));
+	error_t changeFrequency(uint32_t freq);
 	
 	/**
 	 * @brief Starts the BPWM counter.
 	 */
-	void start(void) __attribute__((optimize("-O1")));
+	void start(void);
 	
 	/**
 	 * @brief Stops the BPWM counter.
 	 */
-	void stop(void) __attribute__((optimize("-O1")));
+	void stop(void);
 
 	/**
 	 * @brief Gets the maximum (TOP) value of the BPWM counter.
 	 *
 	 * @return uint32_t The TOP value of the PWM counter.
 	 */
-	uint32_t getTopValue(void) __attribute__((optimize("-O1")));
+	uint32_t getTopValue(void);
 	
 	/**
 	 * @brief Sets the duty ratio of the specified BPWM channel.
@@ -74,7 +74,7 @@ public:
 	 * @param[in] ratio The duty ratio to set (0.0 to 1.0).
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t setDutyRatio(uint8_t ch, float ratio) __attribute__((optimize("-O1")));
+	error_t setDutyRatio(uint8_t ch, float ratio);
 	
 	/**
 	 * @brief Directly sets the compare register value of the specified BPWM channel.
@@ -85,7 +85,7 @@ public:
 	 * @param[in] counter The output compare register value to set.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t setCompareValue(uint8_t ch, int16_t  counter) __attribute__((optimize("-O1")));
+	error_t setCompareValue(uint8_t ch, int16_t  counter);
 
 	/**
 	 * @brief Configures the specified channel as a standard PWM output.
@@ -104,7 +104,7 @@ public:
 		BPWM_T *dev;
 	};
 
-	NuvotonBpwm(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	NuvotonBpwm(const Drv::setup_t drvSetup, const setup_t setup);
 
 protected:
 	BPWM_T *mDev;

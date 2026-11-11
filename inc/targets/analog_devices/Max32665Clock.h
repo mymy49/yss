@@ -14,9 +14,9 @@
 class Clock : public Drv
 {
 public:
-	error_t enableHirc8m(bool en = true) __attribute__((optimize("-O1")));
+	error_t enableHirc8m(bool en = true);
 
-	error_t enableHirc96m(bool en = true) __attribute__((optimize("-O1")));
+	error_t enableHirc96m(bool en = true);
 
 	typedef enum
 	{
@@ -25,11 +25,11 @@ public:
 		HCLK_SRC_HIRC96 = 4
 	}hclkSrc_t;
 
-	error_t setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv) __attribute__((optimize("-O1")));
+	error_t setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv);
 	
-	uint32_t getHclkClockFrequency() __attribute__((optimize("-O1")));
+	uint32_t getHclkClockFrequency();
 	
-	uint32_t getApbClockFrequency() __attribute__((optimize("-O1")));
+	uint32_t getApbClockFrequency();
 
 	/**
 	 * @brief Enables instruction cache 0 (ICC0) for the primary CPU (Core 0).
@@ -37,7 +37,7 @@ public:
 	 * @param[in] en True to enable, false to disable (default is true).
 	 * @return error_t Error status code (ERROR_NONE on success).
 	 */
-	error_t enableCache0(bool en = true) __attribute__((optimize("-O1")));
+	error_t enableCache0(bool en = true);
 
 	/**
 	 * @brief Enables instruction cache 1 (ICC1) for the secondary CPU (Core 1 / CPU1).
@@ -45,7 +45,7 @@ public:
 	 * @param[in] en True to enable, false to disable (default is true).
 	 * @return error_t Error status code (ERROR_NONE on success).
 	 */
-	error_t enableCache1(bool en = true) __attribute__((optimize("-O1")));
+	error_t enableCache1(bool en = true);
 
 	/**
 	 * @brief Boots or disables the secondary CPU core (CPU1) with the specified vector table pointer.
@@ -54,7 +54,7 @@ public:
 	 * @param[in] en True to enable, false to disable (default is true).
 	 * @return error_t Error status code (ERROR_NONE on success).
 	 */
-	error_t enableCpu1(void *vtor, bool en = true) __attribute__((optimize("-O1")));
+	error_t enableCpu1(void *vtor, bool en = true);
 
 	/**
 	 * @brief Boots or disables the secondary CPU core (CPU1) with the specified const vector table pointer.
@@ -63,7 +63,7 @@ public:
 	 * @param[in] en True to enable, false to disable (default is true).
 	 * @return error_t Error status code (ERROR_NONE on success).
 	 */
-	error_t enableCpu1(const void *vtor, bool en = true) __attribute__((optimize("-O1")));
+	error_t enableCpu1(const void *vtor, bool en = true);
 
 	/**
 	 * @brief Enables or disables the hardware semaphore peripheral clock.
@@ -71,23 +71,23 @@ public:
 	 * @param[in] en True to enable, false to disable (default is true).
 	 * @return error_t Error status code (ERROR_NONE on success).
 	 */
-	error_t enableSemaphore(bool en = true) __attribute__((optimize("-O1")));
+	error_t enableSemaphore(bool en = true);
 
-	error_t enableGpio0(bool en = true) __attribute__((optimize("-O1")));
+	error_t enableGpio0(bool en = true);
 
-	error_t enableGpio1(bool en = true) __attribute__((optimize("-O1")));
+	error_t enableGpio1(bool en = true);
 
-	error_t enableTmr0(bool en = true) __attribute__((optimize("-O1")));
+	error_t enableTmr0(bool en = true);
 
-	error_t enableTmr1(bool en = true) __attribute__((optimize("-O1")));
+	error_t enableTmr1(bool en = true);
 
-	error_t enableTmr2(bool en = true) __attribute__((optimize("-O1")));
+	error_t enableTmr2(bool en = true);
 
-	error_t enableTmr3(bool en = true) __attribute__((optimize("-O1")));
+	error_t enableTmr3(bool en = true);
 
-	error_t enableTmr4(bool en = true) __attribute__((optimize("-O1")));
+	error_t enableTmr4(bool en = true);
 
-	error_t enableTmr5(bool en = true) __attribute__((optimize("-O1")));
+	error_t enableTmr5(bool en = true);
 
 private:
 };

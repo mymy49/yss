@@ -12,6 +12,8 @@
 #include <targets/nuvoton/NuvotonBpwm.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_bpwm_nuvoton.cpp
  * @brief BPWM (Basic PWM) target-specific driver source file for Nuvoton.

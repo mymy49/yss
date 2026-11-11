@@ -61,7 +61,7 @@ public:
 	 * @param[in] ahbclkFreq Current frequency of the AHB clock in Hz.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t initialize(config_t config, uint32_t ahbclkFreq) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t initialize(config_t config, uint32_t ahbclkFreq) = 0;
 
 	/**
 	 * @brief Gets the total capacity configured for the host bus.

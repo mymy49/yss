@@ -40,7 +40,7 @@ public:
 	 * @param[in] freq Desired frequency of the PWM output in Hz.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t initialize(uint8_t ch, uint32_t freq) __attribute__((optimize("-O1")));
+	error_t initialize(uint8_t ch, uint32_t freq);
 
 	/**
 	 * @brief Changes the output frequency of the EPWM channel.
@@ -52,14 +52,14 @@ public:
 	 * @param[in] freq Desired frequency of the PWM output in Hz.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t changeFrequency(uint8_t ch, uint32_t freq) __attribute__((optimize("-O1")));
+	error_t changeFrequency(uint8_t ch, uint32_t freq);
 
 	/**
 	 * @brief Gets the clock frequency of EPWM channels 0 and 1.
 	 *
 	 * @return uint32_t Clock frequency in Hz.
 	 */
-	uint32_t getClockFrequency01(void) __attribute__((optimize("-O1")));
+	uint32_t getClockFrequency01(void);
 	
 	/**
 	 * @brief Starts the EPWM counter for the specified channel.
@@ -67,7 +67,7 @@ public:
 	 * @param[in] ch The EPWM channel index (0 ~ 5).
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t start(uint8_t ch) __attribute__((optimize("-O1")));
+	error_t start(uint8_t ch);
 	
 	/**
 	 * @brief Stops the EPWM counter for the specified channel.
@@ -75,7 +75,7 @@ public:
 	 * @param[in] ch The EPWM channel index (0 ~ 5).
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t stop(uint8_t ch) __attribute__((optimize("-O1")));
+	error_t stop(uint8_t ch);
 
 	/**
 	 * @brief Gets the maximum (TOP) value of the EPWM counter for the specified channel.
@@ -83,7 +83,7 @@ public:
 	 * @param[in] ch The EPWM channel index (0 ~ 5).
 	 * @return uint32_t The TOP value of the PWM counter.
 	 */
-	uint32_t getTopValue(uint8_t ch) __attribute__((optimize("-O1")));
+	uint32_t getTopValue(uint8_t ch);
 	
 	/**
 	 * @brief Sets the duty ratio of the specified EPWM channel.
@@ -92,7 +92,7 @@ public:
 	 * @param[in] ratio The duty ratio to set (0.0 to 1.0).
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t setDutyRatio(uint8_t ch, float ratio) __attribute__((optimize("-O1")));
+	error_t setDutyRatio(uint8_t ch, float ratio);
 	
 	/**
 	 * @brief Directly sets the compare register value of the specified EPWM channel.
@@ -103,7 +103,7 @@ public:
 	 * @param[in] counter The output compare register value to set.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t setCompareValue(uint8_t ch, int16_t  counter) __attribute__((optimize("-O1")));
+	error_t setCompareValue(uint8_t ch, int16_t  counter);
 
 	/**
 	 * @brief Configures the specified channel as a standard PWM output.
@@ -125,7 +125,7 @@ public:
 		uint32_t (*getClock45Func)(void);
 	};
 
-	NuvotonEpwm(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	NuvotonEpwm(const Drv::setup_t drvSetup, const setup_t setup);
 
   protected:
 	EPWM_T *mDev;

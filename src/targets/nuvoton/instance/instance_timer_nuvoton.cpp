@@ -18,6 +18,8 @@
 #include <yss.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 #if defined(TIMER0) && TIMER0_ENABLE
 #if YSS_RUNTIME_TIMER == RUNTIME_TIM0
 #error "TIMER0 is currently used by the Yss OS Runtime. General use is not allowed."

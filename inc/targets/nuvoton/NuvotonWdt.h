@@ -101,7 +101,7 @@ public:
 	 *                     `INTERVAL_26p214_Sec` (~26 seconds) if not specified.
 	 * @return error_t Returns `ERROR_NONE` on success.
 	 */
-	error_t initialize(interval_t interval = INTERVAL_26p214_Sec) __attribute__((optimize("-O1")));
+	error_t initialize(interval_t interval = INTERVAL_26p214_Sec);
 
 	/**
 	 * @brief Reloads (feeds) the watchdog counter to prevent a system reset.
@@ -145,7 +145,7 @@ public:
 	 * @param[in] setup    The Nuvoton WDT-specific setup structure containing
 	 *                     the pointer to the WDT hardware register block.
 	 */
-	NuvotonWdt(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	NuvotonWdt(const Drv::setup_t drvSetup, const setup_t setup);
 
 protected:
 	WDT_T *mDev; ///< Pointer to the Nuvoton WDT hardware register structure.

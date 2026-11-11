@@ -37,10 +37,10 @@ public:
 	 * @param[in] hbiClkFreq Desired clock frequency for the HyperBus interface in Hz.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t initialize(config_t config, uint32_t hbiClkFreq) __attribute__((optimize("-O1")));
+	virtual error_t initialize(config_t config, uint32_t hbiClkFreq);
 
 	// Internal system interrupt routine. Do not call from user application.
-	void isr(void) __attribute__((optimize("-O1")));
+	void isr(void);
 
 private :
 	HBI_T *mDev;

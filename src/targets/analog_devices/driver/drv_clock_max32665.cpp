@@ -12,6 +12,8 @@
 #include <util/runtime.h>
 #include <yss/scheduler.h>
 
+#pragma GCC optimize("O1")
+
 error_t Clock::enableHirc8m(bool en)
 {
 	semaphore::lockPeripherals();

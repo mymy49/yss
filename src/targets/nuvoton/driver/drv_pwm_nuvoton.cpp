@@ -12,6 +12,8 @@
 #include <drv/Pwm.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_pwm_nuvoton.cpp
  * @brief PWM target-specific driver source file for Nuvoton.

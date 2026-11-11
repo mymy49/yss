@@ -170,7 +170,7 @@ public:
 	 * @param[in] config Configuration settings.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	error_t initialize(config_t config) __attribute__((optimize("-O1")));
+	error_t initialize(config_t config);
 
 	/**
 	 * @brief Changes the communication baud rate while operating.
@@ -178,7 +178,7 @@ public:
 	 * @param[in] baudrate The target baud rate.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t changeBaudrate(int32_t baudrate) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t changeBaudrate(int32_t baudrate) = 0;
 	
 	/**
 	 * @brief Returns the oldest received byte in the buffer.
@@ -187,7 +187,7 @@ public:
 	 * 
 	 * @return int16_t The received byte, or -1 if the buffer is empty.
 	 */
-	int16_t getRxByte(void) __attribute__((optimize("-O1")));
+	int16_t getRxByte(void);
 	
 	/**
 	 * @brief Gets the number of bytes currently stored in the receive buffer.
@@ -195,7 +195,7 @@ public:
 	 * 
 	 * @return uint32_t Number of received bytes.
 	 */
-	uint32_t getRxCount(void) __attribute__((optimize("-O1")));
+	uint32_t getRxCount(void);
 
 	/**
 	 * @brief Gets the pointer to the oldest valid data block in the receive buffer.
@@ -204,7 +204,7 @@ public:
 	 * 
 	 * @return int8_t* Pointer to the received data.
 	 */
-	int8_t* getRxBuffer(void) __attribute__((optimize("-O1")));
+	int8_t* getRxBuffer(void);
 	
 	/**
 	 * @brief Releases a specified number of bytes from the receive buffer after processing.
@@ -213,7 +213,7 @@ public:
 	 * 
 	 * @param[in] count The number of bytes to release.
 	 */
-	void releaseRxBuffer(uint32_t count) __attribute__((optimize("-O1")));
+	void releaseRxBuffer(uint32_t count);
 	
 	/**
 	 * @brief Blocks/waits until at least one byte of data is received or timeout occurs.
@@ -222,12 +222,12 @@ public:
 	 * @param[in] timeout Timeout value in milliseconds.
 	 * @return bool Returns true if data was received, false on timeout.
 	 */
-	bool waitUntilReceive(uint32_t timeout) __attribute__((optimize("-O1")));
+	bool waitUntilReceive(uint32_t timeout);
 
 	/**
 	 * @brief Flushes/clears the receive buffer.
 	 */
-	void flush(void) __attribute__((optimize("-O1")));
+	void flush(void);
 	
 	/**
 	 * @brief Transmits a block of data.
@@ -236,26 +236,26 @@ public:
 	 * @param[in] size The size of the data payload in bytes.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t send(void *src, int32_t  size, uint32_t timeout = 1000) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t send(void *src, int32_t  size, uint32_t timeout = 1000) = 0;
 	
 	/**
 	 * @brief Transmits a single byte of data.
 	 * 
 	 * @param[in] data The byte to transmit.
 	 */
-	virtual error_t send(int8_t data, uint32_t timeout = 1000) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t send(int8_t data, uint32_t timeout = 1000) = 0;
 
 	/**
 	 * @brief Registers callback handler functions for UART interrupt events.
 	 * 
 	 * @param[in] handler Struct containing target interrupt callback function pointers (set to nullptr for unused interrupts).
 	 */
-	void setIsrHandler(handler_t handler) __attribute__((optimize("-O1")));
+	void setIsrHandler(handler_t handler);
 
 	// The following are internal functions and do not need to be called by the user application.
 	Uart(const Drv::setup_t drvSetup);
 
-	void push(int8_t data) __attribute__((optimize("-O1")));
+	void push(int8_t data);
 
 protected:
 	int8_t *mRcvBuf;

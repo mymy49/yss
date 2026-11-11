@@ -16,6 +16,8 @@
 
 #include <std_ext/string.h>
 
+#pragma GCC optimize("O1")
+
 #if defined(__MA35H0_FAMILY)
 /*---------------------------------------------------------------------------------------------------------*/
 /*  Operation Mode Constant Definitions                                                                    */

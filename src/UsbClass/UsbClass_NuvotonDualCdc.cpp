@@ -14,6 +14,8 @@
 #include <string.h>
 #include <drv/Usbd.h>
 
+#pragma GCC optimize("O1")
+
 extern const uint8_t gNuvotonDualCdcConfigDescriptor[];
 
 

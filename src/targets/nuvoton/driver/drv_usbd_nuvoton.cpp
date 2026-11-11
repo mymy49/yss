@@ -31,6 +31,8 @@
 #include <util/Timeout.h>
 #include <string.h>
 
+#pragma GCC optimize("O1")
+
 Usbd::Usbd(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;

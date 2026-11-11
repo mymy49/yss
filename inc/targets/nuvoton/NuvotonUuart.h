@@ -40,7 +40,7 @@ public :
 		Dma::dmaInfo_t txDmaInfo;
 	};
 
-	NuvotonUuart(const Drv::setup_t drvSetup, const NuvotonUuart::setup_t setup) __attribute__((optimize("-O1")));
+	NuvotonUuart(const Drv::setup_t drvSetup, const NuvotonUuart::setup_t setup);
 
 	/**
 	 * @brief Initializes the USCI UART device.
@@ -49,7 +49,7 @@ public :
 	 * @param[in] config Configuration settings for the UUART (baudrate, stop bits, parity, rx buffer details, etc.).
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t initialize(config_t config) __attribute__((optimize("-O1")));
+	error_t initialize(config_t config);
 
 	/**
 	 * @brief Changes the UUART communication baudrate dynamically.
@@ -57,7 +57,7 @@ public :
 	 * @param[in] baudrate Desired baudrate in bps.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t changeBaudrate(int32_t baudrate) __attribute__((optimize("-O1")));
+	error_t changeBaudrate(int32_t baudrate) override;
 
 	/**
 	 * @brief Sends a data block using DMA.
@@ -67,17 +67,17 @@ public :
 	 * @param[in] size Size of the data block in bytes.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t send(void *src, int32_t  size) __attribute__((optimize("-O1")));
+	error_t send(void *src, int32_t  size, uint32_t timeout = 1000) override;
 
 	/**
 	 * @brief Sends a single byte synchronously (blocking poll).
 	 *
 	 * @param[in] data Byte to transmit.
 	 */
-	virtual void send(int8_t data) __attribute__((optimize("-O1")));
+	error_t send(int8_t data, uint32_t timeout = 1000) override;
 
 	// Internal system interrupt routine. Do not call from user application.
-	void isr(void) __attribute__((optimize("-O1")));
+	void isr(void);
 
 private :
 	UUART_T *mDev;

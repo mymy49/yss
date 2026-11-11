@@ -27,19 +27,19 @@ class NuvotonCdc : public Cdc
 {
 public :
 	// Internal system functions. Do not call from user application.
-	NuvotonCdc(void) __attribute__((optimize("-O1")));
+	NuvotonCdc(void);
 
-	virtual error_t initialize(const config_t &config = {"Nuvoton", "USB Virtual COM"}) __attribute__((optimize("-O1")));
+	virtual error_t initialize(const config_t &config = {"Nuvoton", "USB Virtual COM"});
 
-	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des) __attribute__((optimize("-O1")));
+	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des);
 
-	virtual void handleGetDeviceDescriptor(void) __attribute__((optimize("-O1")));
+	virtual void handleGetDeviceDescriptor(void);
 
-	virtual void handleGetConfigDescriptor(uint16_t size) __attribute__((optimize("-O1")));
+	virtual void handleGetConfigDescriptor(uint16_t size);
 
-	virtual void handleGetDeviceQualifierDescriptor(void) __attribute__((optimize("-O1")));
+	virtual void handleGetDeviceQualifierDescriptor(void);
 
-	virtual void handleGetStringDescriptor(uint8_t index, uint16_t size) __attribute__((optimize("-O1")));
+	virtual void handleGetStringDescriptor(uint8_t index, uint16_t size);
 
 private :
 };

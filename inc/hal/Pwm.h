@@ -14,17 +14,17 @@
 class Pwm
 {
 public :
-	virtual error_t changeFrequency(uint32_t freq) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t changeFrequency(uint32_t freq) = 0;
 	
-	virtual void start(void) __attribute__((optimize("-O1"))) = 0;
+	virtual void start(void) = 0;
 
-	virtual void stop(void) __attribute__((optimize("-O1"))) = 0;
+	virtual void stop(void) = 0;
 
-	virtual uint32_t getTopValue(void) __attribute__((optimize("-O1"))) = 0;
+	virtual uint32_t getTopValue(void) = 0;
 
-	virtual void setDutyRatio(float ratio) __attribute__((optimize("-O1"))) = 0;
+	virtual void setDutyRatio(float ratio) = 0;
 
-	virtual void setCompareValue(uint32_t  counter) __attribute__((optimize("-O1"))) = 0;
+	virtual void setCompareValue(uint32_t  counter) = 0;
 };
 
 class PwmCh0 : public Pwm

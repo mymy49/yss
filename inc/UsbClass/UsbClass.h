@@ -139,33 +139,33 @@ public :
 	}epDesc_t __attribute__ ((__packed__));
 #pragma GCC diagnostic pop
 
-	UsbClass(void) __attribute__((optimize("-O1")));
+	UsbClass(void);
 
 	/**
 	 * @brief Handles receiving a USB Setup packet.
 	 *
 	 * @param[in] data Pointer to the setup packet buffer (8 bytes).
 	 */
-	void handleRxSetupPacket(void *data) __attribute__((optimize("-O1")));
+	void handleRxSetupPacket(void *data);
 
 	/**
 	 * @brief Associates the USB Class driver with a target USBD controller stack.
 	 *
 	 * @param[in] usbd Pointer to the Usbd controller.
 	 */
-	void setUsbd(Usbd *usbd) __attribute__((optimize("-O1")));
+	void setUsbd(Usbd *usbd);
 
 	/**
 	 * @brief Main processing loop execution method.
 	 */
-	void process(void) __attribute__((optimize("-O1")));
+	void process(void);
 
 	/**
 	 * @brief Gets the size of received data currently available.
 	 *
 	 * @return uint32_t Number of bytes received.
 	 */
-	uint32_t getRxDataCount(void) __attribute__((optimize("-O1")));
+	uint32_t getRxDataCount(void);
 
 	/**
 	 * @brief Gets the endpoint descriptor structure for the endpoint at the specified index.
@@ -174,19 +174,19 @@ public :
 	 * @param[out] des Pointer to the structure to copy the endpoint descriptor.
 	 * @return bool True if successful, false otherwise.
 	 */
-	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des) __attribute__((optimize("-O1"))) = 0;
+	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des) = 0;
 
 	/**
 	 * @brief Gets the number of endpoints currently used by this USB class.
 	 *
 	 * @return uint8_t Number of active endpoints.
 	 */
-	virtual uint8_t getUsingEpCount(void) __attribute__((optimize("-O1"))) = 0;
+	virtual uint8_t getUsingEpCount(void) = 0;
 
 	/**
 	 * @brief Callback executed when the USB device wakes up from suspend.
 	 */
-	virtual void handleWakeup(void) __attribute__((optimize("-O1"))) = 0;
+	virtual void handleWakeup(void) = 0;
 
 protected :
 	/**
@@ -217,28 +217,28 @@ protected :
 	 *
 	 * @param[out] des Pointer to the endpoint descriptor.
 	 */
-	void getEmptyEpDescriptor(epDesc_t *des) __attribute__((optimize("-O1")));
+	void getEmptyEpDescriptor(epDesc_t *des);
 
 	/**
 	 * @brief Utility helper function to initialize a device descriptor to defaults.
 	 *
 	 * @param[out] des Pointer to the device descriptor.
 	 */
-	void getEmptyDeviceDescriptor(devDesc_t *des) __attribute__((optimize("-O1")));
+	void getEmptyDeviceDescriptor(devDesc_t *des);
 
 	/**
 	 * @brief Utility helper function to initialize a configuration descriptor to defaults.
 	 *
 	 * @param[out] des Pointer to the configuration descriptor.
 	 */
-	void getEmptyConfigDescriptor(confignDesc_t *des) __attribute__((optimize("-O1")));
+	void getEmptyConfigDescriptor(confignDesc_t *des);
 
 	/**
 	 * @brief Utility helper function to initialize an interface descriptor to defaults.
 	 *
 	 * @param[out] des Pointer to the interface descriptor.
 	 */
-	void getEmptyInterfaceDescriptor(interfaceDesc_t *des) __attribute__((optimize("-O1")));
+	void getEmptyInterfaceDescriptor(interfaceDesc_t *des);
 
 	/**
 	 * @brief Utility helper function to generate a Unicode string descriptor from a standard C string.
@@ -247,7 +247,7 @@ protected :
 	 * @param[in] src Pointer to the source null-terminated C string.
 	 * @return bool True if successful, false otherwise.
 	 */
-	bool generateStringDescriptor(uint8_t *des, char *src) __attribute__((optimize("-O1")));
+	bool generateStringDescriptor(uint8_t *des, char *src);
 
 	/**
 	 * @brief Gets the received data size of the specified OUT endpoint.
@@ -255,22 +255,22 @@ protected :
 	 * @param[in] ep Endpoint number.
 	 * @return uint32_t Number of bytes received.
 	 */
-	uint32_t getOutRxDataSize(uint8_t ep) __attribute__((optimize("-O1")));
+	uint32_t getOutRxDataSize(uint8_t ep);
 
 private :
 	threadId_t mTriggerId;
 
-	virtual void handleGetDeviceDescriptor(void) __attribute__((optimize("-O1"))) = 0;
+	virtual void handleGetDeviceDescriptor(void) = 0;
 
-	virtual void handleGetConfigDescriptor(uint16_t size) __attribute__((optimize("-O1"))) = 0;
+	virtual void handleGetConfigDescriptor(uint16_t size) = 0;
 
-	virtual void handleGetDeviceQualifierDescriptor(void) __attribute__((optimize("-O1"))) = 0;
+	virtual void handleGetDeviceQualifierDescriptor(void) = 0;
 
-	virtual void handleGetStringDescriptor(uint8_t index, uint16_t size) __attribute__((optimize("-O1"))) = 0;
+	virtual void handleGetStringDescriptor(uint8_t index, uint16_t size) = 0;
 
-	virtual void handleSetConfiguration(uint16_t value) __attribute__((optimize("-O1"))) = 0;
+	virtual void handleSetConfiguration(uint16_t value) = 0;
 
-	virtual void handleClassSpecificRequest(void) __attribute__((optimize("-O1"))) = 0;
+	virtual void handleClassSpecificRequest(void) = 0;
 };
 
 #endif

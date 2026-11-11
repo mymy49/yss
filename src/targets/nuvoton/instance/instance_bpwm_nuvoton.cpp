@@ -18,6 +18,8 @@
 #include <yss.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 #if BPWM0_ENABLE && defined(BPWM0)
 
 static void enableBpwm0Clock(bool en)

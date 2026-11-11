@@ -7,6 +7,8 @@
 
 #include <drv/Hbi.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_Hbi.cpp
  * @brief Generic HBI (HyperBus Interface) driver source file.

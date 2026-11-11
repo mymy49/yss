@@ -10,6 +10,8 @@
 #include <targets/nuvoton/NuvotonQuadspi.h>
 #include <yss.h>
 
+#pragma GCC optimize("O1")
+
 #if !defined(QSPI_CTL_SPIEN_Msk)
 #define QSPI_CTL_SPIEN_Msk	QSPI_CTL_QSPIEN_Msk
 #endif

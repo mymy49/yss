@@ -13,6 +13,8 @@
 
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
 
+#pragma GCC optimize("O1")
+
 const static Drv::setup_t gDrvSetupGpio =
 {
 	0,	// void (*clockFunc)(bool en);

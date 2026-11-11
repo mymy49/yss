@@ -92,7 +92,7 @@ public :
 	 * @param[in] config Reference to the CDC configuration structure.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t initialize(const config_t &config) __attribute__((optimize("-O1")));
+	virtual error_t initialize(const config_t &config);
 
 	/**
 	 * @brief Transmits a data block to the host on Channel 0.
@@ -102,7 +102,7 @@ public :
 	 * @param[in] size Size of the data block to send.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t send0(void *src, uint32_t size) __attribute__((optimize("-O1")));
+	error_t send0(void *src, uint32_t size);
 
 	/**
 	 * @brief Transmits a const data block to the host on Channel 0.
@@ -112,7 +112,7 @@ public :
 	 * @param[in] size Size of the data block to send.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t send0(const void *src, uint32_t size) __attribute__((optimize("-O1")));
+	error_t send0(const void *src, uint32_t size);
 
 	/**
 	 * @brief Transmits a data block to the host on Channel 1.
@@ -122,7 +122,7 @@ public :
 	 * @param[in] size Size of the data block to send.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t send1(void *src, uint32_t size) __attribute__((optimize("-O1")));
+	error_t send1(void *src, uint32_t size);
 
 	/**
 	 * @brief Transmits a const data block to the host on Channel 1.
@@ -132,21 +132,21 @@ public :
 	 * @param[in] size Size of the data block to send.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t send1(const void *src, uint32_t size) __attribute__((optimize("-O1")));
+	error_t send1(const void *src, uint32_t size);
 
 	/**
 	 * @brief Gets the size of received data currently available on Channel 0.
 	 *
 	 * @return uint32_t Number of bytes received from the host.
 	 */
-	uint32_t getRxDataCount0(void) __attribute__((optimize("-O1")));
+	uint32_t getRxDataCount0(void);
 
 	/**
 	 * @brief Gets the size of received data currently available on Channel 1.
 	 *
 	 * @return uint32_t Number of bytes received from the host.
 	 */
-	uint32_t getRxDataCount1(void) __attribute__((optimize("-O1")));
+	uint32_t getRxDataCount1(void);
 
 	/**
 	 * @brief Copies the received data on Channel 0 into the user buffer.
@@ -155,7 +155,7 @@ public :
 	 * @param[in] size Size of the data to copy. Must be equal to the value returned by getRxDataCount0().
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t getRxData0(void *des, uint32_t size) __attribute__((optimize("-O1")));
+	error_t getRxData0(void *des, uint32_t size);
 
 	/**
 	 * @brief Copies the received data on Channel 1 into the user buffer.
@@ -164,42 +164,42 @@ public :
 	 * @param[in] size Size of the data to copy. Must be equal to the value returned by getRxDataCount1().
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t getRxData1(void *des, uint32_t size) __attribute__((optimize("-O1")));
+	error_t getRxData1(void *des, uint32_t size);
 
 	/**
 	 * @brief Registers a callback function to handle host Line Coding changes on Channel 0.
 	 *
 	 * @param[in] func Pointer to the line coding callback handler function.
 	 */
-	void setCallbackLineCodeHandler0(void (*func)(lineCoding_t lineCode)) __attribute__((optimize("-O1")));
+	void setCallbackLineCodeHandler0(void (*func)(lineCoding_t lineCode));
 
 	/**
 	 * @brief Registers a callback function to handle host Line Coding changes on Channel 1.
 	 *
 	 * @param[in] func Pointer to the line coding callback handler function.
 	 */
-	void setCallbackLineCodeHandler1(void (*func)(lineCoding_t lineCode)) __attribute__((optimize("-O1")));
+	void setCallbackLineCodeHandler1(void (*func)(lineCoding_t lineCode));
 
 	/**
 	 * @brief Checks if the host is ready to receive data on Channel 0 (CTS/DTE status).
 	 *
 	 * @return bool True if transmission is clear, false otherwise.
 	 */
-	bool isClearToSend0(void) __attribute__((optimize("-O1")));
+	bool isClearToSend0(void);
 
 	/**
 	 * @brief Checks if the host is ready to receive data on Channel 1 (CTS/DTE status).
 	 *
 	 * @return bool True if transmission is clear, false otherwise.
 	 */
-	bool isClearToSend1(void) __attribute__((optimize("-O1")));
+	bool isClearToSend1(void);
 
 	// Internal system functions. Do not call from user application.
-	DualCdc(void) __attribute__((optimize("-O1")));
+	DualCdc(void);
 
-	virtual void handleWakeup(void) __attribute__((optimize("-O1")));
+	virtual void handleWakeup(void);
 
-	virtual uint8_t getUsingEpCount(void) __attribute__((optimize("-O1")));
+	virtual uint8_t getUsingEpCount(void);
 
 protected :
 	config_t mConfig;
@@ -212,12 +212,12 @@ protected :
 	bool mDte0, mRts0;
 	bool mDte1, mRts1;
 
-	void getEmptyCsInterfaceDescriptor(csInterfaceDesc_t *des) __attribute__((optimize("-O1")));
+	void getEmptyCsInterfaceDescriptor(csInterfaceDesc_t *des);
 
 private :
-	virtual void handleSetConfiguration(uint16_t value) __attribute__((optimize("-O1")));
+	virtual void handleSetConfiguration(uint16_t value);
 
-	virtual void handleClassSpecificRequest(void) __attribute__((optimize("-O1")));
+	virtual void handleClassSpecificRequest(void);
 };
 
 #endif

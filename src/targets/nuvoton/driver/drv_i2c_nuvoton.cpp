@@ -16,6 +16,8 @@
 #include <yss/debug.h>
 #include <util/Timeout.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_i2c_nuvoton.cpp
  * @brief I2C target-specific driver source file for Nuvoton.

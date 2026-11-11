@@ -11,6 +11,8 @@
 
 #include <yss/instance.h>
 
+#pragma GCC optimize("O1")
+
 #if defined(__MAX32665_FAMILY)
 
 const static Drv::setup_t gDrvSetupGpio =

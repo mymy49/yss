@@ -13,6 +13,8 @@
 
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
 
+#pragma GCC optimize("O1")
+
 Dma *gDmaChannel[YSS__NUM_OF_DMA_CH] = {
 #if YSS__NUM_OF_DMA_CH >= 1
 	&dmaChannel1

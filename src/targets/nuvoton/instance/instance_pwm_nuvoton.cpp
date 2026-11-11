@@ -18,6 +18,8 @@
 #include <yss.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 #if PWM0_ENABLE && defined(TIMER0)
 #if YSS_RUNTIME_TIMER == RUNTIME_TIMER0
 #error "현재 PWM0는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."

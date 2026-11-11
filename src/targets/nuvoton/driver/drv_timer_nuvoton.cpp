@@ -16,6 +16,8 @@
 #include <yss/scheduler.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_timer_nuvoton.cpp
  * @brief Timer target-specific driver source file for Nuvoton.

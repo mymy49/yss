@@ -20,7 +20,7 @@ public:
 
 	}mode_t;
 
-	Max32665Timer(const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
+	Max32665Timer(const Drv::setup_t drvSetup);
 
 	/**
 	 * @brief Initializes the timer based on the target frequency.
@@ -29,10 +29,10 @@ public:
 	 * @param[in] freq Operation frequency in Hz.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t initialize(uint32_t freq) override __attribute__((optimize("-O1")));
+	virtual error_t initialize(uint32_t freq) override;
 
 
-	error_t initializeAsPwm(uint32_t freq) __attribute__((optimize("-O1")));
+	error_t initializeAsPwm(uint32_t freq);
 
 	/**
 	 * @brief Sets the timer to run in one-pulse mode (stops after one cycle).
@@ -41,17 +41,17 @@ public:
 	 * 
 	 * @param[in] en If true, the timer runs once. If false, the timer runs continuously.
 	 */
-	virtual void setOnePulse(bool en) override __attribute__((optimize("-O1")));
+	virtual void setOnePulse(bool en) override;
 	
 	/**
 	 * @brief Starts the timer counter.
 	 */
-	virtual void start(void) override __attribute__((optimize("-O1")));
+	virtual void start(void) override;
 	
 	/**
 	 * @brief Stops the timer counter.
 	 */
-	virtual void stop(void) override __attribute__((optimize("-O1")));
+	virtual void stop(void) override;
 	
 	/**
 	 * @brief Changes the timer operating frequency.
@@ -61,7 +61,7 @@ public:
 	 * @param[in] freq Target frequency in Hz.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t changeFrequency(uint32_t freq) __attribute__((optimize("-O1")));
+	virtual error_t changeFrequency(uint32_t freq);
 
 	/**
 	 * @brief Gets the current value of the hardware timer counter register.
@@ -73,20 +73,20 @@ public:
 	 *
 	 * @return uint32_t The current hardware timer counter value.
 	 */
-	virtual uint32_t getCounterValue(void) __attribute__((optimize("-O1")));
+	virtual uint32_t getCounterValue(void);
 
-	virtual uint32_t getTopValue(void) override __attribute__((optimize("-O1")));
+	virtual uint32_t getTopValue(void) override;
 
-	virtual void setDutyRatio(float ratio) override __attribute__((optimize("-O1")));
+	virtual void setDutyRatio(float ratio) override;
 
-	virtual void setCompareValue(uint32_t  counter) override __attribute__((optimize("-O1")));
+	virtual void setCompareValue(uint32_t  counter) override;
 
 	struct setup_t
 	{
 		mxc_tmr_regs_t *dev;
 	};
 
-	Max32665Timer(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	Max32665Timer(const Drv::setup_t drvSetup, const setup_t setup);
 
 protected :
 	mxc_tmr_regs_t *mDev;

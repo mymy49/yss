@@ -59,10 +59,10 @@ public:
 	 * 
 	 * @param[in] en If true, enables SCK clock output. If false, disables it.
 	 */
-	void enableSck(bool en = true) __attribute__((optimize("-O1")));
+	void enableSck(bool en = true);
 
 	// The following are internal functions and do not need to be called by the user application.
-	Usart(const Drv::setup_t drvConfig, const Uart::setup_t config) __attribute__((optimize("-O1")));
+	Usart(const Drv::setup_t drvConfig, const Uart::setup_t config);
 };
 
 #endif
