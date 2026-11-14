@@ -68,34 +68,36 @@ Fifo::~Fifo(void)
 }
 
 /**
- * @details Copies `size` bytes from the source buffer `src` into the circular buffer starting at `mHead`.
- *          If the data to be written extends past the end of the physical buffer (`mSize`), the copy is split
- *          into contiguous linear chunks using `memcpy`, wrapping `mHead` back to 0 when the end of the
- *          internal array is reached.
+ * @details Copies up to `size` bytes from the source buffer `src` into the circular buffer starting at `mHead`.
+ *          In each iteration, it queries `getFreeBufferSize()` to check the available space and returns early
+ *          if the buffer becomes full (`freeSize == 0`). Otherwise, it copies the data chunk using `memcpy`,
+ *          advances `mHead` and the source pointer, and wraps `mHead` back to 0 when `mHead` reaches `mSize`.
  * @see Fifo::push(uint8_t src)
  * @see Fifo::getFreeBufferSize()
- * @todo Consider checking `getFreeBufferSize()` or returning the actual number of bytes written to prevent overwrite when full.
- * @bug If `size` exceeds `getFreeBufferSize()`, `mHead` can overtake `mTail` or stall if `mHead == mTail` while `size > 0`.
+ * @todo Consider returning the actual number of bytes written when an early return occurs due to `freeSize == 0`.
+ * @bug When `mTail > 0` and `mTail <= mHead`, `getFreeBufferSize()` returns the total free capacity across the wrap-around
+ *      boundary rather than the linear space up to `mSize`, which can cause `memcpy(&mData[mHead], ...)` to write past `mData[mSize - 1]`.
  */
 void Fifo::push(void *src, uint32_t size)
 {
 	uint32_t freeSize;
 	int8_t *cSrc = (int8_t*)src;
 
-	// Loop until all requested bytes have been copied into the circular buffer
+	// Loop until all requested bytes have been copied or the buffer becomes full
 	while(size)
 	{
-		// Calculate the contiguous space available from mHead to the end of the array (or up to mTail)
-		if (mTail <= mHead)
-			freeSize = mSize - mHead;
-		else
-			freeSize = mTail - mHead;
+		// Query the currently available free space in the FIFO buffer
+		freeSize = getFreeBufferSize();
+
+		// Exit early if there is no free space left in the buffer
+		if(freeSize == 0)
+			return;
 
 		// Clamp the chunk size to the remaining number of bytes to push
 		if(freeSize > size)
 			freeSize = size;
 
-		// Copy the contiguous chunk and advance the head pointer and source pointer
+		// Copy the chunk and advance the head index and source pointer
 		if(freeSize)
 		{
 			memcpy(&mData[mHead], cSrc, freeSize);
