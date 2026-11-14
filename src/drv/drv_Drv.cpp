@@ -99,4 +99,18 @@ Dma* Drv::getIdleDma(void)
 }
 #endif
 
+void Drv::cleanDCache(void *addr, uint32_t size)
+{
+	if (size == 0)
+		return;
 
+	const uintptr_t lineSize = 64;
+	uintptr_t start = (uintptr_t)addr & ~(lineSize - 1);
+	uintptr_t end = (uintptr_t)addr + size;
+
+	__asm__ volatile("dsb sy" : : : "memory");
+	for (uintptr_t line = start; line < end; line += lineSize)
+	{
+		__asm__ volatile("dc cvac, %0" : : "r"(line) : "memory");
+	}
+}

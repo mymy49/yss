@@ -102,6 +102,9 @@ class Drv : public Mutex
 	 */
 	Drv(void);
 
+protected :
+	void cleanDCache(void *addr, uint32_t size);
+
 private :
 	void (*mClockFunc)(bool en);     ///< Function pointer to control peripheral clock.
 	void (*mNvicFunc)(bool en);      ///< Function pointer to control NVIC interrupts.

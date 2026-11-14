@@ -35,7 +35,7 @@ void Uart::push(int8_t data)
 #endif
 }
 
-void Uart::flush(void)
+void Uart::clear(void)
 {
 	// Disable interrupts to ensure atomic tail/head reset.
 	__disable_irq();

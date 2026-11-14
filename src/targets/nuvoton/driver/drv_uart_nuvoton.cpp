@@ -141,7 +141,13 @@ error_t NuvotonUart::send(void *src, int32_t  size, uint32_t timeout)
 	if(size == 0)
 		return error_t::ERROR_NONE;
 
+#if defined(__ARM_ARCH_8A__)
+	cleanDCache(src, size);
+#endif
+
 	mTxDma->ready(mTxDmaInfo, src, size);
+
+	__asm__ volatile("dsb sy" : : : "memory");
 	setBitData(mDev->INTEN, true, UART_INTEN_TXPDMAEN_Pos);
 
 	while (!mTxDma->isComplete() || ~mDev->INTSTS & UART_INTSTS_TXENDIF_Msk)

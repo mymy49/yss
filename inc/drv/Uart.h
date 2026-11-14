@@ -227,7 +227,7 @@ public:
 	/**
 	 * @brief Flushes/clears the receive buffer.
 	 */
-	void flush(void);
+	void clear(void);
 	
 	/**
 	 * @brief Transmits a block of data.

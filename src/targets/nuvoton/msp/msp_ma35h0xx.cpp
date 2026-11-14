@@ -185,7 +185,7 @@ void __WEAK initializeSystem1(void)
 	}
 }
 
-void initializeMultiCore(void)
+void __WEAK initializeMultiCore(void)
 {
 	SYS->RLKTZS = 0x59;
 	SYS->RLKTZS = 0x16;
