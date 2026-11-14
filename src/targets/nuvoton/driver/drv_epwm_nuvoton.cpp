@@ -12,6 +12,8 @@
 #include <targets/nuvoton/NuvotonEpwm.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_epwm_nuvoton.cpp
  * @brief EPWM (Enhanced PWM) target-specific driver source file for Nuvoton.

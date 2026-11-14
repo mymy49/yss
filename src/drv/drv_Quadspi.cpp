@@ -7,6 +7,8 @@
 
 #include <drv/Quadspi.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_Quadspi.cpp
  * @brief Generic QuadSPI (Queued Serial Peripheral Interface) driver source file.

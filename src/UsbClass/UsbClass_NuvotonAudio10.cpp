@@ -15,6 +15,8 @@
 #include <drv/Usbd.h>
 #include <yss/debug.h>
 
+#pragma GCC optimize("O1")
+
 #define NUVOTON_ORIGINAL		false
 
 #define AUDIO_RATE_48K   48000       /* The audo play sampling rate. The setting is 48KHz */

@@ -53,7 +53,7 @@
 class Timer : public Drv
 {
 public:
-	Timer(const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
+	Timer(const Drv::setup_t drvSetup);
 
 	/**
 	 * @brief Initializes the timer based on the target frequency.
@@ -62,7 +62,7 @@ public:
 	 * @param[in] freq Operation frequency in Hz.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t initialize(uint32_t freq) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t initialize(uint32_t freq) = 0;
 
 	/**
 	 * @brief Registers the interrupt service routine (ISR) callback function for timer update events.
@@ -72,7 +72,7 @@ public:
 	 * 
 	 * @param[in] isr Pointer to the callback function.
 	 */
-	void setIsrForUpdate(void (*isr)(void)) __attribute__((optimize("-O1")));
+	void setIsrForUpdate(void (*isr)(void));
 
 	/**
 	 * @brief Sets the timer to run in one-pulse mode (stops after one cycle).
@@ -81,17 +81,17 @@ public:
 	 * 
 	 * @param[in] en If true, the timer runs once. If false, the timer runs continuously.
 	 */
-	virtual void setOnePulse(bool en) __attribute__((optimize("-O1"))) = 0;
+	virtual void setOnePulse(bool en) = 0;
 	
 	/**
 	 * @brief Starts the timer counter.
 	 */
-	virtual void start(void) __attribute__((optimize("-O1"))) = 0;
+	virtual void start(void) = 0;
 	
 	/**
 	 * @brief Stops the timer counter.
 	 */
-	virtual void stop(void) __attribute__((optimize("-O1"))) = 0;
+	virtual void stop(void) = 0;
 	
 	/**
 	 * @brief Changes the timer operating frequency.
@@ -101,7 +101,7 @@ public:
 	 * @param[in] freq Target frequency in Hz.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t changeFrequency(uint32_t freq) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t changeFrequency(uint32_t freq) = 0;
 
 	/**
 	 * @brief Gets the current value of the hardware timer counter register.
@@ -113,7 +113,7 @@ public:
 	 *
 	 * @return uint32_t The current hardware timer counter value.
 	 */
-	virtual uint32_t getCounterValue(void) __attribute__((optimize("-O1"))) = 0;
+	virtual uint32_t getCounterValue(void) = 0;
 
 	/**
 	 * @brief Internal ISR handler called by the hardware timer update interrupt.
@@ -123,7 +123,7 @@ public:
 	 * This function is called from the hardware interrupt vector and must NOT
 	 * be called directly by user application code.
 	 */
-	void isrUpdate(void) __attribute__((optimize("-O1")));
+	void isrUpdate(void);
 
 protected :
 	void (*mIsrUpdate)(void);

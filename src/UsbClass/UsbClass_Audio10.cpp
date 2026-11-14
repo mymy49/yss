@@ -14,6 +14,8 @@
 #include <drv/Usbd.h>
 #include <string.h>
 
+#pragma GCC optimize("O1")
+
 Audio10::Audio10(void)
 {
 	memset(&mConfig, 0x00, sizeof(mConfig));

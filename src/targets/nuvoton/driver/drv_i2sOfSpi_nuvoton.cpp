@@ -15,6 +15,8 @@
 #include <yss/scheduler.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_i2sOfSpi_nuvoton.cpp
  * @brief I2S over SPI controller target-specific driver source file for Nuvoton.

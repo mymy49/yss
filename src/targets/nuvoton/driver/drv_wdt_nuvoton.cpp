@@ -12,6 +12,8 @@
 #include <targets/nuvoton/NuvotonWdt.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @brief Constructor for the NuvotonWdt driver.
  * @details Initializes the base `Watchdog` class with the provided driver

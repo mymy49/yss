@@ -14,6 +14,8 @@
 #include <yss/scheduler.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 #if defined(USPI0)
 
 /**

@@ -202,7 +202,7 @@ public :
 	 * @param[in] config One-time initialization configuration.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t initialize(config_t config) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t initialize(config_t config) = 0;
 
 	/**
 	 * @brief Applies the device-level QSPI specification (max frequency, capacity, clock mode).
@@ -214,7 +214,7 @@ public :
 	 * @param[in] spec Reference to the device specification structure.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t setSpecification(const specification_t &spec) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t setSpecification(const specification_t &spec) = 0;
 
 	/**
 	 * @brief Transmits a single data word.
@@ -223,7 +223,7 @@ public :
 	 * @param[in] data     Data word to transmit.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t transmit(dataform_t dataform, uint32_t data) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t transmit(dataform_t dataform, uint32_t data) = 0;
 
 	/**
 	 * @brief Simultaneously transmits and receives a single data word.
@@ -232,7 +232,7 @@ public :
 	 * @param[out] data     Reference to a variable where the received data word is stored.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t exchange(dataform_t dataform, uint32_t &data) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t exchange(dataform_t dataform, uint32_t &data) = 0;
 
 	/**
 	 * @brief Receives a single data word.
@@ -241,7 +241,7 @@ public :
 	 * @param[out] data     Reference to a variable where the received data word is stored.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t receive(dataform_t dataform, uint32_t &data) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t receive(dataform_t dataform, uint32_t &data) = 0;
 
 	/**
 	 * @brief Transmits a block of data.
@@ -251,7 +251,7 @@ public :
 	 * @param[in] size     Number of bytes to transmit.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t transmit(dataform_t dataform, void *data, uint32_t size) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t transmit(dataform_t dataform, void *data, uint32_t size) = 0;
 
 	/**
 	 * @brief Simultaneously transmits and receives a block of data.
@@ -263,7 +263,7 @@ public :
 	 * @param[in]     size Number of bytes to exchange.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t exchange(dataform_t dataform, void *data, uint32_t size) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t exchange(dataform_t dataform, void *data, uint32_t size) = 0;
 
 	/**
 	 * @brief Gets the capacity of the connected QSPI device.

@@ -72,7 +72,7 @@ public:
 	 * @param[in] slewrate Slew rate speed (SLEWRATE_NORMAL, SLEWRATE_HIGH, or SLEWRATE_FAST).
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t setAsOutput(uint8_t pin, outputDriveStrength_t strength = STRENGTH_MEDIUM_LOW) __attribute__((optimize("-O1")));
+	error_t setAsOutput(uint8_t pin, outputDriveStrength_t strength = STRENGTH_MEDIUM_LOW);
 
 	/**
 	 * @brief Configures a pin as input mode.
@@ -80,7 +80,7 @@ public:
 	 * @param[in] pin Pin number (0 ~ 15).
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t setAsInput(uint8_t pin) __attribute__((optimize("-O1")));
+	error_t setAsInput(uint8_t pin);
 
 	/**
 	 * @brief Sets the output logic state of the specified pin.
@@ -88,7 +88,7 @@ public:
 	 * @param[in] pin Pin number (0 ~ 15).
 	 * @param[in] data Output state (true for High, false for Low).
 	 */
-	void setOutput(uint8_t pin, bool data) __attribute__((optimize("-O1")));
+	void setOutput(uint8_t pin, bool data);
 
 	/**
 	 * @brief Configures a pin to operate as an alternate function pin.
@@ -98,7 +98,7 @@ public:
 	 * @param[in] slewrate Slew rate speed.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t setAsAltFunc(uint8_t pin, altFunc_t altfunc, outputDriveStrength_t strength = STRENGTH_MEDIUM_HIGH) __attribute__((optimize("-O1")));
+	error_t setAsAltFunc(uint8_t pin, altFunc_t altfunc, outputDriveStrength_t strength = STRENGTH_MEDIUM_HIGH);
 
 	/**
 	 * @brief Sets the internal pull-up/pull-down resistor settings for the pin.
@@ -160,7 +160,7 @@ public:
 		mxc_gpio_regs_t *dev;
 	}setup_t;
 
-	Gpio(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	Gpio(const Drv::setup_t drvSetup, const setup_t setup);
 
 	void isr(void);
 

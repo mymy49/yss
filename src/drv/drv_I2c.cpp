@@ -9,6 +9,8 @@
 #include <util/Timeout.h>
 #include <yss/scheduler.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_I2c.cpp
  * @brief Generic I2C (Inter-Integrated Circuit) driver source file.

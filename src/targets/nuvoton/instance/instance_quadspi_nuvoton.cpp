@@ -21,6 +21,8 @@
 #define PDMA_DIR_MEM_TO_PERI 0x00004000UL            /*!<DMA Single Request  \hideinitializer */
 #define PDMA_DIR_PERI_TO_MEM 0x00000000UL            /*!<DMA Burst Request  \hideinitializer */
 
+#pragma GCC optimize("O1")
+
 #if defined(QSPI0) && QSPI0_ENABLE
 static void enableQuadspi0Clock(bool en)
 {

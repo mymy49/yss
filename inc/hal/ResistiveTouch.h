@@ -45,8 +45,6 @@ public :
 protected :
 	int32_t mXDivider; 
 	int32_t mYDivider;
-	int32_t mWidthOffset;
-	int32_t mHeightOffset;
 	Position mPosition;
 
 	void update();

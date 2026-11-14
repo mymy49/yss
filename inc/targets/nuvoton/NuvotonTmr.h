@@ -34,7 +34,7 @@ public:
 	 * @param[in] freq Desired frequency in Hz.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t initialize(uint32_t freq) __attribute__((optimize("-O1")));
+	virtual error_t initialize(uint32_t freq);
 
 	/**
 	 * @brief Sets the timer to operate in one-pulse (one-shot) mode or continuous mode.
@@ -43,17 +43,17 @@ public:
 	 *
 	 * @param[in] en If set to true, sets the timer to one-pulse mode. If false, sets to continuous mode (default after init).
 	 */
-	virtual void setOnePulse(bool en) __attribute__((optimize("-O1")));
+	virtual void setOnePulse(bool en);
 	
 	/**
 	 * @brief Starts the timer counter.
 	 */
-	virtual void start(void) __attribute__((optimize("-O1")));
+	virtual void start(void);
 	
 	/**
 	 * @brief Stops the timer counter.
 	 */
-	virtual void stop(void) __attribute__((optimize("-O1")));
+	virtual void stop(void);
 	
 	/**
 	 * @brief Changes the operating frequency of the timer dynamically.
@@ -63,14 +63,14 @@ public:
 	 * @param[in] freq Desired frequency in Hz.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t changeFrequency(uint32_t freq) __attribute__((optimize("-O1")));
+	virtual error_t changeFrequency(uint32_t freq);
 
 	/**
 	 * @brief Gets the current timer counter value.
 	 *
 	 * @return uint32_t The current counter value.
 	 */
-	virtual uint32_t getCounterValue(void) __attribute__((optimize("-O1")));
+	virtual uint32_t getCounterValue(void);
 
 	// Internal system configurations. Do not call from user application.
 	struct setup_t
@@ -78,7 +78,7 @@ public:
 		TIMER_T *dev;
 	};
 
-	NuvotonTmr(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	NuvotonTmr(const Drv::setup_t drvSetup, const setup_t setup);
 
 private :
 	TIMER_T *mDev;

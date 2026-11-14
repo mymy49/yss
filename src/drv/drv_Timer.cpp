@@ -7,6 +7,8 @@
 
 #include <drv/Timer.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_Timer.cpp
  * @brief Generic Timer driver source file.

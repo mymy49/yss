@@ -17,6 +17,8 @@
 #include <config.h>
 #include <yss.h>
 
+#pragma GCC optimize("O1")
+
 #if I2C0_ENABLE && defined(I2C0)
 static void enableI2c0Clock(bool en)
 {

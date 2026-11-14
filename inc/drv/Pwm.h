@@ -84,7 +84,7 @@ public:
 	 * @param[in] risingAtMatch Output waveform configuration. If false, output remains High when the counter is less than the compare value.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	error_t initialize(uint32_t freq, bool risingAtMatch = false) __attribute__((optimize("-O1")));
+	error_t initialize(uint32_t freq, bool risingAtMatch = false);
 	
 	/**
 	 * @brief Initializes the PWM using prescaler (PSC) and counter TOP value directly.
@@ -99,7 +99,7 @@ public:
 	 *       - Wiznet W7500x: psc (0 ~ 63), top (0x00000000 ~ 0xFFFFFFFF).
 	 *       - Nuvoton M4xx: psc (0 ~ 255), top (0x000000 ~ 0xFFFFFF).
 	 */
-	error_t initialize(uint32_t psc, uint32_t top, bool risingAtMatch = false) __attribute__((optimize("-O1")));
+	error_t initialize(uint32_t psc, uint32_t top, bool risingAtMatch = false);
 	
 	/**
 	 * @brief Changes the PWM output frequency.
@@ -109,7 +109,7 @@ public:
 	 * @param[in] freq Target PWM frequency in Hz.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	error_t changeFrequency(uint32_t freq) __attribute__((optimize("-O1")));
+	error_t changeFrequency(uint32_t freq);
 	
 	/**
 	 * @brief Sets the PWM to produce a single pulse (One-Pulse Mode).
@@ -118,31 +118,31 @@ public:
 	 * 
 	 * @param[in] en If true, configures the timer to run once. If false, configures it to run continuously.
 	 */
-	void setOnePulse(bool en) __attribute__((optimize("-O1")));
+	void setOnePulse(bool en);
 	
 	/**
 	 * @brief Starts the PWM counter.
 	 */
-	void start(void) __attribute__((optimize("-O1")));
+	void start(void);
 	
 	/**
 	 * @brief Stops the PWM counter.
 	 */
-	void stop(void) __attribute__((optimize("-O1")));
+	void stop(void);
 	
 	/**
 	 * @brief Gets the current TOP value of the PWM counter.
 	 * 
 	 * @return uint32_t The TOP value.
 	 */
-	virtual uint32_t getTopValue(void) __attribute__((optimize("-O1"))) = 0;
+	virtual uint32_t getTopValue(void) = 0;
 	
 	/**	
 	 * @brief Sets the PWM duty ratio.
 	 * 
 	 * @param[in] ratio Duty ratio (0.0 to 1.0).
 	 */
-	virtual void setDutyRatio(float ratio) __attribute__((optimize("-O1"))) = 0;
+	virtual void setDutyRatio(float ratio) = 0;
 	
 	/**
 	 * @brief Sets the compare register value directly to change the duty cycle.
@@ -150,7 +150,7 @@ public:
 	 * 
 	 * @param[in] counter The comparison counter value.
 	 */
-	virtual void setCompareValue(int32_t  counter) __attribute__((optimize("-O1"))) = 0 ;
+	virtual void setCompareValue(int32_t  counter) = 0 ;
 
 	// The following are internal functions and do not need to be called by the user application.
 	struct setup_t
@@ -167,12 +167,12 @@ public:
 	/**
 	 * @brief Constructor for the Pwm class (legacy: using peripheral pointer directly).
 	 */
-	Pwm(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
+	Pwm(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup);
 
 	/**
 	 * @brief Constructor for the Pwm class (using setup_t configuration structure).
 	 */
-	Pwm(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	Pwm(const Drv::setup_t drvSetup, const setup_t setup);
 
   protected:
 	YSS_PWM_Peri *mDev; ///< Pointer to the hardware timer peripheral register block.
@@ -192,7 +192,7 @@ public:
 	 * @param[in] risingAtMatch Output waveform polarity. See `initialize()` for details.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t initializeChannel(bool risingAtMatch = false) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t initializeChannel(bool risingAtMatch = false) = 0;
 };
 
 /**
@@ -208,33 +208,33 @@ public:
 class PwmCh1 : public Pwm
 {
   public:
-	error_t initializeChannel(bool risingAtMatch = false) __attribute__((optimize("-O1")));
+	error_t initializeChannel(bool risingAtMatch = false);
 
-	virtual uint32_t getTopValue(void) __attribute__((optimize("-O1")));
+	virtual uint32_t getTopValue(void);
 
-	virtual void setDutyRatio(float ratio) __attribute__((optimize("-O1")));
+	virtual void setDutyRatio(float ratio);
 
-	virtual void setCompareValue(int32_t  counter) __attribute__((optimize("-O1")));
+	virtual void setCompareValue(int32_t  counter);
 
-	PwmCh1(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
+	PwmCh1(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup);
 
-	PwmCh1(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1"))) __attribute__((optimize("-O1")));
+	PwmCh1(const Drv::setup_t drvSetup, const setup_t setup);
 };
 
 class PwmCh2 : public Pwm
 {
   public:
-	error_t initializeChannel(bool risingAtMatch = false) __attribute__((optimize("-O1")));
+	error_t initializeChannel(bool risingAtMatch = false);
 
-	virtual uint32_t getTopValue(void) __attribute__((optimize("-O1")));
+	virtual uint32_t getTopValue(void);
 
-	virtual void setDutyRatio(float ratio) __attribute__((optimize("-O1")));
+	virtual void setDutyRatio(float ratio);
 
-	virtual void setCompareValue(int32_t  counter) __attribute__((optimize("-O1")));
+	virtual void setCompareValue(int32_t  counter);
 
-	PwmCh2(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
+	PwmCh2(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup);
 
-	PwmCh2(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	PwmCh2(const Drv::setup_t drvSetup, const setup_t setup);
 };
 
 /**
@@ -250,17 +250,17 @@ class PwmCh2 : public Pwm
 class PwmCh3 : public Pwm
 {
   public:
-	error_t initializeChannel(bool risingAtMatch = false) __attribute__((optimize("-O1")));
+	error_t initializeChannel(bool risingAtMatch = false);
 
-	virtual uint32_t getTopValue(void) __attribute__((optimize("-O1")));
+	virtual uint32_t getTopValue(void);
 
-	virtual void setDutyRatio(float ratio) __attribute__((optimize("-O1")));
+	virtual void setDutyRatio(float ratio);
 
-	virtual void setCompareValue(int32_t  counter) __attribute__((optimize("-O1")));
+	virtual void setCompareValue(int32_t  counter);
 
-	PwmCh3(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
+	PwmCh3(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup);
 
-	PwmCh3(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	PwmCh3(const Drv::setup_t drvSetup, const setup_t setup);
 };
 
 /**
@@ -276,17 +276,17 @@ class PwmCh3 : public Pwm
 class PwmCh4 : public Pwm
 {
   public:
-	error_t initializeChannel(bool risingAtMatch = false) __attribute__((optimize("-O1")));
+	error_t initializeChannel(bool risingAtMatch = false);
 
-	virtual uint32_t getTopValue(void) __attribute__((optimize("-O1")));
+	virtual uint32_t getTopValue(void);
 
-	virtual void setDutyRatio(float ratio) __attribute__((optimize("-O1")));
+	virtual void setDutyRatio(float ratio);
 
-	virtual void setCompareValue(int32_t  counter) __attribute__((optimize("-O1")));
+	virtual void setCompareValue(int32_t  counter);
 
-	PwmCh4(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
+	PwmCh4(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup);
 
-	PwmCh4(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	PwmCh4(const Drv::setup_t drvSetup, const setup_t setup);
 };
 
 #endif

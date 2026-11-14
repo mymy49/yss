@@ -20,6 +20,8 @@
 #include <yss/scheduler.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 NuvotonUart::NuvotonUart(const Drv::setup_t drvSetup, const setup_t setup) : Uart(drvSetup)
 {
 	mDev = setup.dev;

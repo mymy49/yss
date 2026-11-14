@@ -18,6 +18,8 @@
 #include <yss.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 #if EPWM0_ENABLE && defined(EPWM0)
 
 static void enableEpwm0Clock(bool en)

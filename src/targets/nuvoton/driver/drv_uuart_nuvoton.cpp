@@ -20,6 +20,8 @@
 #include <yss/scheduler.h>
 #include <yss/reg.h>
 
+#pragma GCC optimize("O1")
+
 #if defined(UUART0)
 
 NuvotonUuart::NuvotonUuart(const Drv::setup_t drvSetup, const setup_t setup) : Uart(drvSetup)
@@ -121,7 +123,7 @@ error_t NuvotonUuart::changeBaudrate(int32_t baud)
 	return error_t::ERROR_NONE;
 }
 
-error_t NuvotonUuart::send(void *src, int32_t  size)
+error_t NuvotonUuart::send(void *src, int32_t  size, uint32_t timeout)
 {
 	if(size == 0)
 		return error_t::ERROR_NONE;
@@ -134,13 +136,15 @@ error_t NuvotonUuart::send(void *src, int32_t  size)
 	return error_t::ERROR_NONE;
 }
 
-void NuvotonUuart::send(int8_t data)
+error_t NuvotonUuart::send(int8_t data, uint32_t timeout)
 {
 	mDev->PROTSTS = UUART_PROTSTS_TXENDIF_Msk;
 
 	*(uint8_t*)&mDev->TXDAT = data;
 	while (~mDev->PROTSTS & UUART_PROTSTS_TXENDIF_Msk)
 		thread::yield();
+
+	return error_t::ERROR_NONE;
 }
 
 void NuvotonUuart::isr(void)

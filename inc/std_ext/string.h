@@ -86,7 +86,7 @@ extern "C"
  * @param[in] src Pointer to the source memory block.
  * @param[in] size The size of the memory block to copy, in bytes.
  */
-void memcpyd(void* des, void* src, uint32_t size) __attribute__((optimize("-O1")));
+void memcpyd(void* des, void* src, uint32_t size);
 
 /**
  * @brief Fills a block of memory with an 8-bit byte value using DMA.
@@ -99,7 +99,7 @@ void memcpyd(void* des, void* src, uint32_t size) __attribute__((optimize("-O1")
  * @param[in] data The 8-bit value to fill the memory with.
  * @param[in] count The number of bytes to fill.
  */
-void memsetd(void* des, uint8_t data, uint32_t count) __attribute__((optimize("-O1")));
+void memsetd(void* des, uint8_t data, uint32_t count);
 
 /**
  * @brief Fills a block of memory with a 16-bit halfword value using DMA.
@@ -112,7 +112,7 @@ void memsetd(void* des, uint8_t data, uint32_t count) __attribute__((optimize("-
  * @param[in] data The 16-bit value to fill the memory with.
  * @param[in] count The number of 16-bit halfword elements to fill.
  */
-void memsethwd(void* des, uint16_t data, uint32_t count) __attribute__((optimize("-O1")));
+void memsethwd(void* des, uint16_t data, uint32_t count);
 
 /**
  * @brief Fills a block of memory with a 32-bit word value using DMA.
@@ -125,6 +125,6 @@ void memsethwd(void* des, uint16_t data, uint32_t count) __attribute__((optimize
  * @param[in] data The 32-bit value to fill the memory with.
  * @param[in] count The number of 32-bit word elements to fill.
  */
-void memsetwd(void* des, uint32_t data, uint32_t count) __attribute__((optimize("-O1")));
+void memsetwd(void* des, uint32_t data, uint32_t count);
 
 #endif

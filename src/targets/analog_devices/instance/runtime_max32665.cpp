@@ -12,6 +12,8 @@
 #include <util/runtime.h>
 #include <drv/peripheral.h>
 
+#pragma GCC optimize("O1")
+
 #if YSS_RUNTIME_TIMER == RUNTIME_TMR0
 #define ISR_RUNTIME			TMR0_IRQHandler
 #define RUNTIME_DEV			MXC_TMR0

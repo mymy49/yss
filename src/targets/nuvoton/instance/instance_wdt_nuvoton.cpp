@@ -13,6 +13,8 @@
 #include <config.h>
 #include <yss.h>
 
+#pragma GCC optimize("O1")
+
 #if defined(WDT) && WDT_ENABLE
 /**
  * @brief Enables or disables the APB0 clock for the WDT peripheral.

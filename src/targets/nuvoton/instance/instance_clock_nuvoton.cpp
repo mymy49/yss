@@ -11,6 +11,8 @@
 
 #include <targets/nuvoton/NuvotonClock.h>
 
+#pragma GCC optimize("O1")
+
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY) 
 
 // Clock Instance

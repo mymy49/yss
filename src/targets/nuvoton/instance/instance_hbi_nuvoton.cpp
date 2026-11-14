@@ -17,6 +17,8 @@
 #include <config.h>
 #include <yss.h>
 
+#pragma GCC optimize("O1")
+
 #if HBI_ENABLE && defined(HBI)
 NuvotonHbi hbi;
 

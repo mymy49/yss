@@ -15,6 +15,8 @@
 #include <config.h>
 #include <yss.h>
 
+#pragma GCC optimize("O1")
+
 #if defined(EADC) && EADC_ENABLE
 static void enableEadcClock(bool en)
 {

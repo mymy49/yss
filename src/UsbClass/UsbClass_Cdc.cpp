@@ -14,6 +14,8 @@
 #include <drv/Usbd.h>
 #include <string.h>
 
+#pragma GCC optimize("O1")
+
 Cdc::Cdc(void)
 {
 	mCallback_handleLineCode = nullptr;

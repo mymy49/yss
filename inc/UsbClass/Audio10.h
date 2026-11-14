@@ -50,14 +50,14 @@ public :
 	 * @param[in] config Reference to the Audio Class configuration structure.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t initialize(const config_t &config) __attribute__((optimize("-O1")));
+	virtual error_t initialize(const config_t &config);
 
 	/**
 	 * @brief Gets the size of received audio data currently available in the buffer.
 	 *
 	 * @return uint32_t Number of bytes received from the host.
 	 */
-	uint32_t getRxDataCount(void) __attribute__((optimize("-O1")));
+	uint32_t getRxDataCount(void);
 
 	/**
 	 * @brief Copies the received audio data into the user buffer.
@@ -66,14 +66,14 @@ public :
 	 * @param[in] size Size of the data to copy. Must be equal to the value returned by getRxDataCount().
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t getRxData(void *des, uint32_t size) __attribute__((optimize("-O1")));
+	error_t getRxData(void *des, uint32_t size);
 
 	// Internal system functions. Do not call from user application.
-	Audio10(void) __attribute__((optimize("-O1")));
+	Audio10(void);
 
-	virtual void handleWakeup(void) __attribute__((optimize("-O1")));
+	virtual void handleWakeup(void);
 
-	virtual uint8_t getUsingEpCount(void) __attribute__((optimize("-O1")));
+	virtual uint8_t getUsingEpCount(void);
 
 protected :
 	config_t mConfig;

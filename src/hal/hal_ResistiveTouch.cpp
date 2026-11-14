@@ -2,10 +2,10 @@
 
 ResistiveTouch::ResistiveTouch()
 {
-	mCalibrationData.topLeftX = 819;
-	mCalibrationData.topLeftY = 819;
-	mCalibrationData.botRightX = 3276;
-	mCalibrationData.botRightY = 3276;
+	mCalibrationData.topLeftX = 0;
+	mCalibrationData.topLeftY = 0;
+	mCalibrationData.botRightX = 4095;
+	mCalibrationData.botRightY = 4095;
 	mCalibrationData.width = 320;
 	mCalibrationData.height = 240;
 	update();
@@ -26,8 +26,18 @@ Position ResistiveTouch::calculate(uint16_t x, uint16_t y)
 {
 	mLastConvertedAdcX = x;
 	mLastConvertedAdcY = y;
-	x = ((int32_t)x - mCalibrationData.topLeftX) * mCalibrationData.width / mXDivider + mWidthOffset;
-	y = ((int32_t)y - mCalibrationData.topLeftY) * mCalibrationData.height / mYDivider + mHeightOffset;
+	x = ((int32_t)x - mCalibrationData.topLeftX) * mCalibrationData.width / mXDivider;
+	y = ((int32_t)y - mCalibrationData.topLeftY) * mCalibrationData.height / mYDivider;
+
+	if(x < 0)
+		x = 0;
+	else if(x > mCalibrationData.width)
+		x = x > mCalibrationData.width;
+	if(y < 0)
+		y = 0;
+	else if(y > mCalibrationData.height)
+		y = y > mCalibrationData.height;
+
 	mPosition.setPosition(x, y);
 	return mPosition;
 }
@@ -35,16 +45,24 @@ Position ResistiveTouch::calculate(uint16_t x, uint16_t y)
 uint16_t ResistiveTouch::calculateX(uint16_t x)
 {
 	mLastConvertedAdcX = x;
-	x = ((int32_t)x - mCalibrationData.topLeftX) * mCalibrationData.width / mXDivider + mWidthOffset;
+	x = ((int32_t)x - mCalibrationData.topLeftX) * mCalibrationData.width / mXDivider;
 	mPosition.setX(x);
+	if(x < 0)
+		x = 0;
+	else if(x > mCalibrationData.width)
+		x = x > mCalibrationData.width;
 	return x;
 }
 
 uint16_t ResistiveTouch::calculateY(uint16_t y)
 {
 	mLastConvertedAdcY = y;
-	y = ((int32_t)y - mCalibrationData.topLeftY) * mCalibrationData.height / mYDivider + mHeightOffset;
+	y = ((int32_t)y - mCalibrationData.topLeftY) * mCalibrationData.height / mYDivider;
 	mPosition.setY(y);
+	if(y < 0)
+		y = 0;
+	else if(y > mCalibrationData.height)
+		y = y > mCalibrationData.height;
 	return y;
 }
 
@@ -60,10 +78,8 @@ uint16_t ResistiveTouch::getLastConvertedAdcY()
 
 void ResistiveTouch::update()
 {
-	mXDivider = (int32_t)(mCalibrationData.botRightX - mCalibrationData.topLeftX) * 10 / 6;
-	mYDivider = (int32_t)(mCalibrationData.botRightY - mCalibrationData.topLeftY) * 10 / 6;
-	mWidthOffset = (int32_t)mCalibrationData.width * 2 / 10;
-	mHeightOffset = (int32_t)mCalibrationData.height * 2 / 10;
+	mXDivider = (int32_t)(mCalibrationData.botRightX - mCalibrationData.topLeftX);
+	mYDivider = (int32_t)(mCalibrationData.botRightY - mCalibrationData.topLeftY);
 	mPosition.setMaxPosition(mCalibrationData.width, mCalibrationData.height);
 }
 
