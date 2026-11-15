@@ -74,21 +74,21 @@ public:
 	 *
 	 * @return uint32_t HIRC frequency in Hz.
 	 */
-	uint32_t getHircFrequency(void);
+	uint32_t getHircFrequency();
 	
 	/**
 	 * @brief Gets the frequency of the External High Speed Crystal Oscillator (HXT).
 	 *
 	 * @return uint32_t HXT frequency in Hz.
 	 */
-	uint32_t getHxtFrequency(void);
+	uint32_t getHxtFrequency();
 	
 	/**
 	 * @brief Gets the frequency of the Low-speed Internal RC Oscillator (LIRC).
 	 *
 	 * @return uint32_t LIRC frequency in Hz.
 	 */
-	uint32_t getLircFrequency(void);
+	uint32_t getLircFrequency();
 
 #if defined(__M251_SUBFAMILY)
 	/**
@@ -97,7 +97,7 @@ public:
 	 *
 	 * @return uint32_t MIRC frequency in Hz.
 	 */
-	uint32_t getMircFrequency(void);
+	uint32_t getMircFrequency();
 #endif
 
 #if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
@@ -106,7 +106,7 @@ public:
 	 *
 	 * @return uint32_t PLL frequency in Hz.
 	 */
-	uint32_t getPllFrequency(void);
+	uint32_t getPllFrequency();
 #endif
 	
 #if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
@@ -115,41 +115,69 @@ public:
 	 *
 	 * @return uint32_t HCLK frequency in Hz.
 	 */
-	uint32_t getHclkClockFrequency(void);
-#endif
-	
-#if defined(__MA35H0_FAMILY)
-	uint32_t getSysclk0ClockFrequency(void);
+	uint32_t getHclkClockFrequency();
 #endif
 
 #if defined(__MA35H0_FAMILY)
-	uint32_t getSysclk1ClockFrequency(void);
+	uint32_t getCaClockFrequency();
 #endif
 
 #if defined(__MA35H0_FAMILY)
-	uint32_t getEpllClockFrequency(void);
+	uint32_t getSysclk0ClockFrequency();
 #endif
 
 #if defined(__MA35H0_FAMILY)
-	uint32_t getSyspllClockFrequency(void);
+	uint32_t getSysclk1ClockFrequency();
 #endif
 
-#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
+#if defined(__MA35H0_FAMILY)
+	uint32_t getCapllClockFrequency();
+#endif
+
+#if defined(__MA35H0_FAMILY)
+	uint32_t getDdrpllClockFrequency();
+#endif
+
+#if defined(__MA35H0_FAMILY)
+	uint32_t getEpllClockFrequency();
+#endif
+
+#if defined(__MA35H0_FAMILY)
+	uint32_t getSyspllClockFrequency();
+#endif
+
+#if defined(__MA35H0_FAMILY)
+	uint32_t getApllClockFrequency();
+#endif
+
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY) || defined(__MA35H0_FAMILY)
 	/**
 	 * @brief Gets the APB0 bus clock frequency.
 	 *
 	 * @return uint32_t APB0 clock frequency in Hz.
 	 */
-	uint32_t getApb0ClockFrequency(void);
+	uint32_t getApb0ClockFrequency();
 #endif
 	
-#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY) || defined(__MA35H0_FAMILY)
 	/**
 	 * @brief Gets the APB1 bus clock frequency.
 	 *
 	 * @return uint32_t APB1 clock frequency in Hz.
 	 */
-	uint32_t getApb1ClockFrequency(void);
+	uint32_t getApb1ClockFrequency();
+#endif
+
+#if defined(__MA35H0_FAMILY)
+	uint32_t getApb2ClockFrequency();
+#endif
+
+#if defined(__MA35H0_FAMILY)
+	uint32_t getApb3ClockFrequency();
+#endif
+
+#if defined(__MA35H0_FAMILY)
+	uint32_t getApb4ClockFrequency();
 #endif
 
 	/**
@@ -267,7 +295,7 @@ public:
 	void enableApb0Clock(uint32_t position, bool en = true);
 #endif	
 
-#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY) || defined(__MA35H0_FAMILY)
 	/**
 	 * @brief Enables or disables a clock gate on the APB1 bus.
 	 *
@@ -293,7 +321,7 @@ public:
 	 * @details The MCU can be woken up from Power Down mode by events such as RTC, WDT, I2C,
 	 * Timer, UART, BOD, GPIO, EINT, USCI, USBD, and ACMP interrupts.
 	 */
-	void enterPowerDownMode(void);
+	void enterPowerDownMode();
 #endif	
 
 #if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
@@ -301,8 +329,13 @@ public:
 	 * @brief Enters Idle mode.
 	 * @details The MCU can be woken up from Idle mode by any enabled peripheral interrupt.
 	 */
-	void enterIdleMode(void);
+	void enterIdleMode();
 #endif	
+
+protected :
+#if defined(__MA35H0_FAMILY)
+	uint32_t calculatePllClockFrequency(PLL_T pll);
+#endif
 
 private:
 };

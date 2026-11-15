@@ -9,7 +9,7 @@
  * @brief Global driver instances initialization for Nuvoton QUADSPI peripheral.
  */
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -27,17 +27,42 @@
 static void enableQuadspi0Clock(bool en)
 {
 	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
+#if defined(__MA35H0_FAMILY)
+	clock.lock();
+	clock.enableApb1Clock(CLK_APBCLK1_QSPI0CKEN_Pos, en);
+	clock.unlock();
+#else
 	clock.enableApb0Clock(CLK_APBCLK0_QSPI0CKEN_Pos, en);
+#endif
 }
 
 static void enableQuadspi0Interrupt(bool en)
 {
+#if defined(__MA35H0_FAMILY)
+	nvic.lock();
+	nvic.enableInterrupt(QSPI0_IRQn, en);
+	nvic.unlock();
+#else
 	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(QSPI0_IRQn, en);
+#endif
 }
 
 static uint32_t getQuadspi0ClockFrequency(void)
 {
+#if defined(__MA35H0_FAMILY)
+	switch((CLK->CLKSEL4 & CLK_CLKSEL4_QSPI0SEL_Msk) >> CLK_CLKSEL4_QSPI0SEL_Pos)
+	{
+	case 0 : // PCLK0
+		return clock.getApb1ClockFrequency();
+	
+	case 1 : // APLL
+		return clock.getApllClockFrequency();
+
+	default :
+		return 0;
+	}
+#else
 	switch((CLK->CLKSEL2 & CLK_CLKSEL2_QSPI0SEL_Msk) >> CLK_CLKSEL2_QSPI0SEL_Pos)
 	{
 	case 0 : // HXT
@@ -55,6 +80,9 @@ static uint32_t getQuadspi0ClockFrequency(void)
 	default :
 		return 0;
 	}
+#endif
+
+	return 0;
 }
 
 static const Drv::setup_t gDrvQuadspi0Setup = 

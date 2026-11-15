@@ -5,7 +5,7 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#if defined(__M46x_SUBFAMILY) || defined(__M251_SUBFAMILY)
+#if defined(__M46x_SUBFAMILY) || defined(__M251_SUBFAMILY) || defined(__MA35H0_FAMILY)
 
 #include <targets/nuvoton/NuvotonQuadspi.h>
 #include <yss.h>
@@ -115,10 +115,14 @@ error_t NuvotonQuadspi::transmit(dataform_t dataform, uint32_t data)
 	{
 		thread::yield();
 	}while(mDev->STATUS & QSPI_STATUS_BUSY_Msk);
-	
+
+#if defined(__MA35H0_FAMILY)
+	while(getFieldData(mDev->STATUS2, QSPI_STATUS2_RXCNT_Msk, QSPI_STATUS2_RXCNT_Pos))
+		mDev->RX;
+#else
 	while(getFieldData(mDev->STATUS, QSPI_STATUS_RXCNT_Msk, QSPI_STATUS_RXCNT_Pos))
 		mDev->RX;
-
+#endif
 
 	return error_t::ERROR_NONE;
 }
@@ -173,9 +177,14 @@ error_t NuvotonQuadspi::transmit(dataform_t dataform, void *data, uint32_t size)
 	while(mDev->STATUS & QSPI_STATUS_BUSY_Msk)
 		thread::yield();
 	
+#if defined(__MA35H0_FAMILY)
+	while(getFieldData(mDev->STATUS2, QSPI_STATUS2_RXCNT_Msk, QSPI_STATUS2_RXCNT_Pos))
+		mDev->RX;
+#else
 	while(getFieldData(mDev->STATUS, QSPI_STATUS_RXCNT_Msk, QSPI_STATUS_RXCNT_Pos))
 		mDev->RX;
-	
+#endif
+
 	mDev->PDMACTL = 0;
 
 	return error_t::ERROR_NONE;

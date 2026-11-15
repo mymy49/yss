@@ -32,17 +32,17 @@
 
 #pragma GCC optimize("O1")
 
-uint32_t Clock::getHircFrequency(void)
+uint32_t Clock::getHircFrequency()
 {
 	return HIRC_CLK_FREQ;
 }
 
-uint32_t Clock::getHxtFrequency(void)
+uint32_t Clock::getHxtFrequency()
 {
 	return HXT_CLK_FREQ;
 }
 
-uint32_t Clock::getLircFrequency(void)
+uint32_t Clock::getLircFrequency()
 {
 	return LIRC_CLK_FREQ;
 }
@@ -63,7 +63,45 @@ void Clock::enableSystem1Clock(uint32_t position, bool en)
 		CLK->SYSCLK1 &= ~(1 << position);		
 }
 
-uint32_t Clock::getSyspllClockFrequency(void)
+uint32_t Clock::getCapllClockFrequency()
+{
+	uint32_t ctl0 = CLK->PLL0CTL0;
+	
+	// Power-down 상태이면 0 반환
+	if (ctl0 & CLK_PLL0CTL0_PD_Msk)
+		return 0;
+	
+	// Bypass 상태이면 HXT(24MHz) 그대로 반환
+	if (ctl0 & CLK_PLL0CTL0_BP_Msk)
+		return getHxtFrequency();
+	
+	uint64_t fref = getHxtFrequency();
+	uint32_t n = (ctl0 & CLK_PLL0CTL0_FBDIV_Msk) >> CLK_PLL0CTL0_FBDIV_Pos;
+	uint32_t m = (ctl0 & CLK_PLL0CTL0_INDIV_Msk) >> CLK_PLL0CTL0_INDIV_Pos;
+	uint32_t outdiv = (ctl0 & CLK_PLL0CTL0_OUTDIV_Msk) >> CLK_PLL0CTL0_OUTDIV_Pos;
+	if (m == 0)
+		return 0;
+	
+	// P = 2^OUTDIV = (1UL << outdiv)
+	return (uint32_t)((fref * n) / (m << outdiv));
+}
+
+uint32_t Clock::getDdrpllClockFrequency()
+{
+	return calculatePllClockFrequency(CLK->PLL[2]);
+}
+
+uint32_t Clock::getApllClockFrequency()
+{
+	return calculatePllClockFrequency(CLK->PLL[3]);
+}
+
+uint32_t Clock::getEpllClockFrequency()
+{
+	return calculatePllClockFrequency(CLK->PLL[4]);
+}
+
+uint32_t Clock::getSyspllClockFrequency()
 {
 	// SYS-PLL이 비활성화/불안정 상태이면 0 반환
 	if (!(CLK->STATUS & CLK_STATUS_SYSPLLSTB_Msk))
@@ -73,10 +111,109 @@ uint32_t Clock::getSyspllClockFrequency(void)
 	return 180000000;
 }
 
-uint32_t Clock::getEpllClockFrequency(void)
+uint32_t Clock::getApb0ClockFrequency()
 {
-	uint32_t ctl0 = CLK->PLL[4].CTL0;
-	uint32_t ctl1 = CLK->PLL[4].CTL1;
+	return getSysclk1ClockFrequency();
+}
+
+uint32_t Clock::getApb1ClockFrequency(void)
+{
+	return getSysclk1ClockFrequency();
+}
+
+uint32_t Clock::getApb2ClockFrequency(void)
+{
+	return getSysclk1ClockFrequency();
+}
+
+uint32_t Clock::getApb3ClockFrequency(void)
+{
+	return getSysclk1ClockFrequency() / 2;
+}
+
+uint32_t Clock::getApb4ClockFrequency(void)
+{
+	return getSysclk1ClockFrequency() / 2;
+}
+
+uint32_t Clock::getCaClockFrequency()
+{
+	uint32_t clk = 0;
+
+	switch(getFieldData(CLK->CLKSEL0, CLK_CLKSEL0_CA35CKSEL_Msk, CLK_CLKSEL0_CA35CKSEL_Pos))
+	{
+	case 0 : // HXT
+		clk = getHxtFrequency();
+		break;
+	
+	case 1 :
+		clk = getCapllClockFrequency();
+		break;
+	
+	case 2 :
+		clk = getDdrpllClockFrequency();
+		break;
+	}
+
+	return clk;
+}
+
+uint32_t Clock::getSysclk0ClockFrequency()
+{
+	uint32_t clk;
+ 
+	switch(getBitData(CLK->CLKSEL0, CLK_CLKSEL0_SYSCK0SEL_Pos))
+	{
+	case 0 : // EPLL/2
+		clk = getEpllClockFrequency() / 2;
+		break;
+	
+	case 1 : // SYS-PLL
+		clk = getSyspllClockFrequency();
+		break;
+	}  
+
+	return clk;
+}
+
+uint32_t Clock::getSysclk1ClockFrequency()
+{
+	uint32_t clk;
+	
+	switch(getBitData(CLK->CLKSEL0, CLK_CLKSEL0_SYSCK1SEL_Pos))
+	{
+	case 0 :
+		clk = getHxtFrequency();
+		break;
+	
+	case 1 : // SYS-PLL
+		clk = getSyspllClockFrequency();
+		break;
+	}  
+
+	return clk;
+}
+
+void Clock::enableApb0Clock(uint32_t position, bool en)
+{
+	if(en)
+		CLK->APBCLK0 |= 1 << position;
+	else
+		CLK->APBCLK0 &= ~(1 << position);
+}
+
+void Clock::enableApb1Clock(uint32_t position, bool en)
+{
+	if(en)
+		CLK->APBCLK1 |= 1 << position;
+	else
+		CLK->APBCLK1 &= ~(1 << position);
+}
+
+uint32_t Clock::calculatePllClockFrequency(PLL_T pll)
+{
+	uint32_t ctl0 = pll.CTL0;
+	uint32_t ctl1 = pll.CTL1;
 
 	// Power-down 상태이면 0 반환
 	if (ctl1 & CLK_PLLnCTL1_PD_Msk)
@@ -107,51 +244,6 @@ uint32_t Clock::getEpllClockFrequency(void)
 		return (uint32_t)((fvco_shifted >> 24) / (m * p));
 	}
 }
-
-uint32_t Clock::getSysclk0ClockFrequency(void)
-{
-	uint32_t clk;
- 
-	switch(getBitData(CLK->CLKSEL0, CLK_CLKSEL0_SYSCK0SEL_Pos))
-	{
-	case 0 : // EPLL/2
-		clk = getEpllClockFrequency() / 2;
-		break;
-	
-	case 1 : // SYS-PLL
-		clk = getSyspllClockFrequency();
-		break;
-	}  
-
-	return clk;
-}
-
-uint32_t Clock::getSysclk1ClockFrequency(void)
-{
-	uint32_t clk;
-	
-	switch(getBitData(CLK->CLKSEL0, CLK_CLKSEL0_SYSCK1SEL_Pos))
-	{
-	case 0 :
-		clk = getHxtFrequency();
-		break;
-	
-	case 1 : // SYS-PLL
-		clk = getSyspllClockFrequency();
-		break;
-	}  
-
-	return clk;
-}
-
-void Clock::enableApb0Clock(uint32_t position, bool en)
-{
-	if(en)
-		CLK->APBCLK0 |= 1 << position;
-	else
-		CLK->APBCLK0 &= ~(1 << position);
-}
-
 
 #if 0
 
@@ -279,16 +371,6 @@ void Clock::enableAhb1Clock(uint32_t position, bool en)
 }
 
 
-void Clock::enableApb1Clock(uint32_t position, bool en)
-{
-	__disable_irq();	
-	if(en)
-		CLK->APBCLK1 |= 1 << position;
-	else
-		CLK->APBCLK1 &= ~(1 << position);		
-	__enable_irq();
-}
-
 void Clock::enableApb2Clock(uint32_t position, bool en)
 {
 #if defined(__M46x_SUBFAMILY)
@@ -341,23 +423,6 @@ uint32_t Clock::getHclkClockFrequency(void)
 	return clk;
 }
 
-uint32_t Clock::getApb0ClockFrequency(void)
-{
-	uint32_t clk = getHclkClockFrequency();
-
-	clk /= 1 << ((CLK->PCLKDIV & CLK_PCLKDIV_APB0DIV_Msk) >> CLK_PCLKDIV_APB0DIV_Pos);
-
-	return clk;
-}
-
-uint32_t Clock::getApb1ClockFrequency(void)
-{
-	uint32_t clk = getHclkClockFrequency();
-
-	clk /= 1 << ((CLK->PCLKDIV & CLK_PCLKDIV_APB1DIV_Msk) >> CLK_PCLKDIV_APB1DIV_Pos);
-
-	return clk;
-}
 
 void Clock::enterIdleMode(void)
 {

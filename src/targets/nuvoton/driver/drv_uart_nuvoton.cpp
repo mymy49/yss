@@ -141,11 +141,29 @@ error_t NuvotonUart::send(void *src, int32_t  size, uint32_t timeout)
 	if(size == 0)
 		return error_t::ERROR_NONE;
 
+	uint8_t *cSrc = (uint8_t *)src;
+
+#if defined(__MA35H0_FAMILY)
+	// MA35H0 PDMA requires the source address (SA) to be 4-byte aligned in UART Advanced Mode.
+	// Send the leading 1~3 unaligned bytes directly via the UART TX FIFO (16-byte depth).
+	while (((uintptr_t)cSrc & 0x3) && size > 0)
+	{
+		mDev->DAT = *cSrc++;
+		size--;
+	}
+	if (size == 0)
+	{
+		while (~mDev->INTSTS & UART_INTSTS_TXENDIF_Msk)
+			thread::yield();
+		return error_t::ERROR_NONE;
+	}
+#endif
+
 #if defined(__ARM_ARCH_8A__)
 	cleanDCache(src, size);
 #endif
 
-	mTxDma->ready(mTxDmaInfo, src, size);
+	mTxDma->ready(mTxDmaInfo, cSrc, size);
 
 	__asm__ volatile("dsb sy" : : : "memory");
 	setBitData(mDev->INTEN, true, UART_INTEN_TXPDMAEN_Pos);
