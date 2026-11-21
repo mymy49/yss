@@ -22,6 +22,7 @@
 #include <yss/instance.h>
 #include <drv/Timer.h>
 #include <string.h>
+#include <lib_helpers.h>
 
 #pragma GCC optimize("O1")
 
@@ -185,10 +186,12 @@ static inline void sleep(uint32_t cid)
 	removeFromActivatedThreadList(id);
 	gYssThreadList[id].waitingForSignal = true;
 
+	semaphore::unlockSchedule();
+
 	while(gYssThreadList[id].waitingForSignal)
 	{
-		semaphore::unlockSchedule();
 		thread::yield();
+
 		//else if(gActivatedThreadCount == 0)
 		//{
 		//	semaphore::unlockSchedule();
@@ -553,8 +556,11 @@ void delayUs(uint32_t delayTime)
 
 	uint64_t curTime = runtime::getUsec();
 	uint64_t endTime = curTime + delayTime;
-
+#if defined(YSS__CORE_CA35_H_GENERIC)
+	if(gActivatedThreadCount > YSS__CORE_COUNT  && gDelayCount < MAX_THREAD && delayTime > 500)
+#else
 	if(gDelayCount < MAX_THREAD && delayTime > 500)
+#endif
 	{
 		int32_t index;
 
@@ -679,7 +685,11 @@ void waitForSignal(uint32_t timeout)
 	uint64_t curTime = runtime::getUsec();
 	uint64_t endTime = curTime + timeout * 1000;
 
+#if defined(YSS__CORE_CA35_H_GENERIC)
+	if(gActivatedThreadCount > YSS__CORE_COUNT && gDelayCount < MAX_THREAD)
+#else
 	if(gDelayCount < MAX_THREAD)
+#endif
 	{
 		int32_t index;
 
@@ -738,9 +748,18 @@ void waitForSignal(uint32_t timeout)
 		        }
 		    }
 		}
+	
+		semaphore::unlockSchedule();
+	}
+	else
+	{
+		thread->waitingForSignal = false;
+		semaphore::unlockSchedule();
+		__enable_irq();
+
+		while(thread->waitingForSignalPendingFlag);
 	}
 
-	semaphore::unlockSchedule();
 	__setCoreInterruptStatus(primask);
 }
 
